@@ -6,6 +6,8 @@ $(function()  {
 
 	var center;
 
+	var markers = [];
+
 	center = {lat: 49.283103, lng: -123.119290};
 
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -19,17 +21,15 @@ $(function()  {
 
 
 	function codeAddress() {
-		console.log('fucntion fired')
 		var address = $('#address').val();
 		geocoder.geocode({
 			address: address
 		}, function(results, status) {
 				console.log(results)
-				console.log(status)
 			if (status == 'OK') {
 				map.setCenter(results[0].geometry.location)
 				locationObject = results[0].geometry.location
-				console.log('87asdf', locationObject)
+
 				listPlaces(locationObject)
 			}
 		})
@@ -45,12 +45,31 @@ $(function()  {
 		var service;
 		service = new google.maps.places.PlacesService(map);
 		service.nearbySearch(request, function(results, status) {
-			console.log('nigga', results)
 			if (status == 'OK') {
-				console.log('okayed')
+				getMarkers(results)
+				
 			}
 		})
+	}
 
+	function getMarkers(arrayOfPlaces) {
+		$.each(arrayOfPlaces, function(index, place) {
+			console.log('1', place.name + ' ' + index)
+			var placeName = place.name;
+			var placeCoords = place.geometry.location;
+			var placeAddress = place.vicinity;
+
+			var marker = new google.maps.Marker({
+				position: placeCoords, 
+				address: placeAddress,
+				name: placeName,
+				map: map, 
+				animation: google.maps.Animation.DROP
+			})
+
+			markers.push(marker)
+
+		})
 	}
 	
 
