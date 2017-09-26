@@ -130,3 +130,7 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 
 body {
   background: green; }
+
+#map {
+  width: 500px;
+  height: 500px; }
