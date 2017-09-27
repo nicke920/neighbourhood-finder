@@ -12,7 +12,7 @@ $(function()  {
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: center, 
-		zoom: 11
+		zoom: 8
 	})
 
 	var geocoder = new google.maps.Geocoder()
@@ -22,25 +22,33 @@ $(function()  {
 
 	function codeAddress() {
 		var address = $('#address').val();
+		var rad = $('#radius').val();
+		rad = parseInt(rad)
+
+
 		geocoder.geocode({
 			address: address
 		}, function(results, status) {
 				console.log('resultss',results)
 			if (status == 'OK') {
 				map.setCenter(results[0].geometry.location)
+
 				locationObject = results[0].geometry.location
 
-				listPlaces(locationObject)
+				listPlaces(locationObject, rad)
+
+				centerMarker(locationObject, rad)
 			}
 		})
 	}
 
-	function listPlaces(location) {
+	function listPlaces(location, radius) {
+		
 		var request = {
 			location: location, 
 			rankby: 'distance', 
 			type: ['restaurant'],
-			radius: 3000
+			radius: radius
 		}
 
 		var service;
@@ -48,19 +56,39 @@ $(function()  {
 		service.nearbySearch(request, function(results, status) {
 			if (status == 'OK') {
 				getMarkers(results)
-				
 			}
 		})
 	}
 
+	function centerMarker(location, radius) {
+		var marker = new google.maps.Marker({
+			position: location, 
+			map: map, 
+			animation: google.maps.Animation.DROP,
+			icon: '../../assets/placeholder.png'
+		})
+
+		var circle = new google.maps.Circle({
+			map: map,
+			radius: radius,
+			strokeWeight: 1, 
+			strokeColor: 'rgba(0,0,0,.5)'
+		})
+
+		circle.bindTo('center', marker, 'position')
+	}
+
 
 	function getMarkers(arrayOfPlaces) {
+		var bounds = new google.maps.LatLngBounds();
+
 		$.each(arrayOfPlaces, function(index, place) {
-			// console.log(place)
 			var placeName = place.name;
 			var placeCoords = place.geometry.location;
 			var placeAddress = place.vicinity;
 			var placeid = place.place_id;
+
+			bounds.extend(placeCoords)
 
 			var marker = new google.maps.Marker({
 				position: placeCoords, 
@@ -70,6 +98,8 @@ $(function()  {
 				id: placeid,
 				animation: google.maps.Animation.DROP
 			})
+
+			map.fitBounds(bounds)
 
 			markers.push(marker)
 
