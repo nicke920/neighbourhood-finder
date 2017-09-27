@@ -38,8 +38,9 @@ $(function()  {
 	function listPlaces(location) {
 		var request = {
 			location: location, 
-			radius: 10000, 
-			type: ['night_club']
+			rankby: 'distance', 
+			type: ['restaurant'],
+			radius: 3000
 		}
 
 		var service;
@@ -52,13 +53,6 @@ $(function()  {
 		})
 	}
 
-	function getPlaceDetails(newobject) {
-		newobject.getDetails(request, function(results, status) {
-			if (status == 'OK') {
-				console.log(results)
-			}
-		})
-	}
 
 	function getMarkers(arrayOfPlaces) {
 		$.each(arrayOfPlaces, function(index, place) {
@@ -92,7 +86,8 @@ $(function()  {
 				service.getDetails(request, function(results, status) {
 					console.log('22', results)
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						console.log('reqqqq', results)
+						console.log('reqqqq', results.name)
+						$('h1#name').text(results.name)
 					}
 				})
 			})
