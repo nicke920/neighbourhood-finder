@@ -48,7 +48,8 @@ $(function () {
 		var request = {
 			location: location,
 			rankby: 'prominence',
-			type: ['restaurant'],
+			keyword: 'sushi',
+			openNow: true,
 			radius: radius
 		};
 
@@ -56,11 +57,19 @@ $(function () {
 		service = new google.maps.places.PlacesService(map);
 		service.nearbySearch(request, function (results, status) {
 			if (status == 'OK') {
-				console.log('cuz', results);
-				getMarkers(results, 'res');
+				results.sort(function (a, b) {
+					return b.rating - a.rating;
+				});
+				var toMarkers = [];
+				results.map(function (place, index) {
+					if (index < 5) {
+						toMarkers.push(place);
+					}
+				});
+				getMarkers(toMarkers, 'res');
 
-				$.each(results, function (index, place) {
-					$('#list').append($('<div>').append('<li>' + place.name + '</li>'));
+				$.each(toMarkers, function (index, place) {
+					$('#list').append($('<div>').append('<li>' + place.name + ' / ' + place.rating + '</li>'));
 				});
 			}
 		});
@@ -76,11 +85,20 @@ $(function () {
 		service1 = new google.maps.places.PlacesService(map);
 		service1.nearbySearch(request1, function (results, status) {
 			if (status == 'OK') {
-				console.log('cuz', results);
-				getMarkers(results, 'ban');
+				results.sort(function (a, b) {
+					return b.rating - a.rating;
+				});
 
-				$.each(results, function (index, place) {
-					$('#list2').append($('<div>').append('<li>' + place.name + '</li>'));
+				var toMarkers = [];
+				results.map(function (place, index) {
+					if (index < 5) {
+						toMarkers.push(place);
+					}
+				});
+				getMarkers(toMarkers, 'ban');
+
+				$.each(toMarkers, function (index, place) {
+					$('#list2').append($('<div>').append('<li>' + place.name + ' / ' + place.rating + '</li>'));
 				});
 			}
 		});
@@ -125,7 +143,7 @@ $(function () {
 			if (icon === 'ban') {
 				iconType = '../../assets/money-bag.png';
 			} else {
-				iconType = '../../assets/pin.png';
+				iconType = '../../assets/store.png';
 			}
 			var marker = new google.maps.Marker({
 				position: placeCoords,
