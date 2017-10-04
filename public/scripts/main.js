@@ -110,12 +110,9 @@ $(function () {
 
 	function centerMarker(location, radius) {
 		if (centerPoint || centerCircle) {
-			console.log('yes nigga', centerPoint);
 			centerPoint.setMap(null);
 			centerCircle.setMap(null);
-		} else {
-			console.log('naa homie', centerPoint);
-		}
+		} else {}
 		centerPoint = new google.maps.Marker({
 			position: location,
 			map: map,
@@ -141,14 +138,9 @@ $(function () {
 		map.setZoom(zoomin);
 	}
 
-	function hideListings() {
-		for (var i = 0; i < markers.length; i++) {
-			markers[i].setMap(null);
-		}
-	}
-
 	function getMarkers(arrayOfPlaces, icon) {
 		hideListings();
+
 		$.each(arrayOfPlaces, function (index, place) {
 			var placeName = place.name;
 			var placeCoords = place.geometry.location;
@@ -168,11 +160,19 @@ $(function () {
 				name: placeName,
 				map: map,
 				id: placeid,
-				animation: google.maps.Animation.DROP,
-				icon: iconType
+				animation: google.maps.Animation.DROP
 			});
 
 			markers.push(marker);
+
+			marker.addListener('mouseover', function () {
+				// marker.setAnimation(google.maps.Animation.BOUNCE)
+				marker.setIcon('../../assets/money-bag.png');
+			});
+			marker.addListener('mouseout', function () {
+				// marker.setAnimation(null)
+				marker.setIcon(null);
+			});
 
 			marker.addListener('click', function () {
 
@@ -187,7 +187,8 @@ $(function () {
 				service.getDetails(request, function (results, status) {
 
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						$('h1#name').text(results.name);
+						$('a#name').text(results.name).attr('id', results.place_id).addClass('feat');
+						console.log(results);
 					}
 				});
 			});
@@ -197,6 +198,30 @@ $(function () {
 	$('#gotime').on('click', function () {
 		codeAddress();
 	});
+
+	$('a#name').on('mouseover', function () {
+		var that = this;
+		$.each(markers, function (ind, val) {
+			if ($(that).attr('id') === val.id) {
+				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
+			}
+		});
+	});
+
+	$('a#name').on('mouseout', function () {
+		var that = this;
+		$.each(markers, function (ind, val) {
+			if ($(that).attr('id') === val.id) {
+				markers[ind].setAnimation(null);
+			}
+		});
+	});
+
+	function hideListings() {
+		for (var i = 0; i < markers.length; i++) {
+			markers[i].setMap(null);
+		}
+	}
 
 	function radiusToZoom(r) {
 		var w = $('#map').width();
