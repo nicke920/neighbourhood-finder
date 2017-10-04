@@ -46,15 +46,16 @@ $(function()  {
 		var request = {
 			location: location, 
 			rankby: 'prominence', 
-			keyword: 'sushi',
 			openNow: true,
-			radius: radius
+			radius: radius,
+			type: ['restaurant']
 		}
 
 		var service;
 		service = new google.maps.places.PlacesService(map);
 		service.nearbySearch(request, function(results, status) {
 			if (status == 'OK') {
+				console.log(results)
 				results.sort(function(a,b) {
 					return b.rating - a.rating
 				})
@@ -64,7 +65,7 @@ $(function()  {
 						toMarkers.push(place)
 					}
 				})
-				getMarkers(toMarkers, 'res')
+				getMarkers(toMarkers, 'restaurant')
 
 				$.each(toMarkers, function(index, place) {
 					$('#list').append($('<div>').append(`<li>${place.name} / ${place.rating}</li>`))
@@ -73,55 +74,65 @@ $(function()  {
 			}
 		})
 
-		var request1 = {
-			location: location, 
-			rankby: 'prominence', 
-			type: ['bank'],
-			radius: radius
-		}
+		// var request1 = {
+		// 	location: location, 
+		// 	rankby: 'prominence', 
+		// 	type: ['bank'],
+		// 	radius: radius
+		// }
 
-		var service1;
-		service1 = new google.maps.places.PlacesService(map);
-		service1.nearbySearch(request1, function(results, status) {
-			if (status == 'OK') {
-				results.sort(function(a,b) {
-					return b.rating - a.rating
-				})
+		// var service1;
+		// service1 = new google.maps.places.PlacesService(map);
+		// service1.nearbySearch(request1, function(results, status) {
+		// 	if (status == 'OK') {
+		// 		results.sort(function(a,b) {
+		// 			return b.rating - a.rating
+		// 		})
 
-				var toMarkers = [];
-				results.map(function(place, index) {
-					if (index < 5) {
-						toMarkers.push(place)
-					}
-				})
-				getMarkers(toMarkers, 'ban')
+		// 		var toMarkers = [];
+		// 		results.map(function(place, index) {
+		// 			if (index < 5) {
+		// 				toMarkers.push(place)
+		// 			}
+		// 		})
+		// 		getMarkers(toMarkers, 'ban')
 
-				$.each(toMarkers, function(index, place) {
-					$('#list2').append($('<div>').append(`<li>${place.name} / ${place.rating}</li>`))
-				})
-			}
-		})
+		// 		$.each(toMarkers, function(index, place) {
+		// 			$('#list2').append($('<div>').append(`<li>${place.name} / ${place.rating}</li>`))
+		// 		})
+		// 	}
+		// })
 	}
 
+	var centerPoint;
+	var centerCircle;
+
 	function centerMarker(location, radius) {
-		var marker = new google.maps.Marker({
+		if (centerPoint || centerCircle) {
+			console.log('yes nigga', centerPoint)
+			centerPoint.setMap(null)
+			centerCircle.setMap(null)
+		} else {
+			console.log('naa homie', centerPoint)
+		}
+		centerPoint = new google.maps.Marker({
 			position: location, 
 			map: map, 
 			animation: google.maps.Animation.DROP,
 			icon: '../../assets/placeholder.png'
 		})
 
-		var circle = new google.maps.Circle({
+		centerCircle = new google.maps.Circle({
 			map: map,
 			radius: radius,
 			strokeWeight: 1, 
 			strokeColor: 'rgba(255,255,255,.1)'
 		})
 
-		circle.bindTo('center', marker, 'position')
+		centerCircle.bindTo('center', centerPoint, 'position')
 
 		//center map on center marker
-		map.setCenter(marker.position)
+		map.setCenter(centerPoint.position)
 
 		var zoomin = radiusToZoom(radius)
 		
@@ -129,10 +140,14 @@ $(function()  {
 		map.setZoom(zoomin)
 	}
 
-
+	function hideListings() {
+	        for (var i = 0; i < markers.length; i++) {
+	          markers[i].setMap(null);
+	        }
+	      }
 
 	function getMarkers(arrayOfPlaces, icon) {
-
+		hideListings();
 		$.each(arrayOfPlaces, function(index, place) {
 			var placeName = place.name;
 			var placeCoords = place.geometry.location;
@@ -141,9 +156,9 @@ $(function()  {
 
 			var iconType;
 
-			if (icon === 'ban') {
+			if (icon === 'bank') {
 				iconType = '../../assets/money-bag.png'
-			} else {
+			} else if (icon === 'restaurant'){
 				iconType = '../../assets/store.png'
 			}
 			var marker = new google.maps.Marker({
