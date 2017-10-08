@@ -128,9 +128,100 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 * {
   box-sizing: border-box; }
 
+ul, li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  list-style: none; }
+
+a {
+  text-decoration: none; }
+
+h1, h2, h3, h4, h5 {
+  margin: 0; }
+
 body {
-  background: grey; }
+  font-family: 'Nunito', cursive; }
 
 #map {
   width: 500px;
   height: 500px; }
+
+nav {
+  background: white; }
+
+.nav-wrapper {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 90px;
+  width: 95%;
+  max-width: 1440px;
+  margin: 0 auto; }
+
+.nav {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+  .nav li a {
+    padding: 15px;
+    text-transform: uppercase;
+    color: black; }
+
+.hero {
+  height: calc(80vh - 90px);
+  min-height: 500px;
+  background-image: url("../../assets/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center; }
+
+.searched {
+  height: 120px;
+  min-height: 120px;
+  transition: height 1s; }
+
+.main-copy-searched {
+  display: none; }
+
+.hero-content {
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+
+.about-wrapper {
+  width: 90%;
+  max-width: 1440px;
+  margin: 0 auto; }
+
+.feature-image {
+  width: 200px; }
+
+.contents {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }

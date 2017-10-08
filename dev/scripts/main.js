@@ -74,34 +74,6 @@ $(function()  {
 			}
 		})
 
-		// var request1 = {
-		// 	location: location, 
-		// 	rankby: 'prominence', 
-		// 	type: ['bank'],
-		// 	radius: radius
-		// }
-
-		// var service1;
-		// service1 = new google.maps.places.PlacesService(map);
-		// service1.nearbySearch(request1, function(results, status) {
-		// 	if (status == 'OK') {
-		// 		results.sort(function(a,b) {
-		// 			return b.rating - a.rating
-		// 		})
-
-		// 		var toMarkers = [];
-		// 		results.map(function(place, index) {
-		// 			if (index < 5) {
-		// 				toMarkers.push(place)
-		// 			}
-		// 		})
-		// 		getMarkers(toMarkers, 'ban')
-
-		// 		$.each(toMarkers, function(index, place) {
-		// 			$('#list2').append($('<div>').append(`<li>${place.name} / ${place.rating}</li>`))
-		// 		})
-		// 	}
-		// })
 	}
 
 	var centerPoint;
@@ -156,6 +128,7 @@ $(function()  {
 			} else if (icon === 'restaurant'){
 				iconType = '../../assets/store.png'
 			}
+
 			var marker = new google.maps.Marker({
 				position: placeCoords, 
 				address: placeAddress,
@@ -201,7 +174,14 @@ $(function()  {
 
 
 	$('#gotime').on('click', function() {
-		codeAddress()
+		codeAddress();
+		$('html, body').animate({
+			scrollTop: $('#mapSection').offset().top
+		}, 1000);
+		$('#about').hide();
+		$('.hero').addClass('searched')
+		$('.main-copy-searched').show();
+		$('.main-copy').hide();
 	})
 
 	$('a#name').on('mouseover', function() {
@@ -246,4 +226,34 @@ $(function()  {
 	    return z;
 	}
 
+})
+
+
+
+
+
+
+
+$(function() {
+
+	console.log('also doc ready', map)
+	//SMOOTH SCROLL 
+	$('a[href*="#"]:not([href="#"])').click(function() {
+	  if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+	    var target = $(this.hash);
+	    target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+	    if (target.length) {
+	      $('html, body').animate({
+	        scrollTop: target.offset().top
+	      }, 1000);
+	      return false;
+	    }
+	  }
+	});
+	
+	$('#about-nav').on('click', function() {
+			$('html, body').animate({
+		        scrollTop: $('#about').offset().top
+		    }, 1000);
+	})
 })

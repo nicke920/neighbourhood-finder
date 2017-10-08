@@ -2,10 +2,76 @@
 @import 'partials/colors';
 
 body {
-	background: grey;
+	font-family: 'Nunito', cursive;
 }
 
 #map {
 	width: 500px;
 	height: 500px;
+}
+
+nav {
+	background: white;
+
+}
+
+.nav-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 90px;
+	width: 95%;
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
+.nav {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+	li {
+		a {
+			padding: 15px;
+			text-transform: uppercase;
+			color: black;
+		}
+	}
+}
+
+.hero {
+	height: calc(80vh - 90px);
+	min-height: 500px;
+	background-image: url('../../assets/hero.jpg');
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+
+}
+.searched {
+	height: 120px;
+	min-height: 120px;
+	transition: height 1s;
+}
+.main-copy-searched {
+	display: none;
+}
+.hero-content {
+	display: inline-flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+
+.about-wrapper {
+	width: 90%;
+	max-width: 1440px;
+	margin: 0 auto;
+}
+.feature-image {
+	width: 200px;
+}
+.contents {
+	display: flex;
 }
