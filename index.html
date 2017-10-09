@@ -68,17 +68,30 @@
 </main>
 
 <section id="mapSection">
-	<div id="map"></div>
+	<h2>Showing results for <span class="area-name"></span></h2>
+	<h4 class="full-area-name"></h4>
+
+	<div class="resultsContainer">
+		<div class="area">
+			<div class="dropdown">
+				<h3>Top 5 Restaurants</h3>
+				<ul id="list"></ul>
+			</div>
+			
+			<div class="feat-listing">
+				<img src="" alt="" class="feat-listing-image">
+				<h2 class="feat-listing-name"></h2>
+				<p> <span class="feat-listing-rating"></span> stars</p>
+				<p class="feat-listing-address"></p>
+				<p class="feat-listing-phone"></p>
+				<p class="feat-listing-website"></p>
+			</div>
+		</div>
+		<div id="map"></div>
+	</div>
 </section>
 
 
-
-<h3>Restaurant List</h3>
-<ul id="list"></ul>
-<hr>
-<h3>Banks</h3>
-<ul id="list2"></ul>
-<a id="name"></a>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDeqbMgPGWVeEWOa3cw9QVJpuAZRwwDN4&libraries=places"></script>
 <script src="public/scripts/main.js"></script>
 </body>

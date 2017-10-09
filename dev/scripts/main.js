@@ -38,6 +38,9 @@ $(function()  {
 				listPlaces(locationObject, rad)
 
 				centerMarker(locationObject, rad)
+
+				setTextAboutCity(results[0].address_components[1].long_name, results[0].formatted_address)
+
 			}
 		})
 	}
@@ -68,7 +71,8 @@ $(function()  {
 				getMarkers(toMarkers, 'restaurant')
 
 				$.each(toMarkers, function(index, place) {
-					$('#list').append($('<div>').append(`<li>${place.name} / ${place.rating}</li>`))
+					console.log('poalce', place)
+					$('#list').append($('<div>').append(`<li id='${place.place_id}'>${place.name} / ${place.rating}</li>`))
 				})
 
 			}
@@ -141,17 +145,8 @@ $(function()  {
 
 			markers.push(marker)
 
-			marker.addListener('mouseover', function() {
-				// marker.setAnimation(google.maps.Animation.BOUNCE)
-				marker.setIcon('../../assets/money-bag.png')
-			})
-			marker.addListener('mouseout', function() {
-				// marker.setAnimation(null)
-				marker.setIcon(null)
-			})
-
+			//on click, get details of the marker
 			marker.addListener('click', function() {
-
 				var deets = this;
 
 				var request = {
@@ -161,10 +156,11 @@ $(function()  {
 				var service;
 				service = new google.maps.places.PlacesService(map);
 				service.getDetails(request, function(results, status) {
-
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						$('a#name').text(results.name).attr('id', results.place_id).addClass('feat')
-						console.log(results)
+						//added attr so that when they hover over the list item, marker goes up and down
+						setFeatListingText(results)
+
+						console.log('rezzys', results)
 					}
 				})
 			})
@@ -177,14 +173,18 @@ $(function()  {
 		codeAddress();
 		$('html, body').animate({
 			scrollTop: $('#mapSection').offset().top
-		}, 1000);
+		}, 2000);
 		$('#about').hide();
 		$('.hero').addClass('searched')
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	})
 
-	$('a#name').on('mouseover', function() {
+	$('.dropdown').on('click', function() {
+		$(this).find('#list').toggle();
+	})
+
+	$(document).on('mouseover', '#list div li, .feat-listing-name', function() {
 		var that = this
 		$.each(markers, function(ind, val) {
 			if ($(that).attr('id') === val.id) {
@@ -193,7 +193,7 @@ $(function()  {
 		})
 	})
 
-	$('a#name').on('mouseout', function() {
+	$(document).on('mouseout', '#list div li, .feat-listing-name', function() {
 		var that = this
 		$.each(markers, function(ind, val) {
 			if ($(that).attr('id') === val.id) {
@@ -201,6 +201,16 @@ $(function()  {
 			}
 		})
 	})
+
+
+
+	function setFeatListingText(results) {
+		$('.feat-listing-name').text(results.name).attr('id', results.place_id).addClass('feat')
+		$('.feat-listing-address').text(results.formatted_address)
+		$('.feat-listing-phone').text(results.formatted_phone_number)
+		$('.feat-listing-website').text(results.website)
+		$('.feat-listing-rating').text(results.rating)
+	}
 
 
 
@@ -226,17 +236,12 @@ $(function()  {
 	    return z;
 	}
 
-})
+	function setTextAboutCity(cityName, fullCityName) {
+		$('.area-name').text(cityName)
+		$('.full-area-name').text(fullCityName)
+	}
 
 
-
-
-
-
-
-$(function() {
-
-	console.log('also doc ready', map)
 	//SMOOTH SCROLL 
 	$('a[href*="#"]:not([href="#"])').click(function() {
 	  if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -256,4 +261,12 @@ $(function() {
 		        scrollTop: $('#about').offset().top
 		    }, 1000);
 	})
+
 })
+
+
+
+
+
+
+

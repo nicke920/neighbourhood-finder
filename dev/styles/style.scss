@@ -75,3 +75,33 @@ nav {
 .contents {
 	display: flex;
 }
+
+#mapSection {
+	background: #e8e8e8;
+}
+
+
+.resultsContainer {
+	display: flex;
+}
+#map {
+	width: 40%;
+	height: calc(100vh - 100px;);
+}
+
+.area {
+	width: 60%;
+	background: white;
+}
+
+
+
+
+.feat-listing {
+	border: 1px solid black;
+}
+
+
+.dropdown ul {
+	display: none;
+}
