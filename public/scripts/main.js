@@ -9,6 +9,7 @@ $(function () {
 
 	var center;
 
+	//markers that are gonna show on map
 	var markers = [];
 
 	center = { lat: 49.283103, lng: -123.119290 };
@@ -20,6 +21,7 @@ $(function () {
 
 	var geocoder = new google.maps.Geocoder();
 
+	//gets the lat lng function of the postal code entered
 	var locationObject;
 
 	function codeAddress() {
@@ -47,10 +49,11 @@ $(function () {
 	}
 
 	function listPlaces(location, radius) {
+		hideListings();
+
 		var request = {
 			location: location,
 			rankby: 'prominence',
-			openNow: true,
 			radius: radius,
 			type: ['restaurant']
 		};
@@ -63,17 +66,57 @@ $(function () {
 				results.sort(function (a, b) {
 					return b.rating - a.rating;
 				});
-				var toMarkers = [];
+
+				var toMarkersRestaurant = [];
 				results.map(function (place, index) {
 					if (index < 5) {
-						toMarkers.push(place);
+						toMarkersRestaurant.push(place);
 					}
 				});
-				getMarkers(toMarkers, 'restaurant');
 
-				$.each(toMarkers, function (index, place) {
+				getMarkers(toMarkersRestaurant, 'restaurant');
+
+				$('.dropdown-restaurant #list').empty();
+
+				$.each(toMarkersRestaurant, function (index, place) {
 					console.log('poalce', place);
-					$('#list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
+					$('.dropdown-restaurant #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
+				});
+			}
+		});
+
+		var cafeRequest = {
+			location: location,
+			rankby: 'prominence',
+			radius: radius,
+			type: ['cafe']
+		};
+
+		var cafeService;
+		cafeService = new google.maps.places.PlacesService(map);
+		cafeService.nearbySearch(cafeRequest, function (results, status) {
+			if (status == 'OK') {
+
+				results.sort(function (a, b) {
+					return b.rating - a.rating;
+				});
+
+				var toMarkersCafe = [];
+
+				results.map(function (place, index) {
+					if (index < 5) {
+						toMarkersCafe.push(place);
+					}
+				});
+
+				console.log('rezzies', toMarkersCafe);
+
+				getMarkers(toMarkersCafe, 'cafe');
+
+				$('.dropdown-cafe #list').empty();
+
+				$.each(toMarkersCafe, function (index, place) {
+					$('.dropdown-cafe #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
 				});
 			}
 		});
@@ -113,21 +156,12 @@ $(function () {
 	}
 
 	function getMarkers(arrayOfPlaces, icon) {
-		hideListings();
 
 		$.each(arrayOfPlaces, function (index, place) {
 			var placeName = place.name;
 			var placeCoords = place.geometry.location;
 			var placeAddress = place.vicinity;
 			var placeid = place.place_id;
-
-			var iconType;
-
-			if (icon === 'bank') {
-				iconType = '../../assets/money-bag.png';
-			} else if (icon === 'restaurant') {
-				iconType = '../../assets/store.png';
-			}
 
 			var marker = new google.maps.Marker({
 				position: placeCoords,
@@ -154,8 +188,6 @@ $(function () {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
 						//added attr so that when they hover over the list item, marker goes up and down
 						setFeatListingText(results);
-
-						console.log('rezzys', results);
 					}
 				});
 			});
@@ -173,14 +205,35 @@ $(function () {
 		$('.main-copy').hide();
 	});
 
-	$('.dropdown').on('click', function () {
-		$(this).find('#list').toggle();
+	$('.dropdown h3').on('click', function () {
+		$(this).parent().find('#list').toggle();
+	});
+
+	$(document).on('click', '#list div li', function () {
+		var that = this;
+		$.each(markers, function (ind, val) {
+			if ($(that).attr('id') === val.id) {
+				var request = {
+					placeId: val.id
+				};
+
+				var service;
+				service = new google.maps.places.PlacesService(map);
+				service.getDetails(request, function (results, status) {
+					if (status == google.maps.places.PlacesServiceStatus.OK) {
+						//added attr so that when they hover over the list item, marker goes up and down
+						setFeatListingText(results);
+					}
+				});
+			}
+		});
 	});
 
 	$(document).on('mouseover', '#list div li, .feat-listing-name', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
+				console.log('va', val);
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
 			}
 		});
