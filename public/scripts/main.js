@@ -51,75 +51,63 @@ $(function () {
 	function listPlaces(location, radius) {
 		hideListings();
 
-		var request = {
-			location: location,
-			rankby: 'prominence',
-			radius: radius,
-			type: ['restaurant']
-		};
+		var toMarkersRestaurant = [];
+		var toMarkersCafes = [];
+		var toMarkersDoctors = [];
+		var toMarkersSchool = [];
+		var toMarkersBank = [];
+		var toMarkersBar = [];
 
-		var service;
-		service = new google.maps.places.PlacesService(map);
-		service.nearbySearch(request, function (results, status) {
-			if (status == 'OK') {
-				console.log(results);
-				results.sort(function (a, b) {
-					return b.rating - a.rating;
-				});
+		function top5Search(theMarkersArray, requestType, location, radius) {
+			var request = {
+				location: location,
+				rankby: 'prominence',
+				radius: radius,
+				type: requestType
+			};
 
-				var toMarkersRestaurant = [];
-				results.map(function (place, index) {
-					if (index < 5) {
-						toMarkersRestaurant.push(place);
-					}
-				});
+			var service;
+			service = new google.maps.places.PlacesService(map);
+			service.nearbySearch(request, function (results, status) {
+				if (status == 'OK') {
+					var pattern = function pattern(requestType) {
+						if (requestType === requestType) {
+							getMarkers(theMarkersArray, 'requestType');
 
-				getMarkers(toMarkersRestaurant, 'restaurant');
+							if (typeof requestType !== "string") {
+								requestType = requestType[0];
+							}
 
-				$('.dropdown-restaurant #list').empty();
+							$('.dropdown-' + requestType + ' #list').empty();
 
-				$.each(toMarkersRestaurant, function (index, place) {
-					console.log('poalce', place);
-					$('.dropdown-restaurant #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
-				});
-			}
-		});
+							$.each(theMarkersArray, function (index, place) {
+								$('.dropdown-' + requestType + ' #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
+							});
+						}
+					};
 
-		var cafeRequest = {
-			location: location,
-			rankby: 'prominence',
-			radius: radius,
-			type: ['cafe']
-		};
+					results.filter(function (el) {
+						return el.rating !== undefined;
+					}).sort(function (a, b) {
+						return b.rating - a.rating;
+					}).map(function (place, index) {
 
-		var cafeService;
-		cafeService = new google.maps.places.PlacesService(map);
-		cafeService.nearbySearch(cafeRequest, function (results, status) {
-			if (status == 'OK') {
+						if (index < 5) {
+							theMarkersArray.push(place);
+						}
+					});
 
-				results.sort(function (a, b) {
-					return b.rating - a.rating;
-				});
+					pattern(requestType);
+				}
+			});
+		}
 
-				var toMarkersCafe = [];
-
-				results.map(function (place, index) {
-					if (index < 5) {
-						toMarkersCafe.push(place);
-					}
-				});
-
-				console.log('rezzies', toMarkersCafe);
-
-				getMarkers(toMarkersCafe, 'cafe');
-
-				$('.dropdown-cafe #list').empty();
-
-				$.each(toMarkersCafe, function (index, place) {
-					$('.dropdown-cafe #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
-				});
-			}
-		});
+		top5Search(toMarkersRestaurant, 'restaurant', location, radius);
+		top5Search(toMarkersCafes, 'cafe', location, radius);
+		top5Search(toMarkersDoctors, 'doctor', location, radius);
+		top5Search(toMarkersSchool, 'school', location, radius);
+		top5Search(toMarkersBank, 'bank', location, radius);
+		top5Search(toMarkersBar, ['bar', 'night_club'], location, radius);
 	}
 
 	var centerPoint;
