@@ -72,7 +72,7 @@ $(function () {
 				if (status == 'OK') {
 					var pattern = function pattern(requestType) {
 						if (requestType === requestType) {
-							getMarkers(theMarkersArray, 'requestType');
+							getMarkers(theMarkersArray, '' + requestType);
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0];
@@ -117,7 +117,8 @@ $(function () {
 		if (centerPoint || centerCircle) {
 			centerPoint.setMap(null);
 			centerCircle.setMap(null);
-		} else {}
+		}
+
 		centerPoint = new google.maps.Marker({
 			position: location,
 			map: map,
@@ -151,13 +152,29 @@ $(function () {
 			var placeAddress = place.vicinity;
 			var placeid = place.place_id;
 
+			var typeOfIcon;
+			if (icon === 'cafe') {
+				typeOfIcon = '../../assets/location-pointerLiteBrown.png';
+			} else if (icon === 'doctor') {
+				typeOfIcon = '../../assets/location-pointerBlue.png';
+			} else if (icon === 'school') {
+				typeOfIcon = '../../assets/location-pointerGreen.png';
+			} else if (icon === 'bank') {
+				typeOfIcon = '../../assets/location-pointerOrange.png';
+			} else if (icon === 'restaurant') {
+				typeOfIcon = '../../assets/location-pointerPurp.png';
+			} else if (icon === 'bar,night_club') {
+				typeOfIcon = '../../assets/location-pointerRed.png';
+			}
+
 			var marker = new google.maps.Marker({
 				position: placeCoords,
 				address: placeAddress,
 				name: placeName,
 				map: map,
 				id: placeid,
-				animation: google.maps.Animation.DROP
+				animation: google.maps.Animation.DROP,
+				icon: typeOfIcon
 			});
 
 			markers.push(marker);
