@@ -1,4 +1,5 @@
 $(function()  {	
+
 	console.log('inist')
 	var map;
 
@@ -43,6 +44,11 @@ $(function()  {
 
 				setTextAboutCity(results[0].address_components[1].long_name, results[0].formatted_address)
 
+				//TRANSIT TINGS
+				transitMap.setCenter(results[0].geometry.location)
+
+				listTransit(locationObject)
+
 			}
 		})
 	}
@@ -56,6 +62,7 @@ $(function()  {
 		var toMarkersSchool = [];
 		var toMarkersBank = [];
 		var toMarkersBar = [];
+		var toMarkersTransit = [];
 
 		function top5Search(theMarkersArray, requestType, location, radius) {
 			var request = {
@@ -110,7 +117,6 @@ $(function()  {
 		top5Search(toMarkersBank, 'bank', location, radius)
 		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
 
-
 	}
 
 	var centerPoint;
@@ -122,29 +128,36 @@ $(function()  {
 			centerCircle.setMap(null)
 		}
 
-		centerPoint = new google.maps.Marker({
-			position: location, 
-			map: map, 
-			animation: google.maps.Animation.DROP,
-			icon: '../../assets/placeholder.png'
-		})
+		function settingCenterMarker(whichMap) {
+			centerPoint = new google.maps.Marker({
+				position: location, 
+				map: whichMap, 
+				animation: google.maps.Animation.DROP,
+				icon: '../../assets/placeholder.png'
+			})
 
-		centerCircle = new google.maps.Circle({
-			map: map,
-			radius: radius,
-			strokeWeight: 1, 
-			strokeColor: 'rgba(255,255,255,.1)'
-		})
+			centerCircle = new google.maps.Circle({
+				map: whichMap,
+				radius: radius,
+				strokeWeight: 1, 
+				strokeColor: 'rgba(255,255,255,.1)'
+			})
 
-		centerCircle.bindTo('center', centerPoint, 'position')
+			centerCircle.bindTo('center', centerPoint, 'position')
 
-		//center map on center marker
-		map.setCenter(centerPoint.position)
+			//center map on center marker
+			whichMap.setCenter(centerPoint.position)
 
-		var zoomin = radiusToZoom(radius)
-		
-		//automatically zoom map to fit the radius of the circle overlay
-		map.setZoom(zoomin)
+			var zoomin = radiusToZoom(radius)
+			
+			//automatically zoom map to fit the radius of the circle overlay
+			whichMap.setZoom(zoomin)
+		}
+
+		settingCenterMarker(map)
+		settingCenterMarker(transitMap)
+
+
 	}
 
 
@@ -171,7 +184,7 @@ $(function()  {
 				typeOfIcon = '../../assets/location-pointerPurp.png'
 			} else if (icon === 'bar,night_club') {
 				typeOfIcon = '../../assets/location-pointerRed.png'
-			}
+			} 
 
 			var marker = new google.maps.Marker({
 				position: placeCoords, 
@@ -205,11 +218,12 @@ $(function()  {
 			})
 		})
 	}
-	
 
 
 
 
+
+	//EVENT LISTENERS
 
 
 
@@ -326,6 +340,24 @@ $(function()  {
 		        scrollTop: $('#about').offset().top
 		    }, 1000);
 	})
+
+
+	//TRANSIT MAP
+
+	var transitMap;
+
+	var transitMarkers = [];
+
+	var transitCenter;
+
+	transitCenter = {lat: 49.283103, lng: -123.119290};
+
+
+	transitMap = new google.maps.Map(document.getElementById('transitMap'), {
+		center: center, 
+		zoom: 8
+	})
+
 
 })
 
