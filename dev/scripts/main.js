@@ -47,7 +47,7 @@ $(function()  {
 				//TRANSIT TINGS
 				transitMap.setCenter(results[0].geometry.location)
 
-				listTransit(locationObject)
+				listTransit(locationObject, rad)
 
 			}
 		})
@@ -184,38 +184,60 @@ $(function()  {
 				typeOfIcon = '../../assets/location-pointerPurp.png'
 			} else if (icon === 'bar,night_club') {
 				typeOfIcon = '../../assets/location-pointerRed.png'
-			} 
+			} else if (icon === 'transit_station') {
+				typeOfIcon = '../../assets/subway1.png'
+			}
 
-			var marker = new google.maps.Marker({
-				position: placeCoords, 
-				address: placeAddress,
-				name: placeName,
-				map: map, 
-				id: placeid,
-				animation: google.maps.Animation.DROP,
-				icon: typeOfIcon
-			})
-
-
-			markers.push(marker)
-
-			//on click, get details of the marker
-			marker.addListener('click', function() {
-				var deets = this;
-
-				var request = {
-					placeId: deets.id
-				}
-
-				var service;
-				service = new google.maps.places.PlacesService(map);
-				service.getDetails(request, function(results, status) {
-					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						//added attr so that when they hover over the list item, marker goes up and down
-						setFeatListingText(results)
-					}
+			
+			console.log(icon)
+			if (icon === 'transit_station') {
+				var transitMarker = new google.maps.Marker({
+					position: placeCoords, 
+					address: placeAddress,
+					name: placeName,
+					map: transitMap, 
+					id: placeid,
+					animation: google.maps.Animation.DROP,
+					icon: typeOfIcon
 				})
-			})
+
+				transitMarkers.push(transitMarker)
+				console.log('na?')
+			} else {
+				var marker = new google.maps.Marker({
+					position: placeCoords, 
+					address: placeAddress,
+					name: placeName,
+					map: map, 
+					id: placeid,
+					animation: google.maps.Animation.DROP,
+					icon: typeOfIcon
+				})
+				markers.push(marker)
+				console.log('yee?')
+				//on click, get details of the marker
+				marker.addListener('click', function() {
+					var deets = this;
+
+					var request = {
+						placeId: deets.id
+					}
+
+					var service;
+					service = new google.maps.places.PlacesService(map);
+					service.getDetails(request, function(results, status) {
+						if (status == google.maps.places.PlacesServiceStatus.OK) {
+							//added attr so that when they hover over the list item, marker goes up and down
+							setFeatListingText(results)
+						}
+					})
+				})
+			}
+
+
+
+			
+
 		})
 	}
 
@@ -358,7 +380,40 @@ $(function()  {
 		zoom: 8
 	})
 
+	var transitLayer = new google.maps.TransitLayer();
+	transitLayer.setMap(transitMap)
 
+
+	function listTransit(searchLocation, radius) {
+		var toMarkersSubway = [];
+
+		function markerSearch(markersArray, requestType, locationQuery, queryRadius) {
+			var request = {
+				location: locationQuery,
+				radius: queryRadius,
+				requestType: requestType
+			}
+
+			var service;
+			service = new google.maps.places.PlacesService(transitMap)
+			service.nearbySearch(request, function(results, status) {
+				if (status === 'OK') {
+					console.log('trabsut', results)
+					results.map(function(place, ind) {
+						markersArray.push(place)
+					})
+					console.log('transit niga',markersArray)
+					getMarkers(markersArray, 'transit_station')
+				}
+
+			})
+
+		}
+
+		markerSearch(toMarkersSubway, 'transit_station', searchLocation, radius)
+
+
+	}
 })
 
 
