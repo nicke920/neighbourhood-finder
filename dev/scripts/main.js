@@ -117,7 +117,10 @@ $(function()  {
 		top5Search(toMarkersBank, 'bank', location, radius)
 		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
 
+
 	}
+
+
 
 	var centerPoint;
 	var centerCircle;
@@ -198,8 +201,12 @@ $(function()  {
 				animation: google.maps.Animation.DROP,
 				icon: typeOfIcon
 			})
-			markers.push(marker)
 
+			markers.push(marker)
+			
+			if (icon === 'bank' || icon === 'school' || icon === 'doctor') {
+				marker.setMap(null)
+			}
 			//on click, get details of the marker
 			marker.addListener('click', function() {
 				var deets = this;
@@ -217,16 +224,49 @@ $(function()  {
 					}
 				})
 			})
-
-
-
-
-			
-
 		})
+
+
 	}
 
+		$('.mapCheck').on('change', function() {
+			// console.log(this)
+			if ($(this).attr('checked')) {
+				$(this).removeAttr('checked')
+				console.log('firiing')
+				var n = $(this).parent().parent().find('#list').children();
 
+				$.each(n, function(ind, val) {
+					// console.log('s', $(val).find('li').attr('id'))
+					var ids = $(val).find('li').attr('id')
+
+					$.each(markers, function(ind, val) {
+						if (ids === val.id) {
+							markers[ind].setMap(null)
+						}
+					})
+
+				})
+			} else {
+				$(this).attr('checked', 'true')
+				console.log('98qwr984q98')
+				var n = $(this).parent().parent().find('#list').children();
+
+				$.each(n, function(ind, val) {
+					// console.log('s', $(val).find('li').attr('id'))
+					var ids = $(val).find('li').attr('id')
+
+					$.each(markers, function(ind, val) {
+						if (ids === val.id) {
+							markers[ind].setMap(map)
+						}
+					})
+
+				})
+			}
+			
+			// console.log('asd', n)
+		})
 
 
 
