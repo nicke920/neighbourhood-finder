@@ -244,6 +244,8 @@ nav {
 
 .feat-listing {
   border: 1px solid black; }
+  .feat-listing img {
+    width: 200px; }
 
 .dropdown ul {
   display: none; }

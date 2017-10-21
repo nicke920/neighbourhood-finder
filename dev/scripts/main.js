@@ -16,6 +16,13 @@ $(function()  {
 		center: center, 
 		zoom: 8
 	})
+	var transitLayer = new google.maps.TransitLayer();
+
+	var bikeLayer = new google.maps.BicyclingLayer();
+
+	var trafficLayer = new google.maps.TrafficLayer();
+
+
 
 	var geocoder = new google.maps.Geocoder()
 
@@ -145,18 +152,33 @@ $(function()  {
 				map: whichMap,
 				radius: radius,
 				strokeWeight: 1, 
-				strokeColor: 'rgba(255,255,255,.1)'
+				strokeColor: 'rgba(255,2,2,1)',
+				// fillColor: 'rgba(255,255,255,1)',
+				fillOpacity: 0
 			})
 
 			centerCircle.bindTo('center', centerPoint, 'position')
 
 			//center map on center marker
-			whichMap.setCenter(centerPoint.position)
-
-			var zoomin = radiusToZoom(radius)
 			
-			//automatically zoom map to fit the radius of the circle overlay
-			whichMap.setZoom(zoomin)
+
+			function settingTheCenter() {
+				console.log('center set')
+				whichMap.setCenter(centerPoint.position)
+
+				var zoomin = radiusToZoom(radius) 
+				
+				//automatically zoom map to fit the radius of the circle overlay
+				whichMap.setZoom(zoomin)
+
+			}
+
+			settingTheCenter();
+			
+			$('#setTheCenter').on('click', function() {
+				settingTheCenter();
+			})
+
 		}
 
 		settingCenterMarker(map)
@@ -219,6 +241,7 @@ $(function()  {
 				service = new google.maps.places.PlacesService(map);
 				service.getDetails(request, function(results, status) {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
+						console.log(results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000}))
 						//added attr so that when they hover over the list item, marker goes up and down
 						setFeatListingText(results)
 					}
@@ -229,44 +252,44 @@ $(function()  {
 
 	}
 
-		$('.mapCheck').on('change', function() {
-			// console.log(this)
-			if ($(this).attr('checked')) {
-				$(this).removeAttr('checked')
-				console.log('firiing')
-				var n = $(this).parent().parent().find('#list').children();
+	$('.mapCheck').on('change', function() {
+		// console.log(this)
+		if ($(this).attr('checked')) {
+			$(this).removeAttr('checked')
+			console.log('firiing')
+			var n = $(this).parent().parent().find('#list').children();
 
-				$.each(n, function(ind, val) {
-					// console.log('s', $(val).find('li').attr('id'))
-					var ids = $(val).find('li').attr('id')
+			$.each(n, function(ind, val) {
+				// console.log('s', $(val).find('li').attr('id'))
+				var ids = $(val).find('li').attr('id')
 
-					$.each(markers, function(ind, val) {
-						if (ids === val.id) {
-							markers[ind].setMap(null)
-						}
-					})
-
+				$.each(markers, function(ind, val) {
+					if (ids === val.id) {
+						markers[ind].setMap(null)
+					}
 				})
-			} else {
-				$(this).attr('checked', 'true')
-				console.log('98qwr984q98')
-				var n = $(this).parent().parent().find('#list').children();
 
-				$.each(n, function(ind, val) {
-					// console.log('s', $(val).find('li').attr('id'))
-					var ids = $(val).find('li').attr('id')
+			})
+		} else {
+			$(this).attr('checked', 'true')
+			console.log('98qwr984q98')
+			var n = $(this).parent().parent().find('#list').children();
 
-					$.each(markers, function(ind, val) {
-						if (ids === val.id) {
-							markers[ind].setMap(map)
-						}
-					})
+			$.each(n, function(ind, val) {
+				// console.log('s', $(val).find('li').attr('id'))
+				var ids = $(val).find('li').attr('id')
 
+				$.each(markers, function(ind, val) {
+					if (ids === val.id) {
+						markers[ind].setMap(map)
+					}
 				})
-			}
-			
-			// console.log('asd', n)
-		})
+
+			})
+		}
+		
+		// console.log('asd', n)
+	})
 
 
 
@@ -284,10 +307,50 @@ $(function()  {
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	})
+	
 
+	//open and close dropdown menu in results
 	$('.dropdown h3').on('click', function() {
 		$(this).parent().find('#list').toggle();
 	})
+
+	//toggle transit layer
+	$('#showTransit').on('click', function() {
+		$('body').toggleClass('transitLayerActive')
+
+		if ($('body').hasClass('transitLayerActive')) {
+			transitLayer.setMap(map)
+		} else {
+			transitLayer.setMap(null)
+		}
+
+	})
+
+	//toggle bike layer
+	$('#showBikes').on('click', function() {
+		$('body').toggleClass('bikeLayerActive')
+
+		if ($('body').hasClass('bikeLayerActive')) {
+			bikeLayer.setMap(map)
+		} else {
+			bikeLayer.setMap(null)
+		}
+		
+	})
+
+	//toggle traffic layer
+	$('#showTraffic').on('click', function() {
+		$('body').toggleClass('trafficLayerActive')
+
+		if ($('body').hasClass('trafficLayerActive')) {
+			trafficLayer.setMap(map)
+		} else {
+			trafficLayer.setMap(null)
+		}
+		
+	})
+
+
 
 	$(document).on('click', '#list div li', function() {
 		var that = this
@@ -331,11 +394,13 @@ $(function()  {
 
 
 	function setFeatListingText(results) {
+		var photoUrl = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
 		$('.feat-listing-name').text(results.name).attr('id', results.place_id).addClass('feat')
 		$('.feat-listing-address').text(results.formatted_address)
 		$('.feat-listing-phone').text(results.formatted_phone_number)
 		$('.feat-listing-website').text(results.website)
 		$('.feat-listing-rating').text(results.rating)
+		$('.feat-listing-image').attr('src', photoUrl)
 	}
 
 
@@ -388,62 +453,9 @@ $(function()  {
 		    }, 1000);
 	})
 
-	$('#showTransit').on('click', function() {
-		var transitLayer = new google.maps.TransitLayer();
-
-		transitLayer.setMap(map)
-	})
-
-
-	//TRANSIT MAP
-
-	// var transitMap;
-
-	// var transitMarkers = [];
-
-	// var transitCenter;
-
-	// transitCenter = {lat: 49.283103, lng: -123.119290};
-
-
-	// transitMap = new google.maps.Map(document.getElementById('transitMap'), {
-	// 	center: center, 
-	// 	zoom: 8
-	// })
 
 
 
-
-	// function listTransit(searchLocation, radius) {
-	// 	var toMarkersSubway = [];
-
-	// 	function markerSearch(markersArray, requestType, locationQuery, queryRadius) {
-	// 		var request = {
-	// 			location: locationQuery,
-	// 			radius: queryRadius,
-	// 			requestType: requestType
-	// 		}
-
-	// 		var service;
-	// 		service = new google.maps.places.PlacesService(transitMap)
-	// 		service.nearbySearch(request, function(results, status) {
-	// 			if (status === 'OK') {
-	// 				console.log('trabsut', results)
-	// 				results.map(function(place, ind) {
-	// 					markersArray.push(place)
-	// 				})
-	// 				console.log('transit niga',markersArray)
-	// 				getMarkers(markersArray, 'transit_station')
-	// 			}
-
-	// 		})
-
-	// 	}
-
-	// 	markerSearch(toMarkersSubway, 'transit_station', searchLocation, radius)
-
-
-	// }
 })
 
 
