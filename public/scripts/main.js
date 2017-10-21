@@ -364,6 +364,12 @@ $(function () {
 		}, 1000);
 	});
 
+	$('#showTransit').on('click', function () {
+		var transitLayer = new google.maps.TransitLayer();
+
+		transitLayer.setMap(map);
+	});
+
 	//TRANSIT MAP
 
 	// var transitMap;
@@ -379,9 +385,6 @@ $(function () {
 	// 	center: center, 
 	// 	zoom: 8
 	// })
-
-	// var transitLayer = new google.maps.TransitLayer();
-	// transitLayer.setMap(transitMap)
 
 
 	// function listTransit(searchLocation, radius) {
