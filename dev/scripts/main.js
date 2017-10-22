@@ -50,11 +50,6 @@ $(function()  {
 
 				setTextAboutCity(results[0].address_components[1].long_name, results[0].formatted_address)
 
-				//TRANSIT TINGS
-				// transitMap.setCenter(results[0].geometry.location)
-
-				// listTransit(locationObject, rad)
-
 			}
 		})
 	}
@@ -70,6 +65,10 @@ $(function()  {
 		var toMarkersBar = [];
 		var toMarkersTransit = [];
 
+		var sumOfRatings = []
+		var avg = 0;
+		var totalPlaces = 0;
+
 		function top5Search(theMarkersArray, requestType, location, radius) {
 			var request = {
 				location: location, 
@@ -82,13 +81,21 @@ $(function()  {
 			service = new google.maps.places.PlacesService(map);
 			service.nearbySearch(request, function(results, status) {
 				if (status == 'OK') {
+					results.map(function(place, index) {
+						if (place.rating !== undefined) {
+							avg += place.rating
+							totalPlaces += 1
+							sumOfRatings.push(place.rating)
+						}
+					})
+					$('.avg-area-rating').text(avg / totalPlaces)
+
 
 					results.filter(function(el) {
 						return el.rating !== undefined
 					}).sort(function(a,b) {
 						return (b.rating - a.rating)
 					}).map(function(place, index) {
-
 						if (index < 5) {
 							theMarkersArray.push(place)
 						}
@@ -123,6 +130,7 @@ $(function()  {
 		top5Search(toMarkersSchool, 'school', location, radius)
 		top5Search(toMarkersBank, 'bank', location, radius)
 		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
+
 
 
 	}
@@ -241,16 +249,16 @@ $(function()  {
 				service = new google.maps.places.PlacesService(map);
 				service.getDetails(request, function(results, status) {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						console.log(results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000}))
-						//added attr so that when they hover over the list item, marker goes up and down
 						setFeatListingText(results)
 					}
 				})
 			})
 		})
 
-
 	}
+
+
+
 
 	$('.mapCheck').on('change', function() {
 		// console.log(this)
@@ -260,7 +268,7 @@ $(function()  {
 			var n = $(this).parent().parent().find('#list').children();
 
 			$.each(n, function(ind, val) {
-				// console.log('s', $(val).find('li').attr('id'))
+
 				var ids = $(val).find('li').attr('id')
 
 				$.each(markers, function(ind, val) {
