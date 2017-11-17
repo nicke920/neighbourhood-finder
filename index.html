@@ -4,47 +4,62 @@
 	<meta charset="UTF-8">
 	<title>Neighbourhood Watch</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
 	<link rel="stylesheet" href="public/styles/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
 <body>
 <header>
-	<nav>
-		<div class="nav-wrapper">
-			<ul class="nav left-nav">
+	<div class="wrapper header-wrapper">
+
+		<div class="logo-section">
+			<div class="logo-image">
+				<svg class="thelogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M94.5,47.5l4.1-6.2L49.4,8.8L0.9,41.3l4.1,6.2l9.7-6.5v51.1H85l0-50.8L94.5,47.5z M37.5,48.5  c0,0,7.1-6,12.4,2.2c5.3-8.2,12.4-2.2,12.4-2.2c4.9,4.5,0,10.5,0,10.5c-1.9,3.4-11.6,12.6-12.4,13.4l-0.1-0.1  c-1.2-1.1-10.5-10-12.4-13.3C37.5,59,32.5,53,37.5,48.5z"/></svg>
+			</div>
+			<h1 class="logo-name">Neighbourhood finder</h1>
+		</div>
+		<nav class="nav">
+			<ul class="navbar">
 				<li><a href="#">Home</a></li>
-				<li><a href="#" id="about-nav">About</a></li>
+				<li><a href="#">More Info</a></li>
+				<li><a href="#">About Us</a></li>
 			</ul>
-			<div class="logo">
-				<img src="assets/pineapple.png" alt="">
+
+			<div class="login-section">
+				<a href="" class="btn btn-light login-btn">Login or Register</a>
 			</div>
-			<ul class="nav right-nav">
-				<li><a href="#">Blog</a></li>
-				<li><a href="#">Contact</a></li>
-			</ul>
-		</div>
-	</nav>
-	<div class="hero">
-		<div class="hero-content">
-			<div class="main-copy">
-				<h1>Neighbourhood Finder</h1>
-				<h5>Find the best of the best in your neigbourhood</h5>
-			</div>
-			<div class="main-copy-searched">
-				<h1>Enter another postal code</h1>
-			</div>
-			<div class="forms">
-				<input type="text" id="address" placeholder="enter postal code" value="M6k 0A9">
-				<input type="number" id="radius" placeholder="radius here" value="1111">
-				<input type="button" id="gotime" value="Sumbit">
-			</div>
-		</div>
-		
+		</nav>
 	</div>
 </header>
 <main>
+	<section class="hero">
+		<div class="hero-wrapper">
+			<div class="content-area">
+				<div class="location">
+					<div class="location-details">
+						<h2>Vancouver Sun 19C</h2>
+					</div>
+				</div>
+				<div class="form-area">
+					<form action="" class="home-search">
+						<div class="address-container">
+							<i class="fa fa-map-pin" aria-hidden="true"></i>
+							<input type="text" id="address" placeholder="enter postal code" value="M6k 0A9">
+						</div>
+						<div class="radius-container">
+							<input type="number" id="radius" placeholder="radius here" value="1111">
+						</div>
+						<div class="submit-container">
+							<input type="button" id="gotime" value="Search" class="btn btn-dark">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+				
+	</section>
 	<section id="about">
 		<div class="about-wrapper">
 			<h3>About Neighbourhood Finder</h3>
