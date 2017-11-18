@@ -302,10 +302,18 @@ $(function()  {
 
 
 	//EVENT LISTENERS
-
+	$('li.result-tab').on('click', function() {
+		if (!$(this).hasClass('clicked')) {
+			$('.results-nav li.result-tab').removeClass('clicked')
+			$(this).addClass('clicked')
+		} else if ($(this).hasClass('clicked')) {
+			$('.results-nav li.result-tab').removeClass('clicked')
+		}
+	})
 
 
 	$('#gotime').on('click', function() {
+		$('body').addClass('searched')
 		codeAddress();
 		$('html, body').animate({
 			scrollTop: $('#mapSection').offset().top
@@ -315,7 +323,6 @@ $(function()  {
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	})
-	
 
 	//open and close dropdown menu in results
 	$('.dropdown h3').on('click', function() {

@@ -1,6 +1,10 @@
 @import 'partials/normalize';
 @import 'partials/colors';
 
+
+// ------- GENERAL
+
+
 body {
 	font-family: 'Nunito Sans', cursive;
 	font-size: 16px;
@@ -11,8 +15,8 @@ img {
 	max-width: 100%;
 }
 #map { 
-	width: 500px;
-	height: 500px;
+	width: 100%;
+	height: calc(100vh);
 }
 
 .wrapper {
@@ -26,6 +30,30 @@ input {
 	border: 1px solid rgba(0,0,0,0.2);
 	font-weight: 300;
 }
+
+.btn {
+	padding: 12px 18px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	background: red;
+	box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
+	transition: all 0.5s;
+	border: none;
+	font-weight: 300;
+	&.btn-dark {
+		background: $accent-color;
+		color: white;
+	}
+	&.btn-light {
+		background: rgba(255,255,255,0.5);
+		color: black;
+		&:hover {
+			background: yellow;
+		}
+	}
+}
+
+// ------- HEADER
 
 header {
 	background-color: $primary-color;
@@ -90,36 +118,18 @@ ul.navbar {
 	}
 }
 
-.btn {
-	padding: 12px 18px;
-	border-radius: 5px;
-	text-transform: uppercase;
-	background: red;
-	box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
-	transition: all 0.5s;
-	border: none;
-	font-weight: 300;
-	&.btn-dark {
-		background: $accent-color;
-		color: white;
-	}
-	&.btn-light {
-		background: rgba(255,255,255,0.5);
-		color: black;
-		&:hover {
-			background: yellow;
-		}
-	}
-}
 
-main {
+// ------- MAIN
 
-}
+
+
+// ------- HERO + FORM
 
 section.hero {
-	background-image: url('../../assets/38.jpg');
+	background-image: url('../../assets/OldPaperBW.jpg');
 	background-size: cover;
 	height: calc(100vh - 90px);
+	min-height: 420px;
 	width: 100%;
 }
 
@@ -156,9 +166,12 @@ form.home-search {
 		width: 250px;
 		margin-right: 15px;
 		position: relative;
+		input {
+			padding: 6px 20px;
+		}
 		.fa {
 			position: absolute;
-			left: 4px;
+			left: 8px;
 			top: 50%;
 			font-size: 12px;
 			transform: translateY(-50%)
@@ -171,13 +184,113 @@ form.home-search {
 }
 
 .location {
-	padding: 15px 20px;
+	padding: 15px 20px 5px;
 	h2 {
 		color: white;
 		font-weight: 300;
 		font-size: 30px;
 	}
 }
+
+// ------------  HERO TRANSFORMATIONS ON SEARCH
+body.searched section.hero {
+	background: unset;
+	height: unset;
+	min-height: unset;
+}
+
+body.searched .location {
+	display: none;
+}
+
+body.searched .hero-wrapper {
+	align-items: flex-start;
+}
+
+body.searched .content-area {
+	transform: none;
+	width: 100%;
+	background: rgba($primary-color-light, 0.8);
+	z-index: 999;
+}
+body.searched .form-area {
+	padding: 15px 20px;
+	padding-left: 90px;
+	max-width: 600px;
+	box-shadow: none;
+	background: transparent;
+}
+
+
+
+// ------------ MAP SECTION
+
+section#mapSection {
+	margin-top: -66px;
+}
+
+
+
+
+// ------------- MAP SIDE BAR
+
+.results-bar {
+	position: fixed;
+	display: flex;
+	height: calc(100vh);
+	transition: width 0.4s;
+	z-index: 998;
+	top: 0;
+	padding-top: 66px;
+	transition: width 2s;
+}
+
+
+
+.results-nav {
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: flex-start;
+	padding-top: 20px;
+	z-index: 1003;
+	background: $primary-color-dark;
+	width: 80px;
+		position: relative;
+	li a {
+		display: block;
+		text-align: center;
+		padding: 10px;
+	}
+}
+
+.results-icon {
+	width: 46px;
+	height: 46px;
+	fill: blue;
+}
+
+.listings-nav {
+	background: grey;
+	visibility: hidden;
+	position: absolute;
+	left: -320px;
+	top: 0;
+	overflow: hidden;
+	height: 100vh;
+	width: 320px;
+}
+
+li.result-tab.clicked .listings-nav {
+	left: 80px;
+	visibility: visible;
+}
+li.result-tab.clicked .results-icon {
+	fill: red;
+}
+
+
+
 
 
 

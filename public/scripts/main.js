@@ -278,9 +278,17 @@ $(function () {
 	});
 
 	//EVENT LISTENERS
-
+	$('li.result-tab').on('click', function () {
+		if (!$(this).hasClass('clicked')) {
+			$('.results-nav li.result-tab').removeClass('clicked');
+			$(this).addClass('clicked');
+		} else if ($(this).hasClass('clicked')) {
+			$('.results-nav li.result-tab').removeClass('clicked');
+		}
+	});
 
 	$('#gotime').on('click', function () {
+		$('body').addClass('searched');
 		codeAddress();
 		$('html, body').animate({
 			scrollTop: $('#mapSection').offset().top

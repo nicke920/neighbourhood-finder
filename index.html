@@ -34,33 +34,169 @@
 	</div>
 </header>
 <main>
+
+
 	<section class="hero">
 		<div class="hero-wrapper">
 			<div class="content-area">
+
 				<div class="location">
 					<div class="location-details">
 						<h2>Vancouver Sun 19C</h2>
 					</div>
 				</div>
+
 				<div class="form-area">
 					<form action="" class="home-search">
+
 						<div class="address-container">
 							<i class="fa fa-map-pin" aria-hidden="true"></i>
 							<input type="text" id="address" placeholder="enter postal code" value="M6k 0A9">
 						</div>
+
 						<div class="radius-container">
+							<i class="fa fa-arrows-v" aria-hidden="true"></i>
 							<input type="number" id="radius" placeholder="radius here" value="1111">
 						</div>
+
 						<div class="submit-container">
 							<input type="button" id="gotime" value="Search" class="btn btn-dark">
 						</div>
+
 					</form>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<section id="mapSection">
+		<div id="map"></div>
+<!-- 		<h2>Showing results for <span class="area-name"></span></h2>
+		<h4 class="full-area-name"></h4>
+		<h4>Avg rating in area: <span class="avg-area-rating"></span></h4> -->
+		<div class="results-bar">
+			<ul class="results-nav">
+				<li class="result-tab">
+					<a>
+						<img src="assets/001-doctor-stethoscope.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdown dropdown-restaurant">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+				<li class="result-tab">
+					<a>
+						<img src="assets/002-glass-and-bottle-of-wine.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdow dropdown-cafe">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+				<li class="result-tab">
+					<a>
+						<img src="assets/003-coffee-cup.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdow dropdown-bar">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+				<li class="result-tab">
+					<a>
+						<img src="assets/004-plate-fork-and-knife.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdow dropdown-doctor">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+				<li class="result-tab">
+					<a>
+						<img src="assets/002-college-graduation.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdow dropdown-school">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+				<li class="result-tab">
+					<a>
+						<img src="assets/001-bank-building.svg" alt="" class="results-icon">
+					</a>
+					<div class="listings-nav dropdow dropdown-bank">
+						<ul class="listings-dropdown" id="list">
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="resultsContainer">
+			
+
+			<div class="area">
+				<div class="dropdown dropdown-restaurant">
+					<h3>Top 5 Restaurants <img src="assets/location-pointerPurp.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<div class="dropdown dropdown-cafe">
+					<h3>Top 5 Coffee Shops<img src="assets/location-pointerLiteBrown.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<div class="dropdown dropdown-bar">
+					<h3>Top 5 Bars/Nightlife <img src="assets/location-pointerRed.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<div class="dropdown dropdown-doctor">
+					<h3>Top 5 Doctors <img src="assets/location-pointerBlue.png" alt=""><input type="checkbox" class='mapCheck'></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<div class="dropdown dropdown-school">
+					<h3>Top 5 Schools <img src="assets/location-pointerGreen.png" alt=""><input type="checkbox" class='mapCheck'></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<div class="dropdown dropdown-bank">
+					<h3>Top 5 Banks <img src="assets/location-pointerOrange.png" alt=""><input type="checkbox" class='mapCheck'></h3>
+					<ul id="list"></ul>
+				</div>
+
+				<label for="showTransit">Show Transit Layer</label>
+				<input type="button" id="showTransit" value="Show Transit">
+
+				<label for="showBikes">Show Bike Layer</label>
+				<input type="button" id="showBikes" value="Show Bike Layer">
+
+				<label for="showTraffic">Show Traffic</label>
+				<input type="button" id="showTraffic" value="Show Traffic">
+
+				<input type="button" id="setTheCenter" value="Center map">
+
+				
+				<div class="feat-listing">
+					<img src="" alt="" class="feat-listing-image">
+					<h2 class="feat-listing-name"></h2>
+					<p> <span class="feat-listing-rating"></span> stars</p>
+					<p class="feat-listing-address"></p>
+					<p class="feat-listing-phone"></p>
+					<p class="feat-listing-website"></p>
+
 				</div>
 			</div>
 		</div>
-				
 	</section>
-	<section id="about">
+
+
+
+
+<!-- 	<section id="about">
 		<div class="about-wrapper">
 			<h3>About Neighbourhood Finder</h3>
 			<img class="feature-image" src="assets/me.jpg" alt="">
@@ -79,71 +215,10 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 </main>
 
-<section id="mapSection">
-	<h2>Showing results for <span class="area-name"></span></h2>
-	<h4 class="full-area-name"></h4>
-	<h4>Avg rating in area: <span class="avg-area-rating"></span></h4>
 
-	<div class="resultsContainer">
-		<div class="area">
-			<div class="dropdown dropdown-restaurant">
-				<h3>Top 5 Restaurants <img src="assets/location-pointerPurp.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<div class="dropdown dropdown-cafe">
-				<h3>Top 5 Coffee Shops<img src="assets/location-pointerLiteBrown.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<div class="dropdown dropdown-bar">
-				<h3>Top 5 Bars/Nightlife <img src="assets/location-pointerRed.png" alt=""><input type="checkbox" class='mapCheck' checked></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<div class="dropdown dropdown-doctor">
-				<h3>Top 5 Doctors <img src="assets/location-pointerBlue.png" alt=""><input type="checkbox" class='mapCheck'></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<div class="dropdown dropdown-school">
-				<h3>Top 5 Schools <img src="assets/location-pointerGreen.png" alt=""><input type="checkbox" class='mapCheck'></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<div class="dropdown dropdown-bank">
-				<h3>Top 5 Banks <img src="assets/location-pointerOrange.png" alt=""><input type="checkbox" class='mapCheck'></h3>
-				<ul id="list"></ul>
-			</div>
-
-			<label for="showTransit">Show Transit Layer</label>
-			<input type="button" id="showTransit" value="Show Transit">
-
-			<label for="showBikes">Show Bike Layer</label>
-			<input type="button" id="showBikes" value="Show Bike Layer">
-
-			<label for="showTraffic">Show Traffic</label>
-			<input type="button" id="showTraffic" value="Show Traffic">
-
-			<input type="button" id="setTheCenter" value="Center map">
-
-			
-			<div class="feat-listing">
-				<img src="" alt="" class="feat-listing-image">
-				<h2 class="feat-listing-name"></h2>
-				<p> <span class="feat-listing-rating"></span> stars</p>
-				<p class="feat-listing-address"></p>
-				<p class="feat-listing-phone"></p>
-				<p class="feat-listing-website"></p>
-
-			</div>
-		</div>
-		<div id="map"></div>
-	</div>
-</section>
 
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDeqbMgPGWVeEWOa3cw9QVJpuAZRwwDN4&libraries=places"></script>
