@@ -366,13 +366,12 @@ section#mapSection {
   display: -ms-flexbox;
   display: flex;
   height: calc(100vh);
-  transition: width 0.4s;
+  width: 80px;
   z-index: 998;
   top: 0;
-  padding-top: 66px;
-  transition: width 2s; }
+  padding-top: 66px; }
 
-.results-nav {
+.results-nav, .results-details {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -389,8 +388,8 @@ section#mapSection {
   z-index: 1003;
   background: #455A64;
   width: 80px;
-  position: relative; }
-  .results-nav li a {
+  transition: width ease-out .3s; }
+  .results-nav li a, .results-details li a {
     display: block;
     text-align: center;
     padding: 10px; }
@@ -401,18 +400,31 @@ section#mapSection {
   fill: blue; }
 
 .listings-nav {
-  background: grey;
-  visibility: hidden;
   position: absolute;
-  left: -320px;
   top: 0;
-  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
   height: 100vh;
-  width: 320px; }
+  width: 320px;
+  right: 0;
+  transition: left ease-out 4s; }
 
-li.result-tab.clicked .listings-nav {
-  left: 80px;
+.listings-nav.active {
+  opacity: 1;
   visibility: visible; }
 
-li.result-tab.clicked .results-icon {
-  fill: red; }
+.results-details {
+  width: 320px;
+  height: 100vh;
+  background: red;
+  z-index: 90;
+  transition: unset;
+  left: -320px;
+  position: absolute;
+  transition: left ease-out 0.4s; }
+
+.results-bar.opened .results-details {
+  left: 80px; }
+
+a.hover-link.selected {
+  background: rgba(0, 0, 0, 0.5); }

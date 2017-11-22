@@ -278,13 +278,13 @@ $(function () {
 	});
 
 	//EVENT LISTENERS
-	$('li.result-tab').on('click', function () {
-		if (!$(this).hasClass('clicked')) {
-			$('.results-nav li.result-tab').removeClass('clicked');
-			$(this).addClass('clicked');
-		} else if ($(this).hasClass('clicked')) {
-			$('.results-nav li.result-tab').removeClass('clicked');
-		}
+	$('li.result-tab a.hover-link').on('click', function () {
+		$('.result-tab a.hover-link').removeClass('selected');
+		$(this).addClass('selected');
+		var tabAttr = $(this).attr('category');
+		$('.listings-nav.dropdown').removeClass('active');
+		$('.listings-nav.dropdown[category="' + tabAttr + '"]').addClass('active');
+		$(this).parent().parent().parent().addClass('opened');
 	});
 
 	$('#gotime').on('click', function () {
