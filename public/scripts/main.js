@@ -91,7 +91,20 @@ $(function () {
 							$('.dropdown-' + requestType + ' #list').empty();
 
 							$.each(theMarkersArray, function (index, place) {
-								$('.dropdown-' + requestType + ' #list').append($('<div>').append('<li id=\'' + place.place_id + '\'>' + place.name + ' / ' + place.rating + '</li>'));
+								var isOpenText;
+								var photoURL;
+								console.log(place.opening_hours);
+								if (place.opening_hours && place.opening_hours.open_now === true) {
+									isOpenText = "Open";
+								} else {
+									isOpenText = "";
+								}
+								if ($(place.photos).length > 0) {
+									photoURL = place.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
+								} else {
+									photoURL = "https://www.smashingmagazine.com/wp-content/uploads/2015/06/10-dithering-opt.jpg";
+								}
+								$('.dropdown-' + requestType + ' #list').append('<li id=\'' + place.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t<div class="description">\n\t\t\t\t\t\t\t\t\t\t\t<p class="open-label">' + isOpenText + '</p>\n\t\t\t\t\t\t\t\t\t\t\t<h3>' + place.name + '</h3>\n\t\t\t\t\t\t\t\t\t\t\t<h4>' + place.vicinity + '</h4>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class="result-background-image">\n\t\t\t\t\t\t\t\t\t\t\t<img src=' + photoURL + ' alt="">\n\t\t\t\t\t\t\t\t\t\t\t<div class="theoverlay"></div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t<div class="additional-info">\n\t\t\t\t\t\t\t\t\t\t<div class="rating">\n\t\t\t\t\t\t\t\t\t\t\t<p>' + place.rating + '</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class="more-options">\n\t\t\t\t\t\t\t\t\t\t\t<p>more</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</li>');
 							});
 						}
 					};
