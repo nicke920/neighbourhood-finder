@@ -34,11 +34,13 @@
 	</div>
 </header>
 <main>
-
-
 	<section class="hero">
 		<div class="hero-wrapper">
 			<div class="content-area">
+
+				<div class="hero-copy">
+					<h1>Discover Your Neighbourhood</h1>
+				</div>
 
 				<div class="location">
 					<div class="location-details">
@@ -49,19 +51,17 @@
 				<div class="form-area">
 					<form action="" class="home-search">
 
-						<div class="address-container">
+						<div class="search-container address-container">
 							<i class="fa fa-map-pin" aria-hidden="true"></i>
-							<input type="text" id="address" placeholder="enter postal code" value="M6k 0A9">
+							<input type="text" id="address" placeholder="Enter Postal Code" required value="M5V 2A9">
 						</div>
 
-						<div class="radius-container">
+						<div class="search-container radius-container">
 							<i class="fa fa-arrows-v" aria-hidden="true"></i>
-							<input type="number" id="radius" placeholder="radius here" value="1111">
+							<input type="number" id="radius" placeholder="radius here" required value="2000">
 						</div>
 
-						<div class="submit-container">
-							<input type="button" id="gotime" value="Search" class="btn btn-dark">
-						</div>
+							<input type="submit" id="gotime" value="Search" class="btn btn-dark">
 
 					</form>
 				</div>
@@ -70,12 +70,71 @@
 		</div>
 	</section>
 
-	<section id="mapSection">
+<section class="about-us">
+	<div class="wrapper">
+		<h1>Home page copy goes here</h1>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque tenetur ea accusamus quas, consequatur, quis at commodi magnam aliquam inventore maxime porro a itaque. Quia non sint corporis, tenetur nam incidunt perferendis beatae quos blanditiis. Nulla dolore labore, sit aperiam voluptatibus voluptas corrupti dicta amet molestias possimus fugit dolor provident ab tempore repellendus fugiat beatae accusamus repellat laboriosam nesciunt maiores quaerat, ipsum perferendis mollitia aut. Dolorem quis, officiis, nihil possimus vero excepturi corporis esse dicta illum ut! Tempore nobis in possimus porro est saepe cum, nisi! Id velit aperiam ipsum ad mollitia recusandae, in illo fuga vel voluptas vero laboriosam quibusdam sed odit voluptatem alias optio, dolores porro! Dolor repellat quas consectetur laborum aspernatur dolorum molestiae natus quae accusantium ab harum, debitis libero dolorem rerum reiciendis enim quod facere corporis earum, iure odio ut nostrum cupiditate tempore. Nisi quia in iste, laboriosam omnis sunt delectus fugiat totam nobis explicabo, ipsam at sed alias itaque cum error ipsum ad animi inventore harum debitis. Cupiditate officia sed, harum magnam! Sequi fugit hic eum recusandae adipisci atque nisi. Quaerat commodi, corrupti praesentium modi sapiente perferendis quia dignissimos fugit, tempore beatae et maxime impedit nihil esse quisquam dolores deserunt a quis reprehenderit excepturi dolorem aut cum harum soluta. Eos, atque reprehenderit sapiente quod voluptate nobis quia, dolorem rerum minus eaque velit debitis voluptas explicabo modi dolorum earum! Saepe, nisi? Voluptate iusto optio, impedit, ad eos dolores incidunt aperiam debitis, soluta est aliquid accusamus libero ut. Odit vitae, earum commodi quam voluptates velit adipisci, rem culpa sit cum dolore alias, optio nesciunt repellendus officia aspernatur, asperiores! Vero reiciendis error rerum officia laudantium, molestias reprehenderit voluptates placeat, ipsum accusamus dignissimos adipisci doloribus esse quo qui aliquam, vitae eveniet animi non? Id non praesentium illum ipsam aperiam vel debitis consequatur deserunt quae, tenetur aliquid quis? Amet, sequi, quia, consequuntur incidunt obcaecati aliquam officia voluptatibus distinctio soluta, similique ullam ut nam minima labore. Consectetur fugit nesciunt ratione, explicabo neque aperiam amet eligendi est commodi aspernatur vel odit iusto unde ipsa magni eum repellendus itaque asperiores reiciendis, quaerat dignissimos id. Nisi assumenda autem quis consequatur sunt laudantium porro. Nostrum excepturi reprehenderit atque blanditiis quidem cupiditate odio expedita ut quibusdam, maiores nemo minus eaque porro alias perspiciatis fuga iste ab obcaecati, nihil facere dignissimos provident. Cupiditate at, eos vitae hic a, tempora ullam tempore ea quae quasi libero! Doloremque nemo repudiandae commodi debitis. Dignissimos assumenda distinctio animi temporibus dolorem autem blanditiis at deserunt unde cumque quidem magnam reprehenderit commodi consequuntur eos porro, eum beatae, doloremque, in facilis. Consectetur vitae quis, qui tempore laborum laboriosam harum, omnis nobis! Temporibus molestias accusantium illum, tenetur magni blanditiis consectetur hic quisquam, cupiditate. Reprehenderit dolores dicta aliquid provident cumque, delectus, inventore tempora, pariatur quis quaerat voluptas repellat. Dolorem ut doloremque porro blanditiis autem consequatur sunt iste omnis, voluptatum voluptatibus earum consequuntur nesciunt itaque optio dicta recusandae non pariatur ea culpa officiis, dolor neque reprehenderit. Omnis commodi dolorum rem, reiciendis facere consectetur ipsa minus corrupti! Laborum exercitationem quam fuga, asperiores accusantium, nihil cum ipsa vitae veritatis!</p>
+	</div>
+</section>
+
+
+
+<section id="mapSection">
+	<div class="portal-header">
+		<form action="" class="home-search">
+
+			<div class="search-container address-container">
+				<i class="fa fa-map-pin" aria-hidden="true"></i>
+				<input type="text" id="address" placeholder="Enter Postal Code" required value="M5V 2A9">
+			</div>
+
+			<div class="search-container radius-container">
+				<i class="fa fa-arrows-v" aria-hidden="true"></i>
+				<input type="number" id="radius" placeholder="radius here" required value="2000">
+			</div>
+
+				<input type="submit" id="gotime" value="Search" class="btn btn-dark">
+
+		</form>
+	</div>
 		<div id="map"></div>
-<!-- 		<h2>Showing results for <span class="area-name"></span></h2>
-		<h4 class="full-area-name"></h4>
-		<h4>Avg rating in area: <span class="avg-area-rating"></span></h4> -->
-		<div class="results-bar">
+		<div class="results">
+			<div class="title">
+				<h3>Search Results (4)</h3>
+			</div>
+			<div class="result-area">
+				<div class="result-card dropdown dropdown-cafe open">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+
+				<div class="result-card dropdown dropdown-bars">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+
+				<div class="result-card dropdown dropdown-cafes">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+
+				<div class="result-card dropdown dropdown-cafes">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+
+				<div class="result-card dropdown dropdown-cafes">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+
+				<div class="result-card dropdown dropdown-cafes">
+					<h5>Top 5 Category</h5>
+					<ul class="listings-dropdown" id="list"></ul>
+				</div>
+			</div>
+		</div>
+ 		<!-- <div class="results-bar">
 			<ul class="results-nav">
 				<li class="result-tab">
 					<a class="hover-link" category="restaurant">
@@ -227,10 +286,8 @@
 
 				</div>
 			</div>
-		</div>
-	</section>
-
-
+		</div> -->
+	</section> 
 
 
 <!-- 	<section id="about">

@@ -347,16 +347,21 @@ $(function()  {
 	})
 
 
-	$('#gotime').on('click', function() {
+	$('form.home-search').on('submit', function(e) {
+		e.preventDefault();
+		$('.hero').hide();
+		$('.about-us').hide();
+
+
 		$('body').addClass('searched')
 		codeAddress();
-		$('html, body').animate({
-			scrollTop: $('#mapSection').offset().top
-		}, 2000);
 		$('#about').hide();
 		$('.hero').addClass('searched')
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
+		// $('html, body').animate({
+		// 	scrollTop: $('#mapSection').offset().top
+		// }, 2000);
 	})
 
 	//open and close dropdown menu in results
