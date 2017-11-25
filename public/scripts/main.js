@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
+"use strict";
 
 $(function () {
 
@@ -13,11 +13,96 @@ $(function () {
 	//markers that are gonna show on map
 	var markers = [];
 
+	var styles = [{
+		"featureType": "administrative",
+		"elementType": "all",
+		"stylers": [{
+			"saturation": "-100"
+		}]
+	}, {
+		"featureType": "administrative.province",
+		"elementType": "all",
+		"stylers": [{
+			"visibility": "off"
+		}]
+	}, {
+		"featureType": "landscape",
+		"elementType": "all",
+		"stylers": [{
+			"saturation": -100
+		}, {
+			"lightness": 65
+		}, {
+			"visibility": "on"
+		}]
+	}, {
+		"featureType": "poi",
+		"elementType": "all",
+		"stylers": [{
+			"saturation": -100
+		}, {
+			"lightness": "50"
+		}, {
+			"visibility": "simplified"
+		}]
+	}, {
+		"featureType": "road",
+		"elementType": "all",
+		"stylers": [{
+			"saturation": "-100"
+		}]
+	}, {
+		"featureType": "road.highway",
+		"elementType": "all",
+		"stylers": [{
+			"visibility": "simplified"
+		}]
+	}, {
+		"featureType": "road.arterial",
+		"elementType": "all",
+		"stylers": [{
+			"lightness": "30"
+		}]
+	}, {
+		"featureType": "road.local",
+		"elementType": "all",
+		"stylers": [{
+			"lightness": "40"
+		}]
+	}, {
+		"featureType": "transit",
+		"elementType": "all",
+		"stylers": [{
+			"saturation": -100
+		}, {
+			"visibility": "simplified"
+		}]
+	}, {
+		"featureType": "water",
+		"elementType": "geometry",
+		"stylers": [{
+			"hue": "#ffff00"
+		}, {
+			"lightness": -25
+		}, {
+			"saturation": -97
+		}]
+	}, {
+		"featureType": "water",
+		"elementType": "labels",
+		"stylers": [{
+			"lightness": -25
+		}, {
+			"saturation": -100
+		}]
+	}];
+
 	center = { lat: 49.283103, lng: -123.119290 };
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: center,
-		zoom: 8
+		zoom: 9,
+		styles: styles
 	});
 	var transitLayer = new google.maps.TransitLayer();
 
@@ -82,13 +167,13 @@ $(function () {
 				if (status == 'OK') {
 					var pattern = function pattern(requestType) {
 						if (requestType === requestType) {
-							getMarkers(theMarkersArray, '' + requestType);
+							getMarkers(theMarkersArray, "" + requestType);
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0];
 							}
 
-							$('.dropdown-' + requestType + ' #list').empty();
+							$(".dropdown-" + requestType + " #list").empty();
 
 							$.each(theMarkersArray, function (index, place) {
 								var isOpenText;
@@ -104,7 +189,7 @@ $(function () {
 								} else {
 									photoURL = "https://www.smashingmagazine.com/wp-content/uploads/2015/06/10-dithering-opt.jpg";
 								}
-								$('.dropdown-' + requestType + ' #list').append('<li id=\'' + place.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t<div class="description">\n\t\t\t\t\t\t\t\t\t\t\t<p class="open-label">' + isOpenText + '</p>\n\t\t\t\t\t\t\t\t\t\t\t<h3>' + place.name + '</h3>\n\t\t\t\t\t\t\t\t\t\t\t<h4>' + place.vicinity + '</h4>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class="result-background-image">\n\t\t\t\t\t\t\t\t\t\t\t<img src=' + photoURL + ' alt="">\n\t\t\t\t\t\t\t\t\t\t\t<div class="theoverlay"></div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t<div class="additional-info">\n\t\t\t\t\t\t\t\t\t\t<div class="rating">\n\t\t\t\t\t\t\t\t\t\t\t<p>' + place.rating + '</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class="more-options">\n\t\t\t\t\t\t\t\t\t\t\t<p>more</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</li>');
+								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5>" + place.rating + " stars</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
 							});
 						}
 					};
@@ -164,7 +249,7 @@ $(function () {
 				map: whichMap,
 				radius: radius,
 				strokeWeight: 1,
-				strokeColor: 'rgba(255,2,2,1)',
+				strokeColor: '#607D8B',
 				// fillColor: 'rgba(255,255,255,1)',
 				fillOpacity: 0
 			});
@@ -204,19 +289,17 @@ $(function () {
 
 			var typeOfIcon;
 			if (icon === 'cafe') {
-				typeOfIcon = '../../assets/location-pointerLiteBrown.png';
+				typeOfIcon = '../../assets/001-hot-coffee-rounded-cup-on-a-plate-from-side-view.png';
 			} else if (icon === 'doctor') {
-				typeOfIcon = '../../assets/money-bag.png';
+				typeOfIcon = '../../assets/004-medicine-briefcase.png';
 			} else if (icon === 'school') {
-				typeOfIcon = '../../assets/location-pointerGreen.png';
+				typeOfIcon = '../../assets/003-college-graduation.png';
 			} else if (icon === 'bank') {
-				typeOfIcon = '../../assets/location-pointerOrange.png';
+				typeOfIcon = '../../assets/002-bank-building.png';
 			} else if (icon === 'restaurant') {
-				typeOfIcon = '../../assets/location-pointerPurp.png';
+				typeOfIcon = '../../assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png';
 			} else if (icon === 'bar,night_club') {
-				typeOfIcon = '../../assets/location-pointerRed.png';
-			} else if (icon === 'transit_station') {
-				typeOfIcon = '../../assets/subway1.png';
+				typeOfIcon = '../../assets/005-drink-beer-jar.png';
 			}
 
 			var marker = new google.maps.Marker({
@@ -296,7 +379,7 @@ $(function () {
 		$(this).addClass('selected');
 		var tabAttr = $(this).attr('category');
 		$('.listings-nav.dropdown').removeClass('active');
-		$('.listings-nav.dropdown[category="' + tabAttr + '"]').addClass('active');
+		$(".listings-nav.dropdown[category=\"" + tabAttr + "\"]").addClass('active');
 		$(this).parent().parent().parent().addClass('opened');
 	});
 
@@ -317,8 +400,18 @@ $(function () {
 	});
 
 	//open and close dropdown menu in results
-	$('.dropdown h3').on('click', function () {
-		$(this).parent().find('#list').toggle();
+	$('.result-card').on('click', function (e) {
+		console.log('e', e);
+
+		if (!$(this).hasClass('open')) {
+			$('.result-card > ul').slideUp();
+			$(this).find('ul').slideDown();
+			$('.result-card').removeClass('open');
+			$(this).addClass('open');
+		} else {
+			$('.result-card > ul').slideUp();
+			$('.result-card').removeClass('open');
+		}
 	});
 
 	//toggle transit layer
@@ -354,7 +447,8 @@ $(function () {
 		}
 	});
 
-	$(document).on('click', '#list div li', function () {
+	$(document).on('click', '#list > li', function () {
+		console.log('wok');
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
@@ -374,7 +468,7 @@ $(function () {
 		});
 	});
 
-	$(document).on('mouseover', '#list div li, .feat-listing-name', function () {
+	$(document).on('mouseover', '#list > li, .feat-listing-name', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
@@ -384,7 +478,7 @@ $(function () {
 		});
 	});
 
-	$(document).on('mouseout', '#list div li, .feat-listing-name', function () {
+	$(document).on('mouseout', '#list > li, .feat-listing-name', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
