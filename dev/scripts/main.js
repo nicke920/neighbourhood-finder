@@ -242,17 +242,23 @@ $(function()  {
 							$.each(theMarkersArray, function(index, place) {
 								var isOpenText;
 								var photoURL;
-								console.log(place.opening_hours)
+
 								if (place.opening_hours && place.opening_hours.open_now === true) {
 									isOpenText = "Open"
 								} else {
 									isOpenText = ""
 								}
+
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
 								} else {
 									photoURL = "https://www.smashingmagazine.com/wp-content/uploads/2015/06/10-dithering-opt.jpg"
 								}
+
+								//stars ratings
+
+								
+
 								$(`.dropdown-${requestType} #list`).append(
 									`<li id='${place.place_id}' class='result-tile'>
 										<a>
@@ -262,8 +268,10 @@ $(function()  {
 													<img src="${photoURL}" alt="" />
 												</div>
 												<div class="result-description">
-													<h5>${place.vicinity}</h5>
-													<h5>${place.rating} stars</h5>
+													<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${place.vicinity}</h5>
+													<div class="rating-div">
+														${starRatings(place.rating)}
+													</div>
 												</div>
 											</div>
 										</a>
@@ -288,6 +296,31 @@ $(function()  {
 
 
 
+	}
+
+	function starRatings(rating) {
+		console.log('working', rating)
+		var ratingOutput;
+		if (rating > 4.8) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 4.2 && rating <= 4.7) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 3.8 && rating <= 4.2) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 3.2 && rating <= 3.8) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 2.8 && rating <= 3.2) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 2.2 && rating <= 2.8) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating > 1.8 && rating <= 2.2) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else if (rating <= 1.8 ) {
+			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+		} else {
+			ratingOutput = `<p>No Rating</p>`
+		}
+		return ratingOutput
 	}
 
 
@@ -484,7 +517,6 @@ $(function()  {
 
 	//open and close dropdown menu in results
 	$('.result-card').on('click', function(e) {
-		console.log('e', e)
 
 		if (!$(this).hasClass('open')) {
 			$('.result-card > ul').slideUp();
