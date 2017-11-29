@@ -3,7 +3,6 @@
 
 $(function () {
 
-	console.log('inist');
 	var map;
 
 	var service;
@@ -129,11 +128,13 @@ $(function () {
 
 				locationObject = results[0].geometry.location;
 
+				//populate city details in top bar
+				$('.city-name').text(results[0].formatted_address);
+				$('.results-radius').text(rad);
+
 				listPlaces(locationObject, rad);
 
 				centerMarker(locationObject, rad);
-
-				setTextAboutCity(results[0].address_components[1].long_name, results[0].formatted_address);
 			}
 		});
 	}
@@ -188,11 +189,8 @@ $(function () {
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
 								} else {
-									photoURL = "https://www.smashingmagazine.com/wp-content/uploads/2015/06/10-dithering-opt.jpg";
+									photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 								}
-
-								//stars ratings
-
 
 								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
 							});
@@ -206,7 +204,7 @@ $(function () {
 							sumOfRatings.push(place.rating);
 						}
 					});
-					$('.avg-area-rating').text(avg / totalPlaces);
+					$('.avg-area-rating').text((avg / totalPlaces).toFixed(2));
 
 					results.filter(function (el) {
 						return el.rating !== undefined;
@@ -230,31 +228,6 @@ $(function () {
 		top5Search(toMarkersSchool, 'school', location, radius);
 		top5Search(toMarkersBank, 'bank', location, radius);
 		top5Search(toMarkersBar, ['bar', 'night_club'], location, radius);
-	}
-
-	function starRatings(rating) {
-		console.log('working', rating);
-		var ratingOutput;
-		if (rating > 4.8) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 4.2 && rating <= 4.7) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 3.8 && rating <= 4.2) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 3.2 && rating <= 3.8) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 2.8 && rating <= 3.2) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 2.2 && rating <= 2.8) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating > 1.8 && rating <= 2.2) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else if (rating <= 1.8) {
-			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
-		} else {
-			ratingOutput = "<p>No Rating</p>";
-		}
-		return ratingOutput;
 	}
 
 	var centerPoint;
@@ -290,7 +263,7 @@ $(function () {
 
 
 			function settingTheCenter() {
-				console.log('center set');
+				// console.log('center set')
 				whichMap.setCenter(centerPoint.position);
 
 				var zoomin = radiusToZoom(radius);
@@ -370,7 +343,7 @@ $(function () {
 		// console.log(this)
 		if ($(this).attr('checked')) {
 			$(this).removeAttr('checked');
-			console.log('firiing');
+
 			var n = $(this).parent().parent().find('#list').children();
 
 			$.each(n, function (ind, val) {
@@ -385,7 +358,7 @@ $(function () {
 			});
 		} else {
 			$(this).attr('checked', 'true');
-			console.log('98qwr984q98');
+
 			var n = $(this).parent().parent().find('#list').children();
 
 			$.each(n, function (ind, val) {
@@ -477,7 +450,7 @@ $(function () {
 	});
 
 	$(document).on('click', '#list > li', function () {
-		console.log('wok');
+		// console.log('wok')
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
@@ -501,7 +474,7 @@ $(function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
-				console.log('va', val);
+				// console.log('va', val)
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
 			}
 		});
@@ -547,11 +520,6 @@ $(function () {
 		return z;
 	}
 
-	function setTextAboutCity(cityName, fullCityName) {
-		$('.area-name').text(cityName);
-		$('.full-area-name').text(fullCityName);
-	}
-
 	//SMOOTH SCROLL 
 	$('a[href*="#"]:not([href="#"])').click(function () {
 		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
@@ -566,11 +534,34 @@ $(function () {
 		}
 	});
 
-	$('#about-nav').on('click', function () {
-		$('html, body').animate({
-			scrollTop: $('#about').offset().top
-		}, 1000);
+	$('.secondary-navbar i.fa-bars').on('click', function () {
+		$(this).parent().toggleClass('secondary-search-open');
 	});
+
+	function starRatings(rating) {
+		// console.log('working', rating)
+		var ratingOutput;
+		if (rating > 4.8) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 4.2 && rating <= 4.7) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 3.8 && rating <= 4.2) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 3.2 && rating <= 3.8) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 2.8 && rating <= 3.2) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 2.2 && rating <= 2.8) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating > 1.8 && rating <= 2.2) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else if (rating <= 1.8) {
+			ratingOutput = "<i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><span>(" + rating + ")</span>";
+		} else {
+			ratingOutput = "<p>No Rating</p>";
+		}
+		return ratingOutput;
+	}
 });
 
 },{}]},{},[1]);

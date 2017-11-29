@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Neighbourhood Watch</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,900|Open+Sans:300,400,600,700" rel="stylesheet">
 	<link rel="stylesheet" href="public/styles/style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,17 +78,43 @@
 </section>
 
 
+<div class="secondary-navbar">
+	<div class="inside-navbar">
+		<div class="secondary-menu">
+			<i class="fa fa-bars" aria-hidden="true"></i>
+			<form action="" class="">
+				<div class="">
+					<i class="fa fa-map-pin" aria-hidden="true"></i>
+					<input type="text" id="address" placeholder="Enter Postal Code" required value="M5V 2A9">
+				</div>
 
+				<div class="">
+					<i class="fa fa-arrows-v" aria-hidden="true"></i>
+					<input type="number" id="radius" placeholder="radius here" required value="2000">
+				</div>
+
+					<input type="submit" id="gotime" value="Search" class="">
+			</form>
+		</div>
+	
+	
+
+	<div class="city-details">
+		<h3 class="city-name"></h3>
+	</div>
+	</div>
+</div>
 <section id="mapSection">
 		<div id="map"></div>
 		<div class="results">
 			<div class="title">
 				<h2>Top 5</h2>
+				<p>Average place rating: <span class="avg-area-rating"></span></p>
 			</div>
 			<div class="result-area">
 				<div class="result-card dropdown dropdown-restaurant">
 					<div class="result-card-description">
-						<h5>Top 5 Restaurants</h5>
+						<h5>Restaurants</h5>
 						<img src="assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -96,7 +122,7 @@
 
 				<div class="result-card dropdown dropdown-cafe">
 					<div class="result-card-description">
-						<h5>Top 5 Cafes</h5>
+						<h5>Cafes</h5>
 						<img src="assets/001-hot-coffee-rounded-cup-on-a-plate-from-side-view.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -104,7 +130,7 @@
 
 				<div class="result-card dropdown dropdown-bar">
 					<div class="result-card-description">
-						<h5>Top 5 Bars</h5>
+						<h5>Bars</h5>
 						<img src="assets/005-drink-beer-jar.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -112,7 +138,7 @@
 
 				<div class="result-card dropdown dropdown-doctor">
 					<div class="result-card-description">
-						<h5>Top 5 Doctors</h5>
+						<h5>Doctors</h5>
 						<img src="assets/004-medicine-briefcase.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -120,7 +146,7 @@
 
 				<div class="result-card dropdown dropdown-school">
 					<div class="result-card-description">
-						<h5>Top 5 Schools</h5>
+						<h5>Schools</h5>
 						<img src="assets/003-college-graduation.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -128,7 +154,7 @@
 
 				<div class="result-card dropdown dropdown-bank">
 					<div class="result-card-description">
-						<h5>Top 5 Banks</h5>
+						<h5>Banks</h5>
 						<img src="assets/002-bank-building.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
@@ -283,7 +309,7 @@
 	</section> 
 
 
-	<section>
+<!-- 	<section>
 		<div class="feat-listing">
 			<img src="" alt="" class="feat-listing-image">
 			<h2 class="feat-listing-name"></h2>
@@ -293,7 +319,7 @@
 			<p class="feat-listing-website"></p>
 
 		</div>
-	</section>
+	</section> -->
 
 <!-- 	<section id="about">
 		<div class="about-wrapper">
