@@ -322,7 +322,11 @@ $(function () {
 			}
 			//on click, get details of the marker
 			marker.addListener('click', function () {
+				console.log('th', this);
 				var deets = this;
+
+				$("#list > li").removeClass('mapClickedPlace');
+				$("#list > li#" + deets.id).addClass('mapClickedPlace');
 
 				var request = {
 					placeId: deets.id
@@ -397,6 +401,9 @@ $(function () {
 		$('.hero').addClass('searched');
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
+
+		$('#address').text('');
+		$('#radius').text('');
 		// $('html, body').animate({
 		// 	scrollTop: $('#mapSection').offset().top
 		// }, 2000);
@@ -470,19 +477,20 @@ $(function () {
 		});
 	});
 
-	$(document).on('mouseover', '#list > li, .feat-listing-name', function () {
+	$(document).on('mouseover', '#list > li', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
-				// console.log('va', val)
+				console.log('va', val.id);
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
 			}
 		});
 	});
 
-	$(document).on('mouseout', '#list > li, .feat-listing-name', function () {
+	$(document).on('mouseout', '#list > li', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
+			console.log('88');
 			if ($(that).attr('id') === val.id) {
 				markers[ind].setAnimation(null);
 			}

@@ -195,6 +195,11 @@ form.home-search {
 	.radius-container {
 		width: 30%;
 		border-right: 0;
+		padding-left: 35px;
+		display: flex;
+		select {
+			width: 90%;
+		}
 	}
 
 	.address-container {
@@ -255,11 +260,12 @@ body.searched {
 }
 
 .secondary-navbar {
+	display: none;
 	position: fixed;
 	top: 40px;
 	background: white;
 	z-index: 99999;
-	border: 1px solid black;
+	box-shadow: 0 1px 8px rgba(0,0,0,0.25);
 	width: 100%;
 	.inside-navbar {
 		position: relative;
@@ -282,6 +288,32 @@ body.searched {
 			color: $primary-color;
 		}
 	}
+}
+
+.secondary-menu form {
+	& > div {
+		border-bottom: 2px solid $primary-color;
+		margin-right: 20px;
+		display: flex;
+		align-items: center;
+	}
+	.btn {
+		font-size: 12px;
+		padding: 6px 12px;
+	}
+	.fa {
+		font-size: 20px!important;
+	}
+	#address, #radius {
+		border: none;
+		padding: 6px 12px;
+		font-weight: 300;
+		font-family: 'Open Sans';
+	}
+}
+
+body.searched .secondary-navbar {
+	display: block;
 }
 
 .secondary-menu form {
@@ -372,6 +404,10 @@ body.searched {
 		font-weight: bold;
 		color: $primary-color-dark;
 	}
+}
+.result-tile.mapClickedPlace {
+	background: rgba($primary-color-light, 0.5);
+    border-left: 4px solid $accent-color;
 }
 
 .result-detail {

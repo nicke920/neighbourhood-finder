@@ -327,7 +327,13 @@ form.home-search {
               transform: translateY(-50%); }
   form.home-search .radius-container {
     width: 30%;
-    border-right: 0; }
+    border-right: 0;
+    padding-left: 35px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
+    form.home-search .radius-container select {
+      width: 90%; }
   form.home-search .address-container {
     width: 70%; }
   form.home-search #gotime {
@@ -369,11 +375,12 @@ body.searched .portal-header {
   height: 100vh; }
 
 .secondary-navbar {
+  display: none;
   position: fixed;
   top: 40px;
   background: white;
   z-index: 99999;
-  border: 1px solid black;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
   width: 100%; }
   .secondary-navbar .inside-navbar {
     position: relative;
@@ -405,6 +412,32 @@ body.searched .portal-header {
     .secondary-navbar .secondary-menu .fa {
       font-size: 30px;
       color: #607D8B; }
+
+.secondary-menu form > div {
+  border-bottom: 2px solid #607D8B;
+  margin-right: 20px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+.secondary-menu form .btn {
+  font-size: 12px;
+  padding: 6px 12px; }
+
+.secondary-menu form .fa {
+  font-size: 20px !important; }
+
+.secondary-menu form #address, .secondary-menu form #radius {
+  border: none;
+  padding: 6px 12px;
+  font-weight: 300;
+  font-family: 'Open Sans'; }
+
+body.searched .secondary-navbar {
+  display: block; }
 
 .secondary-menu form {
   display: -webkit-flex;
@@ -489,6 +522,10 @@ body.searched .portal-header {
     font-size: 18px;
     font-weight: bold;
     color: #455A64; }
+
+.result-tile.mapClickedPlace {
+  background: rgba(207, 216, 220, 0.5);
+  border-left: 4px solid #FF9800; }
 
 .result-detail {
   display: -webkit-flex;
