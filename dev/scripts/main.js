@@ -399,11 +399,22 @@ $(function()  {
 			}
 			//on click, get details of the marker
 			marker.addListener('click', function() {
-				console.log('th', this)
 				var deets = this;
+
+				if (!$(`li#${deets.id}`).parent().parent().hasClass('open')) {
+					$('.result-card').removeClass('open')
+					$('.result-card > ul').slideUp();
+					$(`#list > li#${deets.id}`).parent().parent().addClass('open')
+					setTimeout(function() {
+						$(`.result-card > ul > li#${deets.id}`).parent().slideDown();
+					}, 700)
+				} 
 
 				$(`#list > li`).removeClass('mapClickedPlace');
 				$(`#list > li#${deets.id}`).addClass('mapClickedPlace');
+				
+
+
 
 				var request = {
 					placeId: deets.id
@@ -672,6 +683,27 @@ $(function()  {
 		}
 		return ratingOutput
 	}
+
+
+
+// function getUserCoords() {
+// 	var userLat;
+// 	var userLon;
+// 	window.navigator.geolocation.getCurrentPosition(function(position) {
+// 		userLat = position.coords.latitude
+// 		userLon = position.coords.longitude
+// 		console.log('alsd')
+
+// 		$.getJSON("http://api.openweathermap.org/data/2.5/weather?q=London&APPID=8f13372839bb15da74b9f23888f3e666",function(json){
+// 			console.log('came back', result)
+// 		       });
+
+// 	})
+
+// }
+// getUserCoords()
+
+	
 
 
 })
