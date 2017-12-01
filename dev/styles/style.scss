@@ -255,7 +255,7 @@ body.searched {
 #mapSection {
 	padding-top: 90px;
 	display: flex;
-	flex-wrap: wrap;
+	// flex-wrap: wrap;
 	height: 100vh;
 }
 
@@ -338,12 +338,14 @@ body.searched .secondary-navbar {
 }
 
 
-.results {
+.results,
+.place {
 	width: 30%;
 	min-width: 300px;
 	padding: 20px; 
 	position: relative;
 	height: 100%;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
 	.title {
 		margin-bottom: 10px;
 		display: flex;
@@ -357,6 +359,16 @@ body.searched .secondary-navbar {
 			font-size: 12px;
 		}
 	}
+}
+.place {
+	background-color: red;
+	right: -400px;
+	position: absolute;
+	transition: right 0.4s ease-out;
+}
+
+body.place-details-active .place {
+	right: 0;
 }
 
 .result-area {

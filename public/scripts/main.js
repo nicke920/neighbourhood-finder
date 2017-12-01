@@ -103,6 +103,7 @@ $(function () {
 		zoom: 9,
 		styles: styles
 	});
+
 	var transitLayer = new google.maps.TransitLayer();
 
 	var bikeLayer = new google.maps.BicyclingLayer();
@@ -283,6 +284,7 @@ $(function () {
 	}
 
 	function getMarkers(arrayOfPlaces, icon) {
+		console.log('AOP', arrayOfPlaces);
 
 		$.each(arrayOfPlaces, function (index, place) {
 			var placeName = place.name;
@@ -312,18 +314,19 @@ $(function () {
 				map: map,
 				id: placeid,
 				animation: google.maps.Animation.DROP,
-				icon: typeOfIcon
+				icon: typeOfIcon,
+				allDeets: place
 			});
 
 			markers.push(marker);
 
-			if (icon === 'bank' || icon === 'school' || icon === 'doctor') {
-				marker.setMap(null);
-			}
 			//on click, get details of the marker
 			marker.addListener('click', function () {
+
+				console.log(this);
 				var deets = this;
 
+				//on click, this finds and highlights the appropriate card
 				if (!$("li#" + deets.id).parent().parent().hasClass('open')) {
 					$('.result-card').removeClass('open');
 					$('.result-card > ul').slideUp();
@@ -344,6 +347,7 @@ $(function () {
 				service = new google.maps.places.PlacesService(map);
 				service.getDetails(request, function (results, status) {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
+						$('body').addClass('place-details-active');
 						setFeatListingText(results);
 					}
 				});
@@ -505,14 +509,24 @@ $(function () {
 		});
 	});
 
+	$('.place-toggle-slide').on('click', function () {
+		$('body').removeClass('place-details-active');
+	});
+
 	function setFeatListingText(results) {
-		var photoUrl = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
-		$('.feat-listing-name').text(results.name).attr('id', results.place_id).addClass('feat');
-		$('.feat-listing-address').text(results.formatted_address);
-		$('.feat-listing-phone').text(results.formatted_phone_number);
-		$('.feat-listing-website').text(results.website);
-		$('.feat-listing-rating').text(results.rating);
-		$('.feat-listing-image').attr('src', photoUrl);
+		var photoUrl;
+		if (results.photos !== undefined) {
+			photoUrl = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
+		} else {
+			photoUrl = '../../assets/grey.jpg';
+		}
+		$('.place-image > img').attr('src', photoUrl);
+		$('.place-name').text(results.name);
+		$('.place-stars-rating').append(starRatings(results.rating));
+		$('.place-category').text(results.types[0]);
+		$('.place-address').text(results.formatted_address);
+		$('.place-website').text(results.website);
+		$('.place-number').text(results.formatted_phone_number);
 	}
 
 	function hideListings() {

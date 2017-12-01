@@ -369,9 +369,6 @@ body.searched .portal-header {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
   height: 100vh; }
 
 .secondary-navbar {
@@ -460,13 +457,16 @@ body.searched .secondary-navbar {
   .city-details h3 {
     color: #607D8B; }
 
-.results {
+.results,
+.place {
   width: 30%;
   min-width: 300px;
   padding: 20px;
   position: relative;
-  height: 100%; }
-  .results .title {
+  height: 100%;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); }
+  .results .title,
+  .place .title {
     margin-bottom: 10px;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -477,11 +477,22 @@ body.searched .secondary-navbar {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center; }
-    .results .title h2 {
+    .results .title h2,
+    .place .title h2 {
       color: #455A64; }
-    .results .title p {
+    .results .title p,
+    .place .title p {
       color: #607D8B;
       font-size: 12px; }
+
+.place {
+  background-color: red;
+  right: -400px;
+  position: absolute;
+  transition: right 0.4s ease-out; }
+
+body.place-details-active .place {
+  right: 0; }
 
 .result-area {
   overflow-y: scroll;
