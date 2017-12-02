@@ -168,6 +168,9 @@ input {
   border: 1px solid rgba(0, 0, 0, 0.2);
   font-weight: 300; }
 
+body {
+  overflow-x: hidden; }
+
 .btn {
   padding: 12px 18px;
   border-radius: 5px;
@@ -189,6 +192,7 @@ input {
 header {
   background-color: #607D8B;
   height: 90px;
+  top: 0;
   position: fixed;
   width: 100%;
   transition: height 0.4s ease-out; }
@@ -365,11 +369,11 @@ body.searched .portal-header {
       border: none; }
 
 #mapSection {
-  padding-top: 90px;
+  margin-top: 90px;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 100vh; }
+  height: calc(100vh - 90px); }
 
 .secondary-navbar {
   display: none;
@@ -485,13 +489,8 @@ body.searched .secondary-navbar {
       color: #607D8B;
       font-size: 12px; }
 
-.place {
-  background-color: red;
-  right: -400px;
-  position: absolute;
-  transition: right 0.4s ease-out; }
-
 body.place-details-active .place {
+  display: block;
   right: 0; }
 
 .result-area {
@@ -509,6 +508,10 @@ body.place-details-active .place {
   .result-card.open .result-card-description {
     background: #607D8B;
     color: white; }
+
+.result-card:hover .result-card-description {
+  background: #607D8B;
+  color: white; }
 
 .result-card-description {
   display: -webkit-flex;
@@ -588,3 +591,135 @@ body.place-details-active .place {
 
 .fa-star-o {
   opacity: 0.3; }
+
+.place {
+  padding: 0;
+  background: white;
+  right: -30%;
+  height: 0;
+  position: absolute;
+  transition: all 0.4s ease-out;
+  overflow-y: scroll;
+  height: calc(100vh - 90px); }
+  .place p {
+    margin: 0; }
+
+.placeText {
+  padding: 0 20px; }
+
+.place-image {
+  height: 250px;
+  width: 100%; }
+  .place-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; }
+
+.place-details {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #CFD8DC;
+  padding: 16px 24px 20px; }
+  .place-details h3 {
+    font-size: 18px; }
+  .place-details .place-stars-rating {
+    margin-bottom: 4px; }
+    .place-details .place-stars-rating span {
+      margin-right: 6px; }
+
+.pd-left {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start; }
+
+.place-directions {
+  background: #FF9800;
+  border: none;
+  color: white;
+  padding: 8px 12px; }
+
+.place-category {
+  color: #FF9800;
+  border: 1px solid #FF9800;
+  display: inline-block;
+  padding: 1px 2px;
+  border-radius: 5px;
+  font-size: 12px; }
+
+.place-list a {
+  width: calc(100% - 30px);
+  word-wrap: break-word; }
+
+.place-list {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start; }
+
+.list-icon {
+  display: inline-block;
+  width: 30px; }
+  .list-icon .fa {
+    font-size: 12px;
+    color: #607D8B; }
+
+.carousel-cell {
+  display: block;
+  height: 150px;
+  object-fit: contain;
+  margin: 0 5px; }
+
+.place-open-list {
+  display: none; }
+
+.place-latest-reviews {
+  margin-top: 30px; }
+
+.user-review {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start; }
+
+.user-image {
+  width: 60px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+.user-comment {
+  padding: 0 20px 20px;
+  width: calc(100% - 50px); }
+  .user-comment > span {
+    color: #757575;
+    opacity: 0.6;
+    font-size: 10px; }
+
+.user-rating span {
+  display: none; }
+
+.user-rating .fa {
+  font-size: 10px; }

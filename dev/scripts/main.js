@@ -250,12 +250,6 @@ $(function()  {
 								var isOpenText;
 								var photoURL;
 
-								if (place.opening_hours && place.opening_hours.open_now === true) {
-									isOpenText = "Open"
-								} else {
-									isOpenText = ""
-								}
-
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
 								} else {
@@ -310,55 +304,7 @@ $(function()  {
 
 	function centerMarker(location, radius) {
 
-
-		function settingCenterMarker(whichMap) {
-			if (centerPoint || centerCircle) {
-				centerPoint.setMap(null)
-				centerCircle.setMap(null)
-			}
-
-			centerPoint = new google.maps.Marker({
-				position: location, 
-				map: whichMap, 
-				animation: google.maps.Animation.DROP,
-				icon: '../../assets/placeholder.png'
-			})
-
-			centerCircle = new google.maps.Circle({
-				map: whichMap,
-				radius: radius,
-				strokeWeight: 1, 
-				strokeColor: '#607D8B',
-				// fillColor: 'rgba(255,255,255,1)',
-				fillOpacity: 0
-			})
-
-			centerCircle.bindTo('center', centerPoint, 'position')
-
-			//center map on center marker
-			
-
-			function settingTheCenter() {
-				// console.log('center set')
-				whichMap.setCenter(centerPoint.position)
-
-				var zoomin = radiusToZoom(radius) 
-				
-				//automatically zoom map to fit the radius of the circle overlay
-				whichMap.setZoom(zoomin)
-
-			}
-
-			settingTheCenter();
-			
-			$('#setTheCenter').on('click', function() {
-				settingTheCenter();
-			})
-
-		}
-
-		settingCenterMarker(map)
-
+		settingCenterMarker(map, location, radius)
 
 	}
 
@@ -405,23 +351,7 @@ $(function()  {
 			//on click, get details of the marker
 			marker.addListener('click', function() {
 
-				console.log(this)
 				var deets = this;
-				
-				//on click, this finds and highlights the appropriate card
-				if (!$(`li#${deets.id}`).parent().parent().hasClass('open')) {
-					$('.result-card').removeClass('open')
-					$('.result-card > ul').slideUp();
-					$(`#list > li#${deets.id}`).parent().parent().addClass('open')
-					setTimeout(function() {
-						$(`.result-card > ul > li#${deets.id}`).parent().slideDown();
-					}, 700)
-				} 
-
-				$(`#list > li`).removeClass('mapClickedPlace');
-				$(`#list > li#${deets.id}`).addClass('mapClickedPlace');
-
-				
 
 				var request = {
 					placeId: deets.id
@@ -429,9 +359,10 @@ $(function()  {
 
 				var service;
 				service = new google.maps.places.PlacesService(map);
+
 				service.getDetails(request, function(results, status) {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						$('body').addClass('place-details-active')
+
 						setFeatListingText(results)
 					}
 				})
@@ -511,19 +442,18 @@ $(function()  {
 
 		$('#address').text('')
 		$('#radius').text('')
-		// $('html, body').animate({
-		// 	scrollTop: $('#mapSection').offset().top
-		// }, 2000);
+
 	})
 
-	//open and close dropdown menu in results
-	$('.result-card').on('click', function(e) {
 
-		if (!$(this).hasClass('open')) {
+	//open and close dropdown menu in results
+	$('.result-card-description').on('click', function(e) {
+
+		if (!$(this).parent().hasClass('open')) {
 			$('.result-card > ul').slideUp();
-			$(this).find('ul').slideDown();
+			$(this).parent().find('ul').slideDown();
 			$('.result-card').removeClass('open')
-			$(this).addClass('open')
+			$(this).parent().addClass('open')
 		} else {
 			$('.result-card > ul').slideUp();
 			$('.result-card').removeClass('open')
@@ -570,22 +500,19 @@ $(function()  {
 
 
 	$(document).on('click', '#list > li', function() {
-		// console.log('wok')
-		var that = this
-		$.each(markers, function(ind, val) {
-			if ($(that).attr('id') === val.id) {
-				var request = {
-					placeId: val.id
-				}
+		var details = this
 
-				var service;
-				service = new google.maps.places.PlacesService(map);
-				service.getDetails(request, function(results, status) {
-					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						//added attr so that when they hover over the list item, marker goes up and down
-						setFeatListingText(results)
-					}
-				})
+		var request = {
+			placeId: details.id
+		}
+
+		var service;
+		service = new google.maps.places.PlacesService(map);
+
+		service.getDetails(request, function(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				
+				setFeatListingText(results)
 			}
 		})
 	})
@@ -618,19 +545,101 @@ $(function()  {
 
 	function setFeatListingText(results) {
 		var photoUrl;
+		var photosArray;
+		console.log('r', results)
+
 		if (results.photos !== undefined) {
 			photoUrl = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+			photosArray = results.photos;
+
+			$('.photo-carousel-length').text(`(${photosArray.length})`)
+
+
+
+			function initFlickity() {
+				$('.main-carousel').flickity({
+					imagesLoaded: true, 
+					percentPosition: false,
+					wrapAround: true
+				});
+				console.log('flickit initsss')
+			}
+
+			
+			
+
+			function theloop() {
+				$('.main-carousel').flickity('destroy');
+				$('.main-carousel').empty();
+
+				$.each(photosArray, function(ind, val) {
+					var arrPhotoUrl = val.getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+					$('.main-carousel').append(`<img src="${arrPhotoUrl}" alt="" class="carousel-cell"/>`)
+				})
+				console.log('func ran')
+			} 
+
+			$.when(theloop()).then(
+				initFlickity(),
+				$('body').addClass('place-details-active')
+				)
+
 		} else {
 			photoUrl = '../../assets/grey.jpg'
 		}
+
+		var isOpenText;
+		var weeklyHours;
+		if (results.opening_hours && results.opening_hours.open_now === true) {
+			$('.place-hours > p').on('click', function() {
+				$(this).parent().find('ul.place-open-list').slideToggle()
+			})
+			isOpenText = "Open Now";
+			weeklyHours = results.opening_hours.weekday_text;
+			$.each(weeklyHours, function(ind, val) {
+				$('.place-open-list').append(`<li class="week-hours">${val}</li>`)
+			})
+		} else {
+			isOpenText = ""
+		}
+
+		var resultsArray;
+		if (results.reviews !== undefined) {
+			resultsArray = results.reviews;
+			$('.reviews-container').empty()
+			$('.reviews-length').text(`(${resultsArray.length})`)
+			$.each(resultsArray, function(ind, val) {
+				var review = (`
+					<div class="user-review">
+						<div class="user-image">
+							<img src="${val.profile_photo_url}" alt="" />
+							<div class="user-rating">
+								${starRatings(val.rating)}
+							</div>
+						</div>
+						<div class="user-comment">
+							${val.text} <span>${val.relative_time_description}</span>
+						</div>
+					</div>
+					<hr>
+				`)
+				$('.reviews-container').append(review)
+			})
+		}
+
 		$('.place-image > img').attr('src', photoUrl)
 		$('.place-name').text(results.name)
-		$('.place-stars-rating').append(starRatings(results.rating))
+		$('.place-stars-rating').empty().append(starRatings(results.rating))
 		$('.place-category').text(results.types[0])
 		$('.place-address').text(results.formatted_address)
-		$('.place-website').text(results.website)
+		$('.place-website').text(results.website).attr('href', results.website)
 		$('.place-number').text(results.formatted_phone_number) 
+		$('.place-open').text(isOpenText)
+
+		
+
 	}
+	
 
 
 
@@ -682,21 +691,21 @@ $(function()  {
 		// console.log('working', rating)
 		var ratingOutput;
 		if (rating > 4.8) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>`
 		} else if (rating > 4.2 && rating <= 4.7) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i>`
 		} else if (rating > 3.8 && rating <= 4.2) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else if (rating > 3.2 && rating <= 3.8) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else if (rating > 2.8 && rating <= 3.2) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else if (rating > 2.2 && rating <= 2.8) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else if (rating > 1.8 && rating <= 2.2) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else if (rating <= 1.8 ) {
-			ratingOutput = `<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><span>(${rating})</span>`
+			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>`
 		} else {
 			ratingOutput = `<p>No Rating</p>`
 		}
@@ -705,24 +714,85 @@ $(function()  {
 
 
 
-// function getUserCoords() {
-// 	var userLat;
-// 	var userLon;
-// 	window.navigator.geolocation.getCurrentPosition(function(position) {
-// 		userLat = position.coords.latitude
-// 		userLon = position.coords.longitude
-// 		console.log('alsd')
 
-// 		$.getJSON("http://api.openweathermap.org/data/2.5/weather?q=London&APPID=8f13372839bb15da74b9f23888f3e666",function(json){
-// 			console.log('came back', result)
-// 		       });
 
-// 	})
+function settingCenterMarker(whichMap, location, radius) {
+			if (centerPoint || centerCircle) {
+				centerPoint.setMap(null)
+				centerCircle.setMap(null)
+			}
 
-// }
-// getUserCoords()
+			centerPoint = new google.maps.Marker({
+				position: location, 
+				map: whichMap, 
+				animation: google.maps.Animation.DROP,
+				icon: '../../assets/placeholder.png'
+			})
 
-	
+			centerCircle = new google.maps.Circle({
+				map: whichMap,
+				radius: radius,
+				strokeWeight: 1, 
+				strokeColor: '#607D8B',
+				fillOpacity: 0
+			})
+
+			centerCircle.bindTo('center', centerPoint, 'position')
+
+			//center map on center marker
+
+			var centerControlDiv = document.createElement('div');
+	        var centerControl = new CenterControl(centerControlDiv, map);
+	        centerControlDiv.index = 0;
+	        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+			function CenterControl(controlDiv, map) {
+
+			        // Set CSS for the control border.
+			        var controlUI = document.createElement('div');
+			        controlUI.style.backgroundColor = '#fff';
+			        controlUI.style.border = '2px solid #fff';
+			        controlUI.style.borderRadius = '3px';
+			        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+			        controlUI.style.cursor = 'pointer';
+			        controlUI.style.marginBottom = '22px';
+			        controlUI.style.textAlign = 'center';
+			        controlUI.title = 'Click to recenter the map';
+			        controlDiv.appendChild(controlUI);
+
+			        // Set CSS for the control interior.
+			        var controlText = document.createElement('div');
+			        controlText.style.color = 'rgb(25,25,25)';
+			        controlText.style.fontFamily = 'Lato';
+			        controlText.style.fontSize = '16px';
+			        controlText.style.lineHeight = '38px';
+			        controlText.style.paddingLeft = '5px';
+			        controlText.style.paddingRight = '5px';
+			        controlText.innerHTML = 'Center Map';
+			        controlUI.appendChild(controlText);
+
+			        // Setup the click event listeners: simply set the map to Chicago.
+			        controlUI.addEventListener('click', function() {
+			        	settingTheCenter()
+			        });
+
+			      }
+
+			function settingTheCenter() {
+				// console.log('center set')
+				whichMap.setCenter(centerPoint.position)
+
+				var zoomin = radiusToZoom(radius) 
+				
+				//automatically zoom map to fit the radius of the circle overlay
+				whichMap.setZoom(zoomin)
+
+			}
+
+			settingTheCenter();
+			
+
+		}
 
 
 })
