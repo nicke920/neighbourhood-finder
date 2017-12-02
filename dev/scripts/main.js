@@ -282,7 +282,6 @@ $(function()  {
 
 				}
 			})
-			console.log('the markers array', theMarkersArray)
 		}
 
 		top5Search(toMarkersRestaurant, 'restaurant', location, radius)
@@ -366,8 +365,12 @@ $(function()  {
 
 				service.getDetails(request, function(results, status) {
 					if (status == google.maps.places.PlacesServiceStatus.OK) {
-
 						setFeatListingText(results)
+
+						var markerLocation = results.geometry.location;
+
+						settingTheCenter(map, 5, markerLocation)
+
 					}
 				})
 			})
@@ -516,7 +519,6 @@ $(function()  {
 		service.getDetails(request, function(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				setFeatListingText(results)
-				console.log('resssss', results)
 
 				var markerLocation = results.geometry.location;
 
