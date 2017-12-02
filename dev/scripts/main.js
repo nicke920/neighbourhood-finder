@@ -197,6 +197,7 @@ $(function()  {
 		var toMarkersSchool = [];
 		var toMarkersBank = [];
 		var toMarkersBar = [];
+		var toMarkersGym = [];
 		var toMarkersTransit = [];
 
 		var sumOfRatings = []
@@ -290,6 +291,7 @@ $(function()  {
 		top5Search(toMarkersSchool, 'school', location, radius)
 		top5Search(toMarkersBank, 'bank', location, radius)
 		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
+		top5Search(toMarkersGym, 'gym', location, radius)
 
 
 
@@ -333,7 +335,9 @@ $(function()  {
 				typeOfIcon = '../../assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png'
 			} else if (icon === 'bar,night_club') {
 				typeOfIcon = '../../assets/005-drink-beer-jar.png'
-			} 
+			} else if (icon === 'gym') {
+				typeOfIcon = '../../assets/barbell.png'
+			}
 
 			var marker = new google.maps.Marker({
 				position: placeCoords, 
@@ -511,12 +515,18 @@ $(function()  {
 
 		service.getDetails(request, function(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				
 				setFeatListingText(results)
+				console.log('resssss', results)
+
+				var markerLocation = results.geometry.location;
+
+				settingTheCenter(map, 5, markerLocation)
+
 			}
 		})
 	})
 
+	//hovering over list item makes its respective marker bounce
 	$(document).on('mouseover', '#list > li', function() {
 		var that = this
 		$.each(markers, function(ind, val) {
@@ -546,7 +556,6 @@ $(function()  {
 	function setFeatListingText(results) {
 		var photoUrl;
 		var photosArray;
-		console.log('r', results)
 
 		if (results.photos !== undefined) {
 			photoUrl = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
@@ -562,7 +571,6 @@ $(function()  {
 					percentPosition: false,
 					wrapAround: true
 				});
-				console.log('flickit initsss')
 			}
 
 			
@@ -576,12 +584,10 @@ $(function()  {
 					var arrPhotoUrl = val.getUrl({'maxWidth': 1000, 'maxHeight': 1000})
 					$('.main-carousel').append(`<img src="${arrPhotoUrl}" alt="" class="carousel-cell"/>`)
 				})
-				console.log('func ran')
 			} 
 
 			$.when(theloop()).then(
-				initFlickity(),
-				$('body').addClass('place-details-active')
+				initFlickity()
 				)
 
 		} else {
@@ -636,7 +642,7 @@ $(function()  {
 		$('.place-number').text(results.formatted_phone_number) 
 		$('.place-open').text(isOpenText)
 
-		
+		$('body').addClass('place-details-active')
 
 	}
 	
@@ -773,28 +779,32 @@ function settingCenterMarker(whichMap, location, radius) {
 
 			        // Setup the click event listeners: simply set the map to Chicago.
 			        controlUI.addEventListener('click', function() {
-			        	settingTheCenter()
+			        	settingTheCenter(whichMap, radius, centerPoint.position)
 			        });
+
+			        $('.place-toggle-slide').on('click', function() {
+			        	settingTheCenter(whichMap, radius, centerPoint.position)
+			        })
 
 			      }
 
-			function settingTheCenter() {
-				// console.log('center set')
-				whichMap.setCenter(centerPoint.position)
+			settingTheCenter(whichMap, radius, centerPoint.position)
 
-				var zoomin = radiusToZoom(radius) 
-				
-				//automatically zoom map to fit the radius of the circle overlay
-				whichMap.setZoom(zoomin)
 
-			}
-
-			settingTheCenter();
 			
 
 		}
 
+		function settingTheCenter(whichMap, radius, whereToCenter) {
+			// console.log('center set')
+			whichMap.setCenter(whereToCenter)
 
+			var zoomin = radiusToZoom(radius) 
+			
+			//automatically zoom map to fit the radius of the circle overlay
+			whichMap.setZoom(zoomin)
+
+		}
 })
 
 
