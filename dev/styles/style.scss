@@ -612,3 +612,39 @@ body.place-details-active .place {
 		font-size: 10px;
 	}
 }
+
+.authModal {
+	background: rgba(0,0,0,0.8);
+	position: fixed;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+	color: white;
+	form {
+		margin-bottom: 30px;
+	}
+}
+
+.loginModalShowing .authModal {
+	display: flex;
+	z-index: 999999;
+}
+
+.logged-in-status {
+	display: none;
+}
+
+body.loggedIn .logged-in-status {
+	display: block;
+}
+
+body.loggedIn .login-btn {
+	display: none;
+}

@@ -1,3 +1,5 @@
+import './_firebase.js';
+
 $(function()  {	
 
 	var map;
@@ -807,7 +809,11 @@ function settingCenterMarker(whichMap, location, radius) {
 			whichMap.setZoom(zoomin)
 
 		}
+
+
+
 })
+
 
 
 
