@@ -2,6 +2,8 @@ import './_firebase.js';
 
 $(function()  {	
 
+	var userFavs = [];
+
 	var map;
 
 	var service;
@@ -272,6 +274,7 @@ $(function()  {
 													<div class="rating-div">
 														${starRatings(place.rating)}
 													</div>
+													<button class="addToFavs">Add Favs</button>
 												</div>
 											</div>
 										</a>
@@ -508,26 +511,30 @@ $(function()  {
 
 
 
-	$(document).on('click', '#list > li', function() {
-		var details = this
+	$(document).on('click', '#list > li', function(e) {
+		console.log('eee', e)
+		if (e.target.className !== 'addToFavs') {
+			console.log('RANNNNNNN')
+			var details = this
 
-		var request = {
-			placeId: details.id
-		}
-
-		var service;
-		service = new google.maps.places.PlacesService(map);
-
-		service.getDetails(request, function(results, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				setFeatListingText(results)
-
-				var markerLocation = results.geometry.location;
-
-				settingTheCenter(map, 5, markerLocation)
-
+			var request = {
+				placeId: details.id
 			}
-		})
+
+			var service;
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function(results, status) {
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					setFeatListingText(results)
+
+					var markerLocation = results.geometry.location;
+
+					settingTheCenter(map, 5, markerLocation)
+
+				}
+			})
+		}
 	})
 
 	//hovering over list item makes its respective marker bounce

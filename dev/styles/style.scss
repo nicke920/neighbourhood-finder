@@ -642,7 +642,9 @@ body.place-details-active .place {
 }
 
 body.loggedIn .logged-in-status {
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 body.loggedIn .login-btn {

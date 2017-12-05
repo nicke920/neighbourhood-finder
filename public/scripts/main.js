@@ -6,12 +6,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 $(function () {
 	console.log('FIREEBASEEEE');
 
+	var userFavsIds = [];
+
+	var dbRef = firebase.database();
+
 	firebase.auth().onAuthStateChanged(function (user) {
 		setTimeout(function () {
 
 			if (user) {
 				$('body').addClass('loggedIn');
 				$('#usersUserName').text(firebase.auth().currentUser.displayName);
+
+				dbRef.ref('users/' + firebase.auth().currentUser.uid + '/favourites').on('value', function (firebaseData) {
+					var itemsData = firebaseData.val();
+
+					for (var itemKey in itemsData) {
+						userFavsIds.push(itemsData[itemKey]);
+					}
+
+					userFavsIds.map(function (val, ind) {
+						$('.userFavs').append(val);
+						// console.log('valll', val)
+					});
+					console.log(userFavsIds);
+				});
 			} else {
 				$('body').removeClass('loggedIn').addClass('notLoggedIn');
 			}
@@ -35,7 +53,7 @@ $(function () {
 		var userUserName = $('#userUserName').val();
 
 		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (success) {
-			console.log('suss', success);
+			console.log('success', success);
 
 			var newUser = {
 				email: userEmail,
@@ -53,6 +71,48 @@ $(function () {
 			console.log('type of error', typeof error === 'undefined' ? 'undefined' : _typeof(error));
 		});
 	});
+
+	var provider = new firebase.auth.GoogleAuthProvider();
+
+	$('.googleForm').on('click', function (e) {
+		e.preventDefault();
+
+		firebase.auth().signInWithPopup(provider).catch(function (error) {
+			console.log('error message', error);
+			// The email of the user's account used.
+			var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			var credential = error.credential;
+		}).then(function (result) {
+			var token = result.credential.accessToken;
+
+			var user = result.user;
+
+			var newUser = {
+				displayName: user.displayName,
+				email: user.email
+			};
+
+			firebase.database().ref('users/' + user.uid).set(newUser);
+
+			$('body').removeClass('loginModalShowing');
+
+			console.log('ressss', result);
+		});
+	});
+
+	$(document).on('click', '.addToFavs', function () {
+
+		var user = firebase.auth().currentUser.uid;
+
+		var dbRef = firebase.database().ref('users/' + user + '/favourites');
+
+		var placeId = $(this).parents('.result-tile').attr('id');
+
+		userFavsIds.push(placeId);
+
+		dbRef.push(placeId);
+	});
 });
 
 },{}],2:[function(require,module,exports){
@@ -61,6 +121,8 @@ $(function () {
 require("./_firebase.js");
 
 $(function () {
+
+	var userFavs = [];
 
 	var map;
 
@@ -247,7 +309,7 @@ $(function () {
 									photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 								}
 
-								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
+								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button class=\"addToFavs\">Add Favs</button>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
 							});
 						}
 					};
@@ -467,25 +529,29 @@ $(function () {
 		}
 	});
 
-	$(document).on('click', '#list > li', function () {
-		var details = this;
+	$(document).on('click', '#list > li', function (e) {
+		console.log('eee', e);
+		if (e.target.className !== 'addToFavs') {
+			console.log('RANNNNNNN');
+			var details = this;
 
-		var request = {
-			placeId: details.id
-		};
+			var request = {
+				placeId: details.id
+			};
 
-		var service;
-		service = new google.maps.places.PlacesService(map);
+			var service;
+			service = new google.maps.places.PlacesService(map);
 
-		service.getDetails(request, function (results, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				setFeatListingText(results);
+			service.getDetails(request, function (results, status) {
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					setFeatListingText(results);
 
-				var markerLocation = results.geometry.location;
+					var markerLocation = results.geometry.location;
 
-				settingTheCenter(map, 5, markerLocation);
-			}
-		});
+					settingTheCenter(map, 5, markerLocation);
+				}
+			});
+		}
 	});
 
 	//hovering over list item makes its respective marker bounce
