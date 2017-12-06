@@ -1,8 +1,27 @@
 import './_firebase.js';
 
 $(function()  {	
+	// console.log('a', firebase.auth().currentUser)
 
-	var userFavs = [];
+	var anArray = [];
+
+setTimeout(function() {
+	firebase.database().ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
+		console.log('mainnn', firebaseData.val())
+
+		var itemsData = firebaseData.val();
+
+		for (var itemKey in itemsData) {
+			anArray.push(itemsData[itemKey])
+		}
+		console.log('lengt', anArray.length)
+
+	})
+		listingFavourites(anArray);
+
+}, 1000)
+
+
 
 	var map;
 
@@ -194,6 +213,8 @@ $(function()  {
 
 	function listPlaces(location, radius) {
 		hideListings();
+		console.log('7887', anArray)
+
 
 		var toMarkersRestaurant = []
 		var toMarkersCafes = [];
@@ -818,6 +839,61 @@ function settingCenterMarker(whichMap, location, radius) {
 		}
 
 
+	function listingFavourites(favsArray) {
+		console.log('fa', favsArray)
+		$(`.dropdown-userFavs`).empty();
+		$.each(favsArray, function(ind, val) {
+
+			var request = {
+				placeId: val
+			}
+			var service;
+
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function(results, status) {
+				console.log('sa', status)
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					console.log('resssy', results)
+
+					var isOpenText;
+					var photoURL;
+
+					if ($(results.photos).length > 0) {
+						photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+					} else {
+						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
+					}
+
+					$(`.dropdown-userFavs`).append(
+						`<li id='${results.place_id}' class='result-tile'>
+							<a>
+								<h3>${results.name}</h3>
+								<div class="result-detail">
+									<div class="result-image">
+										<img src="${photoURL}" alt="" />
+									</div>
+									<div class="result-description">
+										<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
+										<div class="rating-div">
+											${starRatings(results.rating)}
+										</div>
+										<button class="addToFavs">Add Favs</button>
+									</div>
+								</div>
+							</a>
+						</li>`
+						)
+
+				}
+			})
+		})
+	}
+
+	$('.goToFavs').on('click', function() {
+		$('body').toggleClass('userFavsActive');
+	})
+	
 
 })
 

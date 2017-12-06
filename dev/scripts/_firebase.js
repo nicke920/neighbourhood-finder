@@ -14,19 +14,19 @@ $(function() {
 				$('body').addClass('loggedIn')
 				$('#usersUserName').text(firebase.auth().currentUser.displayName)
 
-				dbRef.ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
-					var itemsData = firebaseData.val();
+				// dbRef.ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
+				// 	var itemsData = firebaseData.val();
 
-					for (var itemKey in itemsData) {
-						userFavsIds.push(itemsData[itemKey])
-					}
+				// 	for (var itemKey in itemsData) {
+				// 		userFavsIds.push(itemsData[itemKey])
+				// 	}
 
-					userFavsIds.map(function(val, ind) {
-						$('.userFavs').append(val)
-						// console.log('valll', val)
-					})
-					console.log(userFavsIds)
-			 	})
+				// 	userFavsIds.map(function(val, ind) {
+				// 		$('.userFavs').append(val)
+				// 		console.log('valll', val)
+				// 	})
+				// 	console.log(userFavsIds)
+			 // 	})
 
 			} else {
 				$('body').removeClass('loggedIn').addClass('notLoggedIn')
@@ -64,7 +64,8 @@ $(function() {
 				displayName: userUserName
 			})
 
-			firebase.database().ref(`users/${userUserName}`).set(newUser)
+
+			firebase.database().ref(`users/${success.uid}`).set(newUser)
 
 			$('body').removeClass('loginModalShowing')
 

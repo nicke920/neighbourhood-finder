@@ -17,19 +17,19 @@ $(function () {
 				$('body').addClass('loggedIn');
 				$('#usersUserName').text(firebase.auth().currentUser.displayName);
 
-				dbRef.ref('users/' + firebase.auth().currentUser.uid + '/favourites').on('value', function (firebaseData) {
-					var itemsData = firebaseData.val();
+				// dbRef.ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
+				// 	var itemsData = firebaseData.val();
 
-					for (var itemKey in itemsData) {
-						userFavsIds.push(itemsData[itemKey]);
-					}
+				// 	for (var itemKey in itemsData) {
+				// 		userFavsIds.push(itemsData[itemKey])
+				// 	}
 
-					userFavsIds.map(function (val, ind) {
-						$('.userFavs').append(val);
-						// console.log('valll', val)
-					});
-					console.log(userFavsIds);
-				});
+				// 	userFavsIds.map(function(val, ind) {
+				// 		$('.userFavs').append(val)
+				// 		console.log('valll', val)
+				// 	})
+				// 	console.log(userFavsIds)
+				// 	})
 			} else {
 				$('body').removeClass('loggedIn').addClass('notLoggedIn');
 			}
@@ -64,7 +64,7 @@ $(function () {
 				displayName: userUserName
 			});
 
-			firebase.database().ref('users/' + userUserName).set(newUser);
+			firebase.database().ref('users/' + success.uid).set(newUser);
 
 			$('body').removeClass('loginModalShowing');
 		}).catch(function (error) {
@@ -116,13 +116,28 @@ $(function () {
 });
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
-require("./_firebase.js");
+require('./_firebase.js');
 
 $(function () {
+	// console.log('a', firebase.auth().currentUser)
 
-	var userFavs = [];
+	var anArray = [];
+
+	setTimeout(function () {
+		firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/favourites').on('value', function (firebaseData) {
+			console.log('mainnn', firebaseData.val());
+
+			var itemsData = firebaseData.val();
+
+			for (var itemKey in itemsData) {
+				anArray.push(itemsData[itemKey]);
+			}
+			console.log('lengt', anArray.length);
+		});
+		listingFavourites(anArray);
+	}, 1000);
 
 	var map;
 
@@ -263,6 +278,7 @@ $(function () {
 
 	function listPlaces(location, radius) {
 		hideListings();
+		console.log('7887', anArray);
 
 		var toMarkersRestaurant = [];
 		var toMarkersCafes = [];
@@ -291,13 +307,13 @@ $(function () {
 				if (status == 'OK') {
 					var pattern = function pattern(requestType) {
 						if (requestType === requestType) {
-							getMarkers(theMarkersArray, "" + requestType);
+							getMarkers(theMarkersArray, '' + requestType);
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0];
 							}
 
-							$(".dropdown-" + requestType + " #list").empty();
+							$('.dropdown-' + requestType + ' #list').empty();
 
 							$.each(theMarkersArray, function (index, place) {
 								var isOpenText;
@@ -309,7 +325,7 @@ $(function () {
 									photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 								}
 
-								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button class=\"addToFavs\">Add Favs</button>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
+								$('.dropdown-' + requestType + ' #list').append('<li id=\'' + place.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>' + place.name + '</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class="result-detail">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class="result-image">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="' + photoURL + '" alt="" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class="result-description">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class="fa fa-map-marker" aria-hidden="true"></i>' + place.vicinity + '</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="rating-div">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + starRatings(place.rating) + '\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button class="addToFavs">Add Favs</button>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>');
 							});
 						}
 					};
@@ -462,7 +478,7 @@ $(function () {
 		$(this).addClass('selected');
 		var tabAttr = $(this).attr('category');
 		$('.listings-nav.dropdown').removeClass('active');
-		$(".listings-nav.dropdown[category=\"" + tabAttr + "\"]").addClass('active');
+		$('.listings-nav.dropdown[category="' + tabAttr + '"]').addClass('active');
 		$(this).parent().parent().parent().addClass('opened');
 	});
 
@@ -598,14 +614,14 @@ $(function () {
 
 				$.each(photosArray, function (ind, val) {
 					var arrPhotoUrl = val.getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
-					$('.main-carousel').append("<img src=\"" + arrPhotoUrl + "\" alt=\"\" class=\"carousel-cell\"/>");
+					$('.main-carousel').append('<img src="' + arrPhotoUrl + '" alt="" class="carousel-cell"/>');
 				});
 			};
 
 			photoUrl = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
 			photosArray = results.photos;
 
-			$('.photo-carousel-length').text("(" + photosArray.length + ")");
+			$('.photo-carousel-length').text('(' + photosArray.length + ')');
 
 			$.when(theloop()).then(initFlickity());
 		} else {
@@ -621,7 +637,7 @@ $(function () {
 			isOpenText = "Open Now";
 			weeklyHours = results.opening_hours.weekday_text;
 			$.each(weeklyHours, function (ind, val) {
-				$('.place-open-list').append("<li class=\"week-hours\">" + val + "</li>");
+				$('.place-open-list').append('<li class="week-hours">' + val + '</li>');
 			});
 		} else {
 			isOpenText = "";
@@ -631,9 +647,9 @@ $(function () {
 		if (results.reviews !== undefined) {
 			resultsArray = results.reviews;
 			$('.reviews-container').empty();
-			$('.reviews-length').text("(" + resultsArray.length + ")");
+			$('.reviews-length').text('(' + resultsArray.length + ')');
 			$.each(resultsArray, function (ind, val) {
-				var review = "\n\t\t\t\t\t<div class=\"user-review\">\n\t\t\t\t\t\t<div class=\"user-image\">\n\t\t\t\t\t\t\t<img src=\"" + val.profile_photo_url + "\" alt=\"\" />\n\t\t\t\t\t\t\t<div class=\"user-rating\">\n\t\t\t\t\t\t\t\t" + starRatings(val.rating) + "\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t\t\t" + val.text + " <span>" + val.relative_time_description + "</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<hr>\n\t\t\t\t";
+				var review = '\n\t\t\t\t\t<div class="user-review">\n\t\t\t\t\t\t<div class="user-image">\n\t\t\t\t\t\t\t<img src="' + val.profile_photo_url + '" alt="" />\n\t\t\t\t\t\t\t<div class="user-rating">\n\t\t\t\t\t\t\t\t' + starRatings(val.rating) + '\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="user-comment">\n\t\t\t\t\t\t\t' + val.text + ' <span>' + val.relative_time_description + '</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<hr>\n\t\t\t\t';
 				$('.reviews-container').append(review);
 			});
 		}
@@ -693,23 +709,23 @@ $(function () {
 		// console.log('working', rating)
 		var ratingOutput;
 		if (rating > 4.8) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>';
 		} else if (rating > 4.2 && rating <= 4.7) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i>';
 		} else if (rating > 3.8 && rating <= 4.2) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else if (rating > 3.2 && rating <= 3.8) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else if (rating > 2.8 && rating <= 3.2) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else if (rating > 2.2 && rating <= 2.8) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else if (rating > 1.8 && rating <= 2.2) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else if (rating <= 1.8) {
-			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
+			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
 		} else {
-			ratingOutput = "<p>No Rating</p>";
+			ratingOutput = '<p>No Rating</p>';
 		}
 		return ratingOutput;
 	}
@@ -791,6 +807,42 @@ $(function () {
 		//automatically zoom map to fit the radius of the circle overlay
 		whichMap.setZoom(zoomin);
 	}
+
+	function listingFavourites(favsArray) {
+		console.log('fa', favsArray);
+		$('.dropdown-userFavs').empty();
+		$.each(favsArray, function (ind, val) {
+
+			var request = {
+				placeId: val
+			};
+			var service;
+
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function (results, status) {
+				console.log('sa', status);
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					console.log('resssy', results);
+
+					var isOpenText;
+					var photoURL;
+
+					if ($(results.photos).length > 0) {
+						photoURL = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
+					} else {
+						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+					}
+
+					$('.dropdown-userFavs').append('<li id=\'' + results.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>' + results.name + '</h3>\n\t\t\t\t\t\t\t\t<div class="result-detail">\n\t\t\t\t\t\t\t\t\t<div class="result-image">\n\t\t\t\t\t\t\t\t\t\t<img src="' + photoURL + '" alt="" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="result-description">\n\t\t\t\t\t\t\t\t\t\t<h5><i class="fa fa-map-marker" aria-hidden="true"></i>' + results.vicinity + '</h5>\n\t\t\t\t\t\t\t\t\t\t<div class="rating-div">\n\t\t\t\t\t\t\t\t\t\t\t' + starRatings(results.rating) + '\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<button class="addToFavs">Add Favs</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>');
+				}
+			});
+		});
+	}
+
+	$('.goToFavs').on('click', function () {
+		$('body').toggleClass('userFavsActive');
+	});
 });
 
 },{"./_firebase.js":1}]},{},[2]);

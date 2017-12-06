@@ -769,3 +769,12 @@ body.loggedIn .logged-in-status {
 
 body.loggedIn .login-btn {
   display: none; }
+
+.dropdown-userFavs {
+  display: none; }
+
+body.userFavsActive .dropdown-userFavs {
+  display: block; }
+
+body.userFavsActive .results {
+  display: none; }
