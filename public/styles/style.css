@@ -462,7 +462,8 @@ body.searched .secondary-navbar {
     color: #607D8B; }
 
 .results,
-.place {
+.place,
+.dropdown-userFavs {
   width: 30%;
   min-width: 300px;
   padding: 20px;
@@ -470,7 +471,8 @@ body.searched .secondary-navbar {
   height: 100%;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); }
   .results .title,
-  .place .title {
+  .place .title,
+  .dropdown-userFavs .title {
     margin-bottom: 10px;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -482,10 +484,12 @@ body.searched .secondary-navbar {
         -ms-flex-align: center;
             align-items: center; }
     .results .title h2,
-    .place .title h2 {
+    .place .title h2,
+    .dropdown-userFavs .title h2 {
       color: #455A64; }
     .results .title p,
-    .place .title p {
+    .place .title p,
+    .dropdown-userFavs .title p {
       color: #607D8B;
       font-size: 12px; }
 
@@ -592,7 +596,8 @@ body.place-details-active .place {
 .fa-star-o {
   opacity: 0.3; }
 
-.place {
+.place,
+.dropdown-userFavs {
   padding: 0;
   background: white;
   right: -30%;
@@ -601,7 +606,8 @@ body.place-details-active .place {
   transition: all 0.4s ease-out;
   overflow-y: scroll;
   height: calc(100vh - 90px); }
-  .place p {
+  .place p,
+  .dropdown-userFavs p {
     margin: 0; }
 
 .placeText {
@@ -771,10 +777,7 @@ body.loggedIn .login-btn {
   display: none; }
 
 .dropdown-userFavs {
-  display: none; }
+  background: red; }
 
 body.userFavsActive .dropdown-userFavs {
-  display: block; }
-
-body.userFavsActive .results {
-  display: none; }
+  right: 0; }

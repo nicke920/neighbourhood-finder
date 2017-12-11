@@ -1,25 +1,26 @@
-import './_firebase.js';
+// require('./_firebase.js')
 
 $(function()  {	
-	// console.log('a', firebase.auth().currentUser)
 
-	var anArray = [];
+		// FIREBASE VARIABLES
+		var config = {
+		  apiKey: "AIzaSyBJ5aGM2771uuDHEtp54gLQmWwvkAy0P9k",
+		  authDomain: "neighbourhood-8b089.firebaseapp.com",
+		  databaseURL: "https://neighbourhood-8b089.firebaseio.com",
+		  projectId: "neighbourhood-8b089",
+		  storageBucket: "",
+		  messagingSenderId: "246296678951"
+		};
+		firebase.initializeApp(config);
+		
 
-setTimeout(function() {
-	firebase.database().ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
-		console.log('mainnn', firebaseData.val())
+		var userFavsIds = [];
 
-		var itemsData = firebaseData.val();
+		var currentUserId; 
 
-		for (var itemKey in itemsData) {
-			anArray.push(itemsData[itemKey])
-		}
-		console.log('lengt', anArray.length)
+		var dbRef = firebase.database();
 
-	})
-		listingFavourites(anArray);
 
-}, 1000)
 
 
 
@@ -213,8 +214,6 @@ setTimeout(function() {
 
 	function listPlaces(location, radius) {
 		hideListings();
-		console.log('7887', anArray)
-
 
 		var toMarkersRestaurant = []
 		var toMarkersCafes = [];
@@ -321,6 +320,9 @@ setTimeout(function() {
 
 
 	}
+
+
+
 
 
 
@@ -563,7 +565,7 @@ setTimeout(function() {
 		var that = this
 		$.each(markers, function(ind, val) {
 			if ($(that).attr('id') === val.id) {
-				console.log('va', val.id)
+				// console.log('va', val.id)
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE)
 			}
 		})
@@ -572,7 +574,7 @@ setTimeout(function() {
 	$(document).on('mouseout', '#list > li', function() {
 		var that = this
 		$.each(markers, function(ind, val) {
-			console.log('88')
+			// console.log('88')
 			if ($(that).attr('id') === val.id) {
 				markers[ind].setAnimation(null)
 			}
@@ -754,146 +756,309 @@ setTimeout(function() {
 
 
 
-function settingCenterMarker(whichMap, location, radius) {
-			if (centerPoint || centerCircle) {
-				centerPoint.setMap(null)
-				centerCircle.setMap(null)
-			}
-
-			centerPoint = new google.maps.Marker({
-				position: location, 
-				map: whichMap, 
-				animation: google.maps.Animation.DROP,
-				icon: '../../assets/placeholder.png'
-			})
-
-			centerCircle = new google.maps.Circle({
-				map: whichMap,
-				radius: radius,
-				strokeWeight: 1, 
-				strokeColor: '#607D8B',
-				fillOpacity: 0
-			})
-
-			centerCircle.bindTo('center', centerPoint, 'position')
-
-			//center map on center marker
-
-			var centerControlDiv = document.createElement('div');
-	        var centerControl = new CenterControl(centerControlDiv, map);
-	        centerControlDiv.index = 0;
-	        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
-			function CenterControl(controlDiv, map) {
-
-			        // Set CSS for the control border.
-			        var controlUI = document.createElement('div');
-			        controlUI.style.backgroundColor = '#fff';
-			        controlUI.style.border = '2px solid #fff';
-			        controlUI.style.borderRadius = '3px';
-			        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-			        controlUI.style.cursor = 'pointer';
-			        controlUI.style.marginBottom = '22px';
-			        controlUI.style.textAlign = 'center';
-			        controlUI.title = 'Click to recenter the map';
-			        controlDiv.appendChild(controlUI);
-
-			        // Set CSS for the control interior.
-			        var controlText = document.createElement('div');
-			        controlText.style.color = 'rgb(25,25,25)';
-			        controlText.style.fontFamily = 'Lato';
-			        controlText.style.fontSize = '16px';
-			        controlText.style.lineHeight = '38px';
-			        controlText.style.paddingLeft = '5px';
-			        controlText.style.paddingRight = '5px';
-			        controlText.innerHTML = 'Center Map';
-			        controlUI.appendChild(controlText);
-
-			        // Setup the click event listeners: simply set the map to Chicago.
-			        controlUI.addEventListener('click', function() {
-			        	settingTheCenter(whichMap, radius, centerPoint.position)
-			        });
-
-			        $('.place-toggle-slide').on('click', function() {
-			        	settingTheCenter(whichMap, radius, centerPoint.position)
-			        })
-
-			      }
-
-			settingTheCenter(whichMap, radius, centerPoint.position)
-
-
-			
-
+	function settingCenterMarker(whichMap, location, radius) {
+		if (centerPoint || centerCircle) {
+			centerPoint.setMap(null)
+			centerCircle.setMap(null)
 		}
 
-		function settingTheCenter(whichMap, radius, whereToCenter) {
-			// console.log('center set')
-			whichMap.setCenter(whereToCenter)
-
-			var zoomin = radiusToZoom(radius) 
-			
-			//automatically zoom map to fit the radius of the circle overlay
-			whichMap.setZoom(zoomin)
-
-		}
-
-
-	function listingFavourites(favsArray) {
-		console.log('fa', favsArray)
-		$(`.dropdown-userFavs`).empty();
-		$.each(favsArray, function(ind, val) {
-
-			var request = {
-				placeId: val
-			}
-			var service;
-
-			service = new google.maps.places.PlacesService(map);
-
-			service.getDetails(request, function(results, status) {
-				console.log('sa', status)
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					console.log('resssy', results)
-
-					var isOpenText;
-					var photoURL;
-
-					if ($(results.photos).length > 0) {
-						photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
-					} else {
-						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
-					}
-
-					$(`.dropdown-userFavs`).append(
-						`<li id='${results.place_id}' class='result-tile'>
-							<a>
-								<h3>${results.name}</h3>
-								<div class="result-detail">
-									<div class="result-image">
-										<img src="${photoURL}" alt="" />
-									</div>
-									<div class="result-description">
-										<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
-										<div class="rating-div">
-											${starRatings(results.rating)}
-										</div>
-										<button class="addToFavs">Add Favs</button>
-									</div>
-								</div>
-							</a>
-						</li>`
-						)
-
-				}
-			})
+		centerPoint = new google.maps.Marker({
+			position: location, 
+			map: whichMap, 
+			animation: google.maps.Animation.DROP,
+			icon: '../../assets/placeholder.png'
 		})
+
+		centerCircle = new google.maps.Circle({
+			map: whichMap,
+			radius: radius,
+			strokeWeight: 1, 
+			strokeColor: '#607D8B',
+			fillOpacity: 0
+		})
+
+		centerCircle.bindTo('center', centerPoint, 'position')
+
+		//center map on center marker
+
+		var centerControlDiv = document.createElement('div');
+	    var centerControl = new CenterControl(centerControlDiv, map);
+	    centerControlDiv.index = 0;
+	    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+		function CenterControl(controlDiv, map) {
+
+		        // Set CSS for the control border.
+		        var controlUI = document.createElement('div');
+		        controlUI.style.backgroundColor = '#fff';
+		        controlUI.style.border = '2px solid #fff';
+		        controlUI.style.borderRadius = '3px';
+		        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+		        controlUI.style.cursor = 'pointer';
+		        controlUI.style.marginBottom = '22px';
+		        controlUI.style.textAlign = 'center';
+		        controlUI.title = 'Click to recenter the map';
+		        controlDiv.appendChild(controlUI);
+
+		        // Set CSS for the control interior.
+		        var controlText = document.createElement('div');
+		        controlText.style.color = 'rgb(25,25,25)';
+		        controlText.style.fontFamily = 'Lato';
+		        controlText.style.fontSize = '16px';
+		        controlText.style.lineHeight = '38px';
+		        controlText.style.paddingLeft = '5px';
+		        controlText.style.paddingRight = '5px';
+		        controlText.innerHTML = 'Center Map';
+		        controlUI.appendChild(controlText);
+
+		        // Setup the click event listeners: simply set the map to Chicago.
+		        controlUI.addEventListener('click', function() {
+		        	settingTheCenter(whichMap, radius, centerPoint.position)
+		        });
+
+		        $('.place-toggle-slide').on('click', function() {
+		        	settingTheCenter(whichMap, radius, centerPoint.position)
+		        })
+
+		      }
+
+		settingTheCenter(whichMap, radius, centerPoint.position)
+
 	}
 
-	$('.goToFavs').on('click', function() {
-		$('body').toggleClass('userFavsActive');
-	})
+	function settingTheCenter(whichMap, radius, whereToCenter) {
+		// console.log('center set')
+		whichMap.setCenter(whereToCenter)
+
+		var zoomin = radiusToZoom(radius) 
+		
+		//automatically zoom map to fit the radius of the circle overlay
+		whichMap.setZoom(zoomin)
+
+	}
+
+
+
+
+
+
+
+		function getIDsFromFirebase(itemsData, userFavsIdss) {
+			userFavsIdss.splice(0,userFavsIdss.length);
+
+			userFavsIdss = [];
+
+			userFavsIdss = new Array;
+
+			for (var itemKey in itemsData) {
+
+				var theobjected = {
+					key: itemKey,
+					id: itemsData[itemKey]
+				}
+				userFavsIdss.push(theobjected)
+			}
+
+			$('.dropdown-userFavs').empty()
+
+			convertEachFavIDToAList(userFavsIdss)
+
+		}
+
 	
+
+
+
+
+
+		firebase.auth().onAuthStateChanged(function(user) {
+				if (user) {
+					currentUserId = user.uid;
+
+					$('body').removeClass('loginModalShowing')
+
+					var userFavsIdss = [];
+
+					var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
+
+
+						var itemsData = firebaseData.val();
+
+						getIDsFromFirebase(itemsData, userFavsIdss);
+
+					})
+
+					$('body').addClass('loggedIn')
+					$('#usersUserName').text(firebase.auth().currentUser.displayName)
+				} 
+				else {
+					console.log('user NOT logged in')
+					$('body').removeClass('loggedIn').addClass('notLoggedIn')
+				}
+
+		})
+
+
+		//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
+
+		$('.authForm').on('submit', function(e) {
+			e.preventDefault();
+
+			var userEmail = $('#userEmail').val();
+			var userPass = $('#userPass').val();
+			var userUserName = $('#userUserName').val();
+			
+			firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
+			.then(function(userData) {
+				$('body').removeClass('loginModalShowing')
+
+			})
+			.catch(function(error) {
+				console.log('type of error', typeof error)
+				alert(error)
+			})
+
+		})
+
+		//GOOGLE AUTHORIZATION FROM FIREBASE
+
+		var provider = new firebase.auth.GoogleAuthProvider();
+
+		$('.googleForm').on('click', function(e) {
+			e.preventDefault();
+
+			firebase.auth().signInWithPopup(provider).catch(function(error) {
+				console.log('error message', error)
+				// The email of the user's account used.
+				  var email = error.email;
+				  // The firebase.auth.AuthCredential type that was used.
+				  var credential = error.credential;
+			}).then(function(result) {
+				var token = result.credential.accessToken;
+
+				var user = result.user;
+
+				var newUser = {
+					displayName: user.displayName,
+					email: user.email
+				}
+
+				firebase.database().ref(`users/${user.uid}`).set(newUser)
+
+				$('body').removeClass('loginModalShowing')
+				
+				console.log('ressss', result)
+
+			})
+		})
+
+
+
+		//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
+		$(document).on('click', '.addToFavs', function() {
+
+			var user = firebase.auth().currentUser.uid;
+			
+			var dbRef = firebase.database().ref(`users/${user}/favourites`);
+
+			var placeId = $(this).parents('.result-tile').attr('id')
+
+			console.log('yes', dbRef)
+
+			dbRef.push(placeId)
+		})
+
+
+		$(document).on('click', '.removeFav', function() {
+
+			var user = firebase.auth().currentUser.uid;
+			
+			var placeId = $(this).parents('.result-tile').attr('data-db-ref')
+
+			var dbRef = firebase.database().ref(`users/${user}/favourites/${placeId}`);
+
+			dbRef.remove();
+
+			console.log('lci')
+		})
+
+
+
+		function convertEachFavIDToAList(pushed) {
+
+			$.each(pushed, function(ind, val) {
+				var request = {
+					placeId: val.id,
+					dbRef: val.key
+				}
+
+				var service;
+				service = new google.maps.places.PlacesService(map);
+
+				service.getDetails(request, function(results, status) {
+
+					if (status == google.maps.places.PlacesServiceStatus.OK) {
+						var photoURL;
+
+						if ($(results.photos).length > 0) {
+							photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+						} else {
+							photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
+						}
+
+						$('.dropdown-userFavs').append(`
+							<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
+								<a>
+									<h3>${results.name}</h3>
+									<div class="result-detail">
+										<div class="result-image">
+											<img src="${photoURL}" alt="" />
+										</div>
+										<div class="result-description">
+											<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
+											<div class="rating-div">
+												${starRatings(results.rating)}
+											</div>
+											<button class="removeFav">Remove</button>
+										</div>
+									</div>
+								</a>
+							</li>
+							`)
+					}
+				})
+				
+			})
+
+			// console.log('resssUlts -- OUTSIDE', results)
+		}
+
+
+
+
+
+		//FAVOURITES EVENT LISTENERS
+		$('.login-btn').on('click', function(e) {
+			e.preventDefault();
+			$('body').addClass('loginModalShowing')
+		})
+		
+		$('#userSignOut').on('click', function() {
+			firebase.auth().signOut();
+		})
+
+		$('.goToFavs').on('click', function() {
+			$('body').addClass('userFavsActive');
+		})
+
+
+
+
+
+
+
+
+
 
 })
 

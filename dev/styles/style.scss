@@ -345,7 +345,8 @@ body.searched .secondary-navbar {
 
 
 .results,
-.place {
+.place, 
+.dropdown-userFavs {
 	width: 30%;
 	min-width: 300px;
 	padding: 20px; 
@@ -477,7 +478,8 @@ body.place-details-active .place {
 }
 
 
-.place {
+.place,
+.dropdown-userFavs {
 	padding: 0;
 	background: white;
 	right: -30%;
@@ -652,12 +654,14 @@ body.loggedIn .login-btn {
 }
 
 .dropdown-userFavs {
-	display: none;
+	background: red;
+	// display: none;
 }
 
 body.userFavsActive .dropdown-userFavs {
-	display: block;
+	// display: block;
+	right: 0;
 }
 body.userFavsActive .results {
-	display: none;
+	// display: none;
 }

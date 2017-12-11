@@ -1,143 +1,28 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+// require('./_firebase.js')
+
 $(function () {
-	console.log('FIREEBASEEEE');
+
+	// FIREBASE VARIABLES
+	var config = {
+		apiKey: "AIzaSyBJ5aGM2771uuDHEtp54gLQmWwvkAy0P9k",
+		authDomain: "neighbourhood-8b089.firebaseapp.com",
+		databaseURL: "https://neighbourhood-8b089.firebaseio.com",
+		projectId: "neighbourhood-8b089",
+		storageBucket: "",
+		messagingSenderId: "246296678951"
+	};
+	firebase.initializeApp(config);
 
 	var userFavsIds = [];
 
+	var currentUserId;
+
 	var dbRef = firebase.database();
-
-	firebase.auth().onAuthStateChanged(function (user) {
-		setTimeout(function () {
-
-			if (user) {
-				$('body').addClass('loggedIn');
-				$('#usersUserName').text(firebase.auth().currentUser.displayName);
-
-				// dbRef.ref(`users/${firebase.auth().currentUser.uid}/favourites`).on('value', function(firebaseData) {
-				// 	var itemsData = firebaseData.val();
-
-				// 	for (var itemKey in itemsData) {
-				// 		userFavsIds.push(itemsData[itemKey])
-				// 	}
-
-				// 	userFavsIds.map(function(val, ind) {
-				// 		$('.userFavs').append(val)
-				// 		console.log('valll', val)
-				// 	})
-				// 	console.log(userFavsIds)
-				// 	})
-			} else {
-				$('body').removeClass('loggedIn').addClass('notLoggedIn');
-			}
-		}, 500);
-	});
-
-	$('.login-btn').on('click', function (e) {
-		e.preventDefault();
-		$('body').addClass('loginModalShowing');
-	});
-
-	$('#userSignOut').on('click', function () {
-		firebase.auth().signOut();
-	});
-
-	$('.authForm').on('submit', function (e) {
-		e.preventDefault();
-
-		var userEmail = $('#userEmail').val();
-		var userPass = $('#userPass').val();
-		var userUserName = $('#userUserName').val();
-
-		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (success) {
-			console.log('success', success);
-
-			var newUser = {
-				email: userEmail,
-				displayName: userUserName
-			};
-
-			success.updateProfile({
-				displayName: userUserName
-			});
-
-			firebase.database().ref('users/' + success.uid).set(newUser);
-
-			$('body').removeClass('loginModalShowing');
-		}).catch(function (error) {
-			console.log('type of error', typeof error === 'undefined' ? 'undefined' : _typeof(error));
-		});
-	});
-
-	var provider = new firebase.auth.GoogleAuthProvider();
-
-	$('.googleForm').on('click', function (e) {
-		e.preventDefault();
-
-		firebase.auth().signInWithPopup(provider).catch(function (error) {
-			console.log('error message', error);
-			// The email of the user's account used.
-			var email = error.email;
-			// The firebase.auth.AuthCredential type that was used.
-			var credential = error.credential;
-		}).then(function (result) {
-			var token = result.credential.accessToken;
-
-			var user = result.user;
-
-			var newUser = {
-				displayName: user.displayName,
-				email: user.email
-			};
-
-			firebase.database().ref('users/' + user.uid).set(newUser);
-
-			$('body').removeClass('loginModalShowing');
-
-			console.log('ressss', result);
-		});
-	});
-
-	$(document).on('click', '.addToFavs', function () {
-
-		var user = firebase.auth().currentUser.uid;
-
-		var dbRef = firebase.database().ref('users/' + user + '/favourites');
-
-		var placeId = $(this).parents('.result-tile').attr('id');
-
-		userFavsIds.push(placeId);
-
-		dbRef.push(placeId);
-	});
-});
-
-},{}],2:[function(require,module,exports){
-'use strict';
-
-require('./_firebase.js');
-
-$(function () {
-	// console.log('a', firebase.auth().currentUser)
-
-	var anArray = [];
-
-	setTimeout(function () {
-		firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/favourites').on('value', function (firebaseData) {
-			console.log('mainnn', firebaseData.val());
-
-			var itemsData = firebaseData.val();
-
-			for (var itemKey in itemsData) {
-				anArray.push(itemsData[itemKey]);
-			}
-			console.log('lengt', anArray.length);
-		});
-		listingFavourites(anArray);
-	}, 1000);
 
 	var map;
 
@@ -278,7 +163,6 @@ $(function () {
 
 	function listPlaces(location, radius) {
 		hideListings();
-		console.log('7887', anArray);
 
 		var toMarkersRestaurant = [];
 		var toMarkersCafes = [];
@@ -307,13 +191,13 @@ $(function () {
 				if (status == 'OK') {
 					var pattern = function pattern(requestType) {
 						if (requestType === requestType) {
-							getMarkers(theMarkersArray, '' + requestType);
+							getMarkers(theMarkersArray, "" + requestType);
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0];
 							}
 
-							$('.dropdown-' + requestType + ' #list').empty();
+							$(".dropdown-" + requestType + " #list").empty();
 
 							$.each(theMarkersArray, function (index, place) {
 								var isOpenText;
@@ -325,7 +209,7 @@ $(function () {
 									photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 								}
 
-								$('.dropdown-' + requestType + ' #list').append('<li id=\'' + place.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>' + place.name + '</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class="result-detail">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class="result-image">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="' + photoURL + '" alt="" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class="result-description">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class="fa fa-map-marker" aria-hidden="true"></i>' + place.vicinity + '</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="rating-div">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + starRatings(place.rating) + '\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button class="addToFavs">Add Favs</button>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>');
+								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button class=\"addToFavs\">Add Favs</button>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
 							});
 						}
 					};
@@ -478,7 +362,7 @@ $(function () {
 		$(this).addClass('selected');
 		var tabAttr = $(this).attr('category');
 		$('.listings-nav.dropdown').removeClass('active');
-		$('.listings-nav.dropdown[category="' + tabAttr + '"]').addClass('active');
+		$(".listings-nav.dropdown[category=\"" + tabAttr + "\"]").addClass('active');
 		$(this).parent().parent().parent().addClass('opened');
 	});
 
@@ -575,7 +459,7 @@ $(function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
-				console.log('va', val.id);
+				// console.log('va', val.id)
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
 			}
 		});
@@ -584,7 +468,7 @@ $(function () {
 	$(document).on('mouseout', '#list > li', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
-			console.log('88');
+			// console.log('88')
 			if ($(that).attr('id') === val.id) {
 				markers[ind].setAnimation(null);
 			}
@@ -614,14 +498,14 @@ $(function () {
 
 				$.each(photosArray, function (ind, val) {
 					var arrPhotoUrl = val.getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
-					$('.main-carousel').append('<img src="' + arrPhotoUrl + '" alt="" class="carousel-cell"/>');
+					$('.main-carousel').append("<img src=\"" + arrPhotoUrl + "\" alt=\"\" class=\"carousel-cell\"/>");
 				});
 			};
 
 			photoUrl = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
 			photosArray = results.photos;
 
-			$('.photo-carousel-length').text('(' + photosArray.length + ')');
+			$('.photo-carousel-length').text("(" + photosArray.length + ")");
 
 			$.when(theloop()).then(initFlickity());
 		} else {
@@ -637,7 +521,7 @@ $(function () {
 			isOpenText = "Open Now";
 			weeklyHours = results.opening_hours.weekday_text;
 			$.each(weeklyHours, function (ind, val) {
-				$('.place-open-list').append('<li class="week-hours">' + val + '</li>');
+				$('.place-open-list').append("<li class=\"week-hours\">" + val + "</li>");
 			});
 		} else {
 			isOpenText = "";
@@ -647,9 +531,9 @@ $(function () {
 		if (results.reviews !== undefined) {
 			resultsArray = results.reviews;
 			$('.reviews-container').empty();
-			$('.reviews-length').text('(' + resultsArray.length + ')');
+			$('.reviews-length').text("(" + resultsArray.length + ")");
 			$.each(resultsArray, function (ind, val) {
-				var review = '\n\t\t\t\t\t<div class="user-review">\n\t\t\t\t\t\t<div class="user-image">\n\t\t\t\t\t\t\t<img src="' + val.profile_photo_url + '" alt="" />\n\t\t\t\t\t\t\t<div class="user-rating">\n\t\t\t\t\t\t\t\t' + starRatings(val.rating) + '\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="user-comment">\n\t\t\t\t\t\t\t' + val.text + ' <span>' + val.relative_time_description + '</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<hr>\n\t\t\t\t';
+				var review = "\n\t\t\t\t\t<div class=\"user-review\">\n\t\t\t\t\t\t<div class=\"user-image\">\n\t\t\t\t\t\t\t<img src=\"" + val.profile_photo_url + "\" alt=\"\" />\n\t\t\t\t\t\t\t<div class=\"user-rating\">\n\t\t\t\t\t\t\t\t" + starRatings(val.rating) + "\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t\t\t" + val.text + " <span>" + val.relative_time_description + "</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<hr>\n\t\t\t\t";
 				$('.reviews-container').append(review);
 			});
 		}
@@ -709,23 +593,23 @@ $(function () {
 		// console.log('working', rating)
 		var ratingOutput;
 		if (rating > 4.8) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i>";
 		} else if (rating > 4.2 && rating <= 4.7) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i>";
 		} else if (rating > 3.8 && rating <= 4.2) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else if (rating > 3.2 && rating <= 3.8) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else if (rating > 2.8 && rating <= 3.2) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else if (rating > 2.2 && rating <= 2.8) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else if (rating > 1.8 && rating <= 2.2) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else if (rating <= 1.8) {
-			ratingOutput = '<span>(' + rating + ')</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i><i class="fa fa-star-o" aria-hidden="true"></i>';
+			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i><i class=\"fa fa-star-o\" aria-hidden=\"true\"></i>";
 		} else {
-			ratingOutput = '<p>No Rating</p>';
+			ratingOutput = "<p>No Rating</p>";
 		}
 		return ratingOutput;
 	}
@@ -808,24 +692,139 @@ $(function () {
 		whichMap.setZoom(zoomin);
 	}
 
-	function listingFavourites(favsArray) {
-		console.log('fa', favsArray);
-		$('.dropdown-userFavs').empty();
-		$.each(favsArray, function (ind, val) {
+	function getIDsFromFirebase(itemsData, userFavsIdss) {
+		userFavsIdss.splice(0, userFavsIdss.length);
 
-			var request = {
-				placeId: val
+		userFavsIdss = [];
+
+		userFavsIdss = new Array();
+
+		for (var itemKey in itemsData) {
+
+			var theobjected = {
+				key: itemKey,
+				id: itemsData[itemKey]
 			};
-			var service;
+			userFavsIdss.push(theobjected);
+		}
 
+		$('.dropdown-userFavs').empty();
+
+		convertEachFavIDToAList(userFavsIdss);
+	}
+
+	firebase.auth().onAuthStateChanged(function (user) {
+		if (user) {
+			currentUserId = user.uid;
+
+			$('body').removeClass('loginModalShowing');
+
+			var userFavsIdss = [];
+
+			var dbRef = firebase.database().ref("users/" + currentUserId + "/favourites").on('value', function (firebaseData) {
+
+				var itemsData = firebaseData.val();
+
+				getIDsFromFirebase(itemsData, userFavsIdss);
+			});
+
+			$('body').addClass('loggedIn');
+			$('#usersUserName').text(firebase.auth().currentUser.displayName);
+		} else {
+			console.log('user NOT logged in');
+			$('body').removeClass('loggedIn').addClass('notLoggedIn');
+		}
+	});
+
+	//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
+
+	$('.authForm').on('submit', function (e) {
+		e.preventDefault();
+
+		var userEmail = $('#userEmail').val();
+		var userPass = $('#userPass').val();
+		var userUserName = $('#userUserName').val();
+
+		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (userData) {
+			$('body').removeClass('loginModalShowing');
+		}).catch(function (error) {
+			console.log('type of error', typeof error === "undefined" ? "undefined" : _typeof(error));
+			alert(error);
+		});
+	});
+
+	//GOOGLE AUTHORIZATION FROM FIREBASE
+
+	var provider = new firebase.auth.GoogleAuthProvider();
+
+	$('.googleForm').on('click', function (e) {
+		e.preventDefault();
+
+		firebase.auth().signInWithPopup(provider).catch(function (error) {
+			console.log('error message', error);
+			// The email of the user's account used.
+			var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			var credential = error.credential;
+		}).then(function (result) {
+			var token = result.credential.accessToken;
+
+			var user = result.user;
+
+			var newUser = {
+				displayName: user.displayName,
+				email: user.email
+			};
+
+			firebase.database().ref("users/" + user.uid).set(newUser);
+
+			$('body').removeClass('loginModalShowing');
+
+			console.log('ressss', result);
+		});
+	});
+
+	//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
+	$(document).on('click', '.addToFavs', function () {
+
+		var user = firebase.auth().currentUser.uid;
+
+		var dbRef = firebase.database().ref("users/" + user + "/favourites");
+
+		var placeId = $(this).parents('.result-tile').attr('id');
+
+		console.log('yes', dbRef);
+
+		dbRef.push(placeId);
+	});
+
+	$(document).on('click', '.removeFav', function () {
+
+		var user = firebase.auth().currentUser.uid;
+
+		var placeId = $(this).parents('.result-tile').attr('data-db-ref');
+
+		var dbRef = firebase.database().ref("users/" + user + "/favourites/" + placeId);
+
+		dbRef.remove();
+
+		console.log('lci');
+	});
+
+	function convertEachFavIDToAList(pushed) {
+
+		$.each(pushed, function (ind, val) {
+			var request = {
+				placeId: val.id,
+				dbRef: val.key
+			};
+
+			var service;
 			service = new google.maps.places.PlacesService(map);
 
 			service.getDetails(request, function (results, status) {
-				console.log('sa', status);
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					console.log('resssy', results);
 
-					var isOpenText;
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
 					var photoURL;
 
 					if ($(results.photos).length > 0) {
@@ -834,15 +833,27 @@ $(function () {
 						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 					}
 
-					$('.dropdown-userFavs').append('<li id=\'' + results.place_id + '\' class=\'result-tile\'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>' + results.name + '</h3>\n\t\t\t\t\t\t\t\t<div class="result-detail">\n\t\t\t\t\t\t\t\t\t<div class="result-image">\n\t\t\t\t\t\t\t\t\t\t<img src="' + photoURL + '" alt="" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="result-description">\n\t\t\t\t\t\t\t\t\t\t<h5><i class="fa fa-map-marker" aria-hidden="true"></i>' + results.vicinity + '</h5>\n\t\t\t\t\t\t\t\t\t\t<div class="rating-div">\n\t\t\t\t\t\t\t\t\t\t\t' + starRatings(results.rating) + '\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<button class="addToFavs">Add Favs</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>');
+					$('.dropdown-userFavs').append("\n\t\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<button class=\"removeFav\">Remove</button>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t");
 				}
 			});
 		});
+
+		// console.log('resssUlts -- OUTSIDE', results)
 	}
 
+	//FAVOURITES EVENT LISTENERS
+	$('.login-btn').on('click', function (e) {
+		e.preventDefault();
+		$('body').addClass('loginModalShowing');
+	});
+
+	$('#userSignOut').on('click', function () {
+		firebase.auth().signOut();
+	});
+
 	$('.goToFavs').on('click', function () {
-		$('body').toggleClass('userFavsActive');
+		$('body').addClass('userFavsActive');
 	});
 });
 
-},{"./_firebase.js":1}]},{},[2]);
+},{}]},{},[1]);
