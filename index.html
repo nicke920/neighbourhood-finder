@@ -38,23 +38,22 @@
 
 		<div class="logo-section">
 			<div class="logo-image">
-				<svg class="thelogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M94.5,47.5l4.1-6.2L49.4,8.8L0.9,41.3l4.1,6.2l9.7-6.5v51.1H85l0-50.8L94.5,47.5z M37.5,48.5  c0,0,7.1-6,12.4,2.2c5.3-8.2,12.4-2.2,12.4-2.2c4.9,4.5,0,10.5,0,10.5c-1.9,3.4-11.6,12.6-12.4,13.4l-0.1-0.1  c-1.2-1.1-10.5-10-12.4-13.3C37.5,59,32.5,53,37.5,48.5z"/></svg>
+				<svg class="thelogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 5 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M94.5,47.5l4.1-6.2L49.4,8.8L0.9,41.3l4.1,6.2l9.7-6.5v51.1H85l0-50.8L94.5,47.5z M37.5,48.5  c0,0,7.1-6,12.4,2.2c5.3-8.2,12.4-2.2,12.4-2.2c4.9,4.5,0,10.5,0,10.5c-1.9,3.4-11.6,12.6-12.4,13.4l-0.1-0.1  c-1.2-1.1-10.5-10-12.4-13.3C37.5,59,32.5,53,37.5,48.5z"/></svg>
 			</div>
-			<h1 class="logo-name">Neighbourhood finder</h1>
+			<h1 class="logo-name">HoodFinder</h1>
 		</div>
 		<nav class="nav">
 			<ul class="navbar">
 				<li><a href="#">Home</a></li>
-				<li><a href="#">More Info</a></li>
 				<li><a href="#">About Us</a></li>
+				
+				<li class="signin-btn "><a href="" class="user-btn">Sign In</a></li>
+				<li class="signup-btn register "><a href="" class="user-btn"><i class="fa fa-plus" aria-hidden="true"></i>Register</a></li>
+				<li><a id="userSignOut"><i class="fa fa-user-circle-o" aria-hidden="true"></i></li>
+				<li><a href="" class="signout-btn user-btn" id="userSignOut">Sign Out</a></li>
 			</ul>
 
-			<div class="login-section">
-				<a href="" class="btn btn-light login-btn">Login or Register</a>
-				<div class="logged-in-status">
-					<a id="userSignOut"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a><p id="usersUserName"></p>
-				</div>
-			</div>
+
 		</nav>
 	</div>
 </header>
@@ -77,11 +76,16 @@
 					<form action="" class="home-search">
 
 						<div class="search-container address-container">
-							<i class="fa fa-map-pin" aria-hidden="true"></i>
+							<img src="assets/icons/placeholder.png" alt="">
 							<input type="text" id="address" placeholder="Enter Postal Code" required value="">
 						</div>
 
 						<div class="search-container radius-container">
+							<!-- <button class="dropdown-toggle">
+								<img src="assets/icons/target.png" alt="">
+								<span>Distance (10min walk, ...)</span>
+								<span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+							</button> -->
 							<i class="fa fa-arrows-v" aria-hidden="true"></i>
 							<select id="radius" placeholder="nigga">
 								<option value="1000">1000</option>
@@ -90,7 +94,7 @@
 							</select>
 						</div>
 
-						<input type="submit" id="gotime" value="Search" class="btn btn-dark">
+						<input type="submit" id="gotime" value="Go!" class="btn btn-dark">
 
 					</form>
 				</div>
@@ -107,7 +111,7 @@
 </section>
 
 
-<div class="secondary-navbar">
+<!-- <div class="secondary-navbar">
 	<div class="inside-navbar">
 		<div class="secondary-menu">
 			<i class="fa fa-bars" aria-hidden="true"></i>
@@ -134,15 +138,18 @@
 			<h3 class="city-name"></h3>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <section id="mapSection">
 		<div id="map"></div>
 		<div class="results">
+			<div class="results-top-bar">
+				<p class="city-name"></p>
+				<p><i class="fa fa-star" aria-hidden="true"></i><span class="avg-area-rating"></span></p>
+			</div>
+			<hr>
 			<div class="title">
-				<h2>Top 5</h2>
-				<a class="goToFavs">Favs</a>
-				<p>Average place rating: <span class="avg-area-rating"></span></p>
+				<h2>Top 5's</h2>
 			</div>
 			<div class="result-area">
 				<div class="result-card dropdown dropdown-restaurant">
@@ -203,7 +210,10 @@
 			</div>
 		</div>
 		<div class="place">
-			<a class="place-toggle-slide">Back</a>
+			<div class="place-top-bar place-wrapper">
+				<a class="place-toggle-slide"><img src="assets/icons/left-arrow.png" alt=""></a>
+				<a class="place-add-to-favs"><img src="assets/icons/add-favorite.png" alt=""></a>
+			</div>
 			<div class="place-image">
 				<img src="" alt="">
 			</div>
@@ -259,13 +269,9 @@
 		</div>
 
 		<div class="dropdown-userFavs">
-			
+
 		</div>
  		
-	</section> 
-
-	<section class="userFavs">
-		<h2>Favs</h2>
 	</section>
 
 </main>

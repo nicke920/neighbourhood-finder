@@ -274,6 +274,7 @@ $(function()  {
 							$.each(theMarkersArray, function(index, place) {
 								var isOpenText;
 								var photoURL;
+								console.log('placeee', place)
 
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
@@ -294,7 +295,11 @@ $(function()  {
 													<div class="rating-div">
 														${starRatings(place.rating)}
 													</div>
-													<button class="addToFavs">Add Favs</button>
+													<div class="types">
+														<p>${place.types[0].replace(/_/g, " ")}</p>
+														<p>${place.types[1].replace(/_/g, " ")}</p>
+													</div>
+													<a class="addToFavs">Add to favourites</a>
 												</div>
 											</div>
 										</a>
@@ -888,7 +893,7 @@ $(function()  {
 
 					})
 
-					$('body').addClass('loggedIn')
+					$('body').addClass('loggedIn').removeClass('notLoggedIn')
 					$('#usersUserName').text(firebase.auth().currentUser.displayName)
 				} 
 				else {
@@ -956,16 +961,21 @@ $(function()  {
 
 		//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
 		$(document).on('click', '.addToFavs', function() {
-
 			var user = firebase.auth().currentUser.uid;
+
+			if (user) {
+				var dbRef = firebase.database().ref(`users/${user}/favourites`);
+
+				var placeId = $(this).parents('.result-tile').attr('id')
+
+				console.log('yes', dbRef)
+
+				dbRef.push(placeId)
+			} else {
+				alert('Please sign in to add to favs')
+			}
+
 			
-			var dbRef = firebase.database().ref(`users/${user}/favourites`);
-
-			var placeId = $(this).parents('.result-tile').attr('id')
-
-			console.log('yes', dbRef)
-
-			dbRef.push(placeId)
 		})
 
 
@@ -1045,6 +1055,7 @@ $(function()  {
 		
 		$('#userSignOut').on('click', function() {
 			firebase.auth().signOut();
+			window.location.reload();
 		})
 
 		$('.goToFavs').on('click', function() {
@@ -1054,6 +1065,10 @@ $(function()  {
 
 
 
+
+	$('.dropdown-toggle').on('click', function() {
+		
+	})
 
 
 
