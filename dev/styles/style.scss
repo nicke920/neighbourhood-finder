@@ -326,13 +326,13 @@ body.searched {
 
 
 #mapSection {
-	margin-top: 40px;
+	margin-top: 50px;
 	display: flex;
-	height: calc(100vh - 40px);
+	height: calc(100vh - 50px);
 }
 
 body.searched #mapSection {
-	overflow: unset;
+	overflow: hidden;
 }
 
 .secondary-navbar {
@@ -601,11 +601,10 @@ body.place-details-active .place {
 	padding: 0;
 	background: white;
 	right: -30%;
-	height: 0;
+	height: calc(100% - 50px);
 	position: absolute;
 	transition: all 0.4s ease-out;
 	overflow-y: scroll;
-	height: 100%;
 	p {
 		margin: 0;
 	}
@@ -615,28 +614,30 @@ body.place-details-active .place {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: absolute;
+	width: 100%;
 }
 
 .place-toggle-slide, 
 .place-add-to-favs {
 	display: inline-flex;
-	border: 1px solid $primary-color-light;
-	width: 40px;
-	height: 40px;
+	background: $primary-white;
+	cursor: pointer;
+	border: 1px solid $primary-white;
+	width: 50px;
+	height: 50px;
+	box-shadow: 0px 4px 2px rgba(33,33,33, 0.5);
 	border-radius: 50%;
 	align-items: center;
 	padding: 8px;
 	justify-content: center;
 }
 
-.placeText {
-	padding: 0 20px;
-}
-
 .place-image {
 	height: 250px;
 	width: 100%;
-	img {
+	position: relative;
+	& > img {
 		height: 100%;
 		width: 100%;
 		object-fit: cover;
@@ -647,15 +648,19 @@ body.place-details-active .place {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	background: $primary-color-light;
-	padding: 16px 24px 20px;
+	background: $accent-color;
+	// padding: 16px 24px 20px;
+	color: white!important;
 	h3 {
 		font-size: 18px;
+		font-weight: 400;
 	}
 	.place-stars-rating {
-		margin-bottom: 4px;
+		margin: 10px 0 12px;
 		span {
 			margin-right: 6px;
+			color: white;
+			font-weight: 300;
 		}
 	}
 }
@@ -667,42 +672,72 @@ body.place-details-active .place {
 }
 
 .place-directions {
-	background: $accent-color;
-	border: none;
+	background-color: transparent;
+	border: 2px solid white;
 	color: white;
-	padding: 8px 12px;
+	padding: 5px 11px;
+	border-radius: 16px;
+	transition: all 0.2s ease-out;
+	font-weight: 300;
+	font-size: 14px;
+	letter-spacing: 0.70px;
+}
+
+.place-directions:hover {
+	background: white;
+	color: $accent-color;
+	// border-color: white;
 }
 
 .place-category {
-	color: $accent-color;
-	border: 1px solid $accent-color;
+	color: white;
+	border: 1px solid white;
 	display: inline-block;
-	padding: 1px 2px;
-	border-radius: 5px;
-	font-size: 12px;
+	padding: 0px 3px;
+	font-size: 11px;
+	opacity: 0.7;
 }
-
-.place-list {
-	a {
-		width: calc(100% - 30px);
-	    word-wrap: break-word;
-	}
-}
-
-
-
 
 .place-list {
 	display: flex;
 	justify-content: flex-start;
+	margin-bottom: 8px;
+	p,a,li {
+		font-size: 14px;
+		line-height: 1.6;
+	}
+	a {
+		width: calc(100% - 30px);
+	    word-wrap: break-word;
+	}
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+.place-heading {
+	font-size: 20px;
+	font-weight: 300;
+	margin-bottom: 20px;
+	color: $accent-color;
+	span {
+		color: $accent-color
+	}
 }
 
 .list-icon {
 	display: inline-block;
 	width: 30px;
 	.fa {
-		font-size: 12px;
-		color: $primary-color;
+		font-size: 13px;
+		color: $accent-color;
+	}
+}
+
+.place-additional-details {
+
+	a:hover {
+		text-decoration: underline;
 	}
 }
 
@@ -724,6 +759,10 @@ body.place-details-active .place {
 .user-review {
 	display: flex;
 	align-items: flex-start;
+	font-size: 14px;
+	font-family: 'Lato';
+	color: $primary-black-text;
+	line-height: 1.6;
 }
 
 .user-image {

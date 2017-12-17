@@ -635,17 +635,18 @@ $(function()  {
 
 		var isOpenText;
 		var weeklyHours;
-		if (results.opening_hours && results.opening_hours.open_now === true) {
+		if (results.opening_hours) {
 			$('.place-hours > p').on('click', function() {
 				$(this).parent().find('ul.place-open-list').slideToggle()
 			})
 			isOpenText = "Open Now";
 			weeklyHours = results.opening_hours.weekday_text;
+			$('.place-open-list').empty();
 			$.each(weeklyHours, function(ind, val) {
 				$('.place-open-list').append(`<li class="week-hours">${val}</li>`)
 			})
 		} else {
-			isOpenText = ""
+			isOpenText = "Hours Unavailable"
 		}
 
 		var resultsArray;
