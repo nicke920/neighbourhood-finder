@@ -226,6 +226,9 @@ form.home-search {
 			transform: translateY(-50%);
 			left: 13px;
 		}
+		select, input {
+			width: 100%;
+		}
 	}
 
 	.radius-container {
@@ -267,6 +270,7 @@ form.home-search {
 	padding: 0;
 	color: white;
 	margin-left: 35px;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .submit-container {
@@ -313,6 +317,7 @@ body.searched {
 				background: white;
 				padding: 0;
 				padding-left: 28px;
+				width: 100%;
 			}
 			.search-container {
 				margin-right: 10px;
@@ -418,7 +423,7 @@ body.searched .secondary-navbar {
 .place, 
 .dropdown-userFavs {
 	width: 30%;
-	min-width: 300px;
+	min-width: 430px;
 	padding: 20px; 
 	position: relative;
 	height: 100%;
@@ -444,6 +449,16 @@ body.searched .secondary-navbar {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
+	&>span {
+		display: inherit;
+		align-items: flex-start;
+		img {
+			width: 30px;
+		}
+		p {
+			align-self: flex-end;
+		}
+	}
 	p {
 		margin: 0;
 		font-size: 12px;
@@ -790,6 +805,10 @@ body.place-details-active .place {
 	}
 }
 
+
+
+
+
 .authModal {
 	background: rgba(0,0,0,0.8);
 	position: fixed;
@@ -808,6 +827,50 @@ body.place-details-active .place {
 		margin-bottom: 30px;
 	}
 }
+
+.forms {
+	width: 60%;
+}
+.logging-in {
+	.signup-form {
+		display: none;
+	}
+}
+
+.authModal-copy {
+	background-color: grey;
+	padding: 25px;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	.thecopy {
+		max-width: 250px;
+	}
+}
+
+
+.auth-slider {
+	position: absolute;
+	top: -30px;
+	bottom: -30px;
+	background: red;
+	width: 60%;
+	transition: all 0.2s ease-out;
+	& > div {
+		padding: 30px;
+	}
+}
+
+.forms.logging-in .auth-slider {
+	right: 25px;
+	left: unset;
+}
+
+.forms.signing-up .auth-slider {
+	right: unset;
+	left: 25px;
+}
+
 
 .loginModalShowing .authModal {
 	display: flex;
@@ -839,4 +902,82 @@ body.userFavsActive .dropdown-userFavs {
 }
 body.userFavsActive .results {
 	// display: none;
+}
+
+
+
+
+header nav .fa-bars {
+	display: none;
+}
+
+// MEDIA QUERIES
+
+
+@media screen and (max-width: 800px) {
+	.hero-copy h1 {
+		font-size: 36px;
+	}
+	.hero-copy, 
+	.location {
+		text-align: center;
+	}
+	.content-area {
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 80%;
+
+	}
+	form.home-search {
+		flex-direction: column;
+		.search-container {
+			width: 100%;
+			margin-bottom: 15px;
+			min-width: 0;
+		}
+
+		.radius-container {
+			margin-left: 0;
+		}
+
+		#gotime {
+			margin-left: 0;
+			width: 150px;
+		}
+	}
+}
+
+
+@media screen and (max-width: 580px) {
+	header {
+		z-index: 999;
+	}
+	header nav {
+		align-items: center;
+		padding-right: 20px;
+		.fa-bars {
+			display: block;
+			font-size: 30px;
+		}
+	}
+	ul.navbar {
+		display: none;
+		position: absolute;
+	    flex-direction: column;
+	    top: 50px;
+	    right: 0;
+	    background-color: $primary-white;
+	    width: 130px;
+	    a {
+	    	line-height: 40px;
+	    	text-align: right;
+	    	width: 100%;
+	    }
+	    .signup-btn a {
+	    	background-color: unset!important;
+	    	color: $accent-color!important;
+	    	display: block!important;
+	    	text-align: right;
+	    }
+	}
 }

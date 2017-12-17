@@ -362,6 +362,8 @@ form.home-search {
           -ms-transform: translateY(-50%);
               transform: translateY(-50%);
       left: 13px; }
+    form.home-search .search-container select, form.home-search .search-container input {
+      width: 100%; }
   form.home-search .radius-container {
     width: 30%;
     border-right: 0;
@@ -393,7 +395,8 @@ form.home-search {
   position: relative;
   padding: 0;
   color: white;
-  margin-left: 35px; }
+  margin-left: 35px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8); }
 
 .submit-container {
   width: 60px;
@@ -430,7 +433,8 @@ body.searched .portal-header {
     body.searched .portal-header form.home-search input#radius {
       background: white;
       padding: 0;
-      padding-left: 28px; }
+      padding-left: 28px;
+      width: 100%; }
     body.searched .portal-header form.home-search .search-container {
       margin-right: 10px;
       border: none; }
@@ -535,7 +539,7 @@ body.searched .secondary-navbar {
 .place,
 .dropdown-userFavs {
   width: 30%;
-  min-width: 300px;
+  min-width: 430px;
   padding: 20px;
   position: relative;
   height: 100%;
@@ -575,6 +579,17 @@ body.searched .secondary-navbar {
   -webkit-align-items: baseline;
       -ms-flex-align: baseline;
           align-items: baseline; }
+  .results-top-bar > span {
+    display: inherit;
+    -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+            align-items: flex-start; }
+    .results-top-bar > span img {
+      width: 30px; }
+    .results-top-bar > span p {
+      -webkit-align-self: flex-end;
+          -ms-flex-item-align: end;
+              align-self: flex-end; }
   .results-top-bar p {
     margin: 0;
     font-size: 12px; }
@@ -935,6 +950,43 @@ body.place-details-active .place {
   .authModal form {
     margin-bottom: 30px; }
 
+.forms {
+  width: 60%; }
+
+.logging-in .signup-form {
+  display: none; }
+
+.authModal-copy {
+  background-color: grey;
+  padding: 25px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  position: relative; }
+  .authModal-copy .thecopy {
+    max-width: 250px; }
+
+.auth-slider {
+  position: absolute;
+  top: -30px;
+  bottom: -30px;
+  background: red;
+  width: 60%;
+  transition: all 0.2s ease-out; }
+  .auth-slider > div {
+    padding: 30px; }
+
+.forms.logging-in .auth-slider {
+  right: 25px;
+  left: unset; }
+
+.forms.signing-up .auth-slider {
+  right: unset;
+  left: 25px; }
+
 .loginModalShowing .authModal {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -963,3 +1015,63 @@ body.loggedIn .login-btn {
 
 body.userFavsActive .dropdown-userFavs {
   right: 0; }
+
+header nav .fa-bars {
+  display: none; }
+
+@media screen and (max-width: 800px) {
+  .hero-copy h1 {
+    font-size: 36px; }
+  .hero-copy,
+  .location {
+    text-align: center; }
+  .content-area {
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    width: 80%; }
+  form.home-search {
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column; }
+    form.home-search .search-container {
+      width: 100%;
+      margin-bottom: 15px;
+      min-width: 0; }
+    form.home-search .radius-container {
+      margin-left: 0; }
+    form.home-search #gotime {
+      margin-left: 0;
+      width: 150px; } }
+
+@media screen and (max-width: 580px) {
+  header {
+    z-index: 999; }
+  header nav {
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    padding-right: 20px; }
+    header nav .fa-bars {
+      display: block;
+      font-size: 30px; }
+  ul.navbar {
+    display: none;
+    position: absolute;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    top: 50px;
+    right: 0;
+    background-color: #fafafa;
+    width: 130px; }
+    ul.navbar a {
+      line-height: 40px;
+      text-align: right;
+      width: 100%; }
+    ul.navbar .signup-btn a {
+      background-color: unset !important;
+      color: #4611a7 !important;
+      display: block !important;
+      text-align: right; } }

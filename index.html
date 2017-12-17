@@ -14,23 +14,45 @@
 <body>
 
 <div class="authModal">
-	<div class="forms">
-		<h2>This is create user form</h2>
-		<form class="authForm">
-			<input type="text" id="userUserName" placeholder="What shall we call you?">
-		  <input type="text" id="userEmail" placeholder="Please enter your e-mail address" />
-		  <input type="password" id="userPass" placeholder="Please enter your desired password" />
-		  <button>Create User</button>
-		</form>
+	<div class="forms logging-in">
+		<div class="authModal-copy">
+			<div class="thecopy not-signed-up">
+				<h2>Don't have an account?</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita officiis magnam, minus.</p>
+				<button class="activate-signup">
+					Sign Up
+				</button>
+			</div>
+			<div class="thecopy not-logged-in">
+				<h2>Have an account?</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita officiis magnam, minus.</p>
+				<button class="activate-login">
+					Log In
+				</button>
+			</div>
+			<div class="auth-slider">
+				<div class="login-form">
+					<h2>Log In</h2>
+					<form>
+						<input type="text" id="userLoginEmail" placeholder="email">
+						<input type="text" id="userLoginPass" placeholder="pass">
+						<input type="text" id="userLoginPassConfirmation" placeholder="confirm pass">
+					</form>
+				</div>
+				<div class="signup-form">
+					<h2>Sign Up</h2>
 
-		<button class="googleForm">Sign in with Google</button>
+					<form class="authForm">
+						<input type="text" id="userUserName" placeholder="What shall we call you?">
+						<input type="text" id="userEmail" placeholder="Please enter your e-mail address" />
+						<input type="password" id="userPass" placeholder="Please enter your desired password" />
+						<button>Create User</button>
+					</form>
 
-		<h2>this is login form</h2>
-		<form>
-			<input type="text" id="userLoginEmail" placeholder="email">
-			<input type="text" id="userLoginPass" placeholder="pass">
-			<input type="text" id="userLoginPassConfirmation" placeholder="confirm pass">
-		</form>
+					<button class="googleForm">Sign in with Google</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <header>
@@ -43,12 +65,14 @@
 			<h1 class="logo-name">HoodFinder</h1>
 		</div>
 		<nav class="nav">
+			<i class="fa fa-bars" aria-hidden="true"></i>
 			<ul class="navbar">
 				<li><a href="#">Home</a></li>
 				<li><a href="#">About Us</a></li>
+				<li><a href="#" class="goToFavs">My Favourites</a></li>
 				
-				<li class="signin-btn "><a href="" class="user-btn">Sign In</a></li>
-				<li class="signup-btn register "><a href="" class="user-btn"><i class="fa fa-plus" aria-hidden="true"></i>Register</a></li>
+				<li class="signin-btn login-btn "><a href="" class="user-btn">Sign In</a></li>
+				<li class="signup-btn register login-btn "><a href="" class="user-btn"><i class="fa fa-plus" aria-hidden="true"></i>Register</a></li>
 				<li><a id="userSignOut"><i class="fa fa-user-circle-o" aria-hidden="true"></i></li>
 				<li><a href="" class="signout-btn user-btn" id="userSignOut">Sign Out</a></li>
 			</ul>
@@ -144,7 +168,7 @@
 		<div id="map"></div>
 		<div class="results">
 			<div class="results-top-bar">
-				<p class="city-name"></p>
+				<span><img src="assets/icons/locationCenter.png" alt=""><p class="city-name"></p></span>
 				<p><i class="fa fa-star" aria-hidden="true"></i><span class="avg-area-rating"></span></p>
 			</div>
 			<hr>
@@ -155,7 +179,7 @@
 				<div class="result-card dropdown dropdown-restaurant">
 					<div class="result-card-description">
 						<h5>Restaurants</h5>
-						<img src="assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png" alt="">
+						<img src="assets/icons/location5.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -163,7 +187,7 @@
 				<div class="result-card dropdown dropdown-cafe">
 					<div class="result-card-description">
 						<h5>Cafes</h5>
-						<img src="assets/001-hot-coffee-rounded-cup-on-a-plate-from-side-view.png" alt="">
+						<img src="assets/icons/location.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -171,7 +195,7 @@
 				<div class="result-card dropdown dropdown-bar">
 					<div class="result-card-description">
 						<h5>Bars</h5>
-						<img src="assets/005-drink-beer-jar.png" alt="">
+						<img src="assets/icons/location6.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -179,7 +203,7 @@
 				<div class="result-card dropdown dropdown-doctor">
 					<div class="result-card-description">
 						<h5>Doctors</h5>
-						<img src="assets/004-medicine-briefcase.png" alt="">
+						<img src="assets/icons/location2.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -187,7 +211,7 @@
 				<div class="result-card dropdown dropdown-school">
 					<div class="result-card-description">
 						<h5>Schools</h5>
-						<img src="assets/003-college-graduation.png" alt="">
+						<img src="assets/icons/location3.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -195,7 +219,7 @@
 				<div class="result-card dropdown dropdown-bank">
 					<div class="result-card-description">
 						<h5>Banks</h5>
-						<img src="assets/002-bank-building.png" alt="">
+						<img src="assets/icons/location4.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
@@ -203,7 +227,7 @@
 				<div class="result-card dropdown dropdown-gym">
 					<div class="result-card-description">
 						<h5>Gyms</h5>
-						<img src="assets/barbell.png" alt="">
+						<img src="assets/icons/location7.png" alt="">
 					</div>
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>

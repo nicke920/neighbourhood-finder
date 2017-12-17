@@ -267,19 +267,19 @@ $(function () {
 
 			var typeOfIcon;
 			if (icon === 'cafe') {
-				typeOfIcon = '../../assets/001-hot-coffee-rounded-cup-on-a-plate-from-side-view.png';
+				typeOfIcon = '../../assets/icons/location.png';
 			} else if (icon === 'doctor') {
-				typeOfIcon = '../../assets/004-medicine-briefcase.png';
+				typeOfIcon = '../../assets/icons/location2.png';
 			} else if (icon === 'school') {
-				typeOfIcon = '../../assets/003-college-graduation.png';
+				typeOfIcon = '../../assets/icons/location3.png';
 			} else if (icon === 'bank') {
-				typeOfIcon = '../../assets/002-bank-building.png';
+				typeOfIcon = '../../assets/icons/location4.png';
 			} else if (icon === 'restaurant') {
-				typeOfIcon = '../../assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png';
+				typeOfIcon = '../../assets/icons/location5.png';
 			} else if (icon === 'bar,night_club') {
-				typeOfIcon = '../../assets/005-drink-beer-jar.png';
+				typeOfIcon = '../../assets/icons/location6.png';
 			} else if (icon === 'gym') {
-				typeOfIcon = '../../assets/barbell.png';
+				typeOfIcon = '../../assets/icons/location7.png';
 			}
 
 			var marker = new google.maps.Marker({
@@ -516,9 +516,7 @@ $(function () {
 		var isOpenText;
 		var weeklyHours;
 		if (results.opening_hours) {
-			$('.place-hours > p').on('click', function () {
-				$(this).parent().find('ul.place-open-list').slideToggle();
-			});
+
 			isOpenText = "Open Now";
 			weeklyHours = results.opening_hours.weekday_text;
 			$('.place-open-list').empty();
@@ -626,7 +624,7 @@ $(function () {
 			position: location,
 			map: whichMap,
 			animation: google.maps.Animation.DROP,
-			icon: '../../assets/placeholder.png'
+			icon: '../../assets/icons/locationCenter.png'
 		});
 
 		centerCircle = new google.maps.Circle({
@@ -838,7 +836,7 @@ $(function () {
 						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 					}
 
-					$('.dropdown-userFavs').append("\n\t\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<button class=\"removeFav\">Remove</button>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t");
+					$('.dropdown-userFavs').append("\n\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<button class=\"removeFav\">Remove</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t");
 				}
 			});
 		});
@@ -861,7 +859,13 @@ $(function () {
 		$('body').addClass('userFavsActive');
 	});
 
-	$('.dropdown-toggle').on('click', function () {});
+	$('nav .fa-bars').on('click', function () {
+		$('ul.navbar').slideToggle();
+	});
+
+	$('.place-hours > p').on('click', function () {
+		$(this).parent().find('ul.place-open-list').slideToggle();
+	});
 });
 
 },{}]},{},[1]);

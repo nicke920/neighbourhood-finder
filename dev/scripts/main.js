@@ -356,19 +356,19 @@ $(function()  {
 
 			var typeOfIcon;
 			if (icon === 'cafe') {
-				typeOfIcon = '../../assets/001-hot-coffee-rounded-cup-on-a-plate-from-side-view.png'
+				typeOfIcon = '../../assets/icons/location.png'
 			} else if (icon === 'doctor') {
-				typeOfIcon = '../../assets/004-medicine-briefcase.png'
+				typeOfIcon = '../../assets/icons/location2.png'
 			} else if (icon === 'school') {
-				typeOfIcon = '../../assets/003-college-graduation.png'
+				typeOfIcon = '../../assets/icons/location3.png'
 			} else if (icon === 'bank') {
-				typeOfIcon = '../../assets/002-bank-building.png'
+				typeOfIcon = '../../assets/icons/location4.png'
 			} else if (icon === 'restaurant') {
-				typeOfIcon = '../../assets/006-restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png'
+				typeOfIcon = '../../assets/icons/location5.png'
 			} else if (icon === 'bar,night_club') {
-				typeOfIcon = '../../assets/005-drink-beer-jar.png'
+				typeOfIcon = '../../assets/icons/location6.png'
 			} else if (icon === 'gym') {
-				typeOfIcon = '../../assets/barbell.png'
+				typeOfIcon = '../../assets/icons/location7.png'
 			}
 
 			var marker = new google.maps.Marker({
@@ -636,9 +636,7 @@ $(function()  {
 		var isOpenText;
 		var weeklyHours;
 		if (results.opening_hours) {
-			$('.place-hours > p').on('click', function() {
-				$(this).parent().find('ul.place-open-list').slideToggle()
-			})
+			
 			isOpenText = "Open Now";
 			weeklyHours = results.opening_hours.weekday_text;
 			$('.place-open-list').empty();
@@ -772,7 +770,7 @@ $(function()  {
 			position: location, 
 			map: whichMap, 
 			animation: google.maps.Animation.DROP,
-			icon: '../../assets/placeholder.png'
+			icon: '../../assets/icons/locationCenter.png'
 		})
 
 		centerCircle = new google.maps.Circle({
@@ -849,27 +847,27 @@ $(function()  {
 
 
 
-		function getIDsFromFirebase(itemsData, userFavsIdss) {
-			userFavsIdss.splice(0,userFavsIdss.length);
+	function getIDsFromFirebase(itemsData, userFavsIdss) {
+		userFavsIdss.splice(0,userFavsIdss.length);
 
-			userFavsIdss = [];
+		userFavsIdss = [];
 
-			userFavsIdss = new Array;
+		userFavsIdss = new Array;
 
-			for (var itemKey in itemsData) {
+		for (var itemKey in itemsData) {
 
-				var theobjected = {
-					key: itemKey,
-					id: itemsData[itemKey]
-				}
-				userFavsIdss.push(theobjected)
+			var theobjected = {
+				key: itemKey,
+				id: itemsData[itemKey]
 			}
-
-			$('.dropdown-userFavs').empty()
-
-			convertEachFavIDToAList(userFavsIdss)
-
+			userFavsIdss.push(theobjected)
 		}
+
+		$('.dropdown-userFavs').empty()
+
+		convertEachFavIDToAList(userFavsIdss)
+
+	}
 
 	
 
@@ -877,198 +875,201 @@ $(function()  {
 
 
 
-		firebase.auth().onAuthStateChanged(function(user) {
-				if (user) {
-					currentUserId = user.uid;
-
-					$('body').removeClass('loginModalShowing')
-
-					var userFavsIdss = [];
-
-					var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
-
-
-						var itemsData = firebaseData.val();
-
-						getIDsFromFirebase(itemsData, userFavsIdss);
-
-					})
-
-					$('body').addClass('loggedIn').removeClass('notLoggedIn')
-					$('#usersUserName').text(firebase.auth().currentUser.displayName)
-				} 
-				else {
-					console.log('user NOT logged in')
-					$('body').removeClass('loggedIn').addClass('notLoggedIn')
-				}
-
-		})
-
-
-		//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
-
-		$('.authForm').on('submit', function(e) {
-			e.preventDefault();
-
-			var userEmail = $('#userEmail').val();
-			var userPass = $('#userPass').val();
-			var userUserName = $('#userUserName').val();
-			
-			firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
-			.then(function(userData) {
-				$('body').removeClass('loginModalShowing')
-
-			})
-			.catch(function(error) {
-				console.log('type of error', typeof error)
-				alert(error)
-			})
-
-		})
-
-		//GOOGLE AUTHORIZATION FROM FIREBASE
-
-		var provider = new firebase.auth.GoogleAuthProvider();
-
-		$('.googleForm').on('click', function(e) {
-			e.preventDefault();
-
-			firebase.auth().signInWithPopup(provider).catch(function(error) {
-				console.log('error message', error)
-				// The email of the user's account used.
-				  var email = error.email;
-				  // The firebase.auth.AuthCredential type that was used.
-				  var credential = error.credential;
-			}).then(function(result) {
-				var token = result.credential.accessToken;
-
-				var user = result.user;
-
-				var newUser = {
-					displayName: user.displayName,
-					email: user.email
-				}
-
-				firebase.database().ref(`users/${user.uid}`).set(newUser)
-
-				$('body').removeClass('loginModalShowing')
-				
-				console.log('ressss', result)
-
-			})
-		})
-
-
-
-		//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
-		$(document).on('click', '.addToFavs', function() {
-			var user = firebase.auth().currentUser.uid;
-
+	firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
-				var dbRef = firebase.database().ref(`users/${user}/favourites`);
+				currentUserId = user.uid;
 
-				var placeId = $(this).parents('.result-tile').attr('id')
+				$('body').removeClass('loginModalShowing')
 
-				console.log('yes', dbRef)
+				var userFavsIdss = [];
 
-				dbRef.push(placeId)
-			} else {
-				alert('Please sign in to add to favs')
+				var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
+
+
+					var itemsData = firebaseData.val();
+
+					getIDsFromFirebase(itemsData, userFavsIdss);
+
+				})
+
+				$('body').addClass('loggedIn').removeClass('notLoggedIn')
+				$('#usersUserName').text(firebase.auth().currentUser.displayName)
+			} 
+			else {
+				console.log('user NOT logged in')
+				$('body').removeClass('loggedIn').addClass('notLoggedIn')
 			}
 
-			
+	})
+
+
+	//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
+
+	$('.authForm').on('submit', function(e) {
+		e.preventDefault();
+
+		var userEmail = $('#userEmail').val();
+		var userPass = $('#userPass').val();
+		var userUserName = $('#userUserName').val();
+		
+		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
+		.then(function(userData) {
+			$('body').removeClass('loginModalShowing')
+
+		})
+		.catch(function(error) {
+			console.log('type of error', typeof error)
+			alert(error)
 		})
 
+	})
 
-		$(document).on('click', '.removeFav', function() {
+	//GOOGLE AUTHORIZATION FROM FIREBASE
 
-			var user = firebase.auth().currentUser.uid;
+	var provider = new firebase.auth.GoogleAuthProvider();
+
+	$('.googleForm').on('click', function(e) {
+		e.preventDefault();
+
+		firebase.auth().signInWithPopup(provider).catch(function(error) {
+			console.log('error message', error)
+			// The email of the user's account used.
+			  var email = error.email;
+			  // The firebase.auth.AuthCredential type that was used.
+			  var credential = error.credential;
+		}).then(function(result) {
+			var token = result.credential.accessToken;
+
+			var user = result.user;
+
+			var newUser = {
+				displayName: user.displayName,
+				email: user.email
+			}
+
+			firebase.database().ref(`users/${user.uid}`).set(newUser)
+
+			$('body').removeClass('loginModalShowing')
 			
-			var placeId = $(this).parents('.result-tile').attr('data-db-ref')
+			console.log('ressss', result)
 
-			var dbRef = firebase.database().ref(`users/${user}/favourites/${placeId}`);
-
-			dbRef.remove();
-
-			console.log('lci')
 		})
+	})
 
 
 
-		function convertEachFavIDToAList(pushed) {
+	//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
+	$(document).on('click', '.addToFavs', function() {
+		var user = firebase.auth().currentUser.uid;
 
-			$.each(pushed, function(ind, val) {
-				var request = {
-					placeId: val.id,
-					dbRef: val.key
-				}
+		if (user) {
+			var dbRef = firebase.database().ref(`users/${user}/favourites`);
 
-				var service;
-				service = new google.maps.places.PlacesService(map);
+			var placeId = $(this).parents('.result-tile').attr('id')
 
-				service.getDetails(request, function(results, status) {
+			console.log('yes', dbRef)
 
-					if (status == google.maps.places.PlacesServiceStatus.OK) {
-						var photoURL;
-
-						if ($(results.photos).length > 0) {
-							photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
-						} else {
-							photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
-						}
-
-						$('.dropdown-userFavs').append(`
-							<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
-								<a>
-									<h3>${results.name}</h3>
-									<div class="result-detail">
-										<div class="result-image">
-											<img src="${photoURL}" alt="" />
-										</div>
-										<div class="result-description">
-											<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
-											<div class="rating-div">
-												${starRatings(results.rating)}
-											</div>
-											<button class="removeFav">Remove</button>
-										</div>
-									</div>
-								</a>
-							</li>
-							`)
-					}
-				})
-				
-			})
-
-			// console.log('resssUlts -- OUTSIDE', results)
+			dbRef.push(placeId)
+		} else {
+			alert('Please sign in to add to favs')
 		}
 
-
-
-
-
-		//FAVOURITES EVENT LISTENERS
-		$('.login-btn').on('click', function(e) {
-			e.preventDefault();
-			$('body').addClass('loginModalShowing')
-		})
 		
-		$('#userSignOut').on('click', function() {
-			firebase.auth().signOut();
-			window.location.reload();
-		})
-
-		$('.goToFavs').on('click', function() {
-			$('body').addClass('userFavsActive');
-		})
+	})
 
 
+	$(document).on('click', '.removeFav', function() {
 
-
-
-	$('.dropdown-toggle').on('click', function() {
+		var user = firebase.auth().currentUser.uid;
 		
+		var placeId = $(this).parents('.result-tile').attr('data-db-ref')
+
+		var dbRef = firebase.database().ref(`users/${user}/favourites/${placeId}`);
+
+		dbRef.remove();
+
+		console.log('lci')
+	})
+
+
+
+	function convertEachFavIDToAList(pushed) {
+
+		$.each(pushed, function(ind, val) {
+			var request = {
+				placeId: val.id,
+				dbRef: val.key
+			}
+
+			var service;
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function(results, status) {
+
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					var photoURL;
+
+					if ($(results.photos).length > 0) {
+						photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+					} else {
+						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
+					}
+
+					$('.dropdown-userFavs').append(`
+						<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
+							<a>
+								<h3>${results.name}</h3>
+								<div class="result-detail">
+									<div class="result-image">
+										<img src="${photoURL}" alt="" />
+									</div>
+									<div class="result-description">
+										<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
+										<div class="rating-div">
+											${starRatings(results.rating)}
+										</div>
+										<button class="removeFav">Remove</button>
+									</div>
+								</div>
+							</a>
+						</li>
+						`)
+				}
+			})
+			
+		})
+
+		// console.log('resssUlts -- OUTSIDE', results)
+	}
+
+
+
+
+
+	//FAVOURITES EVENT LISTENERS
+	$('.login-btn').on('click', function(e) {
+		e.preventDefault();
+		$('body').addClass('loginModalShowing')
+	})
+	
+	$('#userSignOut').on('click', function() {
+		firebase.auth().signOut();
+		window.location.reload();
+	})
+
+	$('.goToFavs').on('click', function() {
+		$('body').addClass('userFavsActive');
+	})
+
+
+
+
+	$('nav .fa-bars').on('click', function() {
+		$('ul.navbar').slideToggle();
+	})
+
+	$('.place-hours > p').on('click', function() {
+		$(this).parent().find('ul.place-open-list').slideToggle()
 	})
 
 
