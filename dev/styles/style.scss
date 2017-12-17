@@ -261,7 +261,8 @@ form.home-search {
 	}
 
 }
-#gotime {
+#gotime,
+#login-submit {
 	width: 90px;
 	height: 50px;
 	background-color: $accent-color;
@@ -810,7 +811,7 @@ body.place-details-active .place {
 
 
 .authModal {
-	background: rgba(0,0,0,0.8);
+	background: rgba($primary-black-text, 0.3);
 	position: fixed;
 	display: none;
 	justify-content: center;
@@ -830,6 +831,8 @@ body.place-details-active .place {
 
 .forms {
 	width: 60%;
+	max-width: 850px;
+	min-width: 720px;
 }
 .logging-in {
 	.signup-form {
@@ -838,27 +841,92 @@ body.place-details-active .place {
 }
 
 .authModal-copy {
-	background-color: grey;
+	background-color: rgba( $primary-black-text ,.98);
 	padding: 25px;
 	display: flex;
 	justify-content: space-between;
 	position: relative;
+	height: 400px;
 	.thecopy {
 		max-width: 250px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		h2,p {
+			color: $primary-white;
+			font-family: 'Lato';
+			font-weight: 300;
+			opacity: 0.7;
+		}
+		button {
+			background-color: transparent;
+			border: 2px solid $primary-white;
+			color: $primary-white;
+			font-family: 'Lato';
+			font-weight: 300;
+			padding: 8px 10px;
+			opacity: 0.7;
+		}
 	}
 }
 
 
 .auth-slider {
 	position: absolute;
-	top: -30px;
-	bottom: -30px;
-	background: red;
-	width: 60%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	// height: 50%;
+	top: -35px;
+	bottom: -35px;
+	background: $primary-white;
+	width: calc(50% + 25px);
+	box-shadow: 0px -1px 3px white;
 	transition: all 0.2s ease-out;
+	color: $accent-color;
 	& > div {
 		padding: 30px;
+		height: 60%;
 	}
+}
+
+body .login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: space-between;
+	justify-content: space-between;
+	h2 {
+		color: $accent-color;
+		font-weight: 300;
+		text-transform: uppercase;
+		margin-bottom: 15px;
+	}
+
+	form {
+		position: relative;
+		margin-bottom: 0;
+		input {
+			margin-bottom: 20px;
+		}
+		input[type="text"] {
+			background-color: transparent;
+			border: none;
+			border-bottom: 2px solid $accent-color;
+			width: 100%;
+			height: 50px;
+			line-height: 50px;
+		}
+		input[type="submit"]#login-submit {
+			margin-left: 0!important;
+			border: none;
+			position: absolute;
+			right: 0;
+			margin-bottom: 0;
+		}
+	}
+
 }
 
 .forms.logging-in .auth-slider {
