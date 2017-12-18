@@ -36,21 +36,25 @@
 					<form>
 						<input type="text" id="userLoginEmail" placeholder="Email">
 						<input type="text" id="userLoginPass" placeholder="Password">
-						<input type="submit" id="login-submit" value="log in">
-						<a class="google-signin">Log in with Google</a>
+						<div class="submit-row">
+							<a class="google-signin">Log in with Google</a>
+							<input type="submit" id="login-submit" value="log in">
+						</div>
 					</form>
 				</div>
 				<div class="signup-form">
 					<h2>Sign Up</h2>
 
 					<form class="authForm">
-						<input type="text" id="userUserName" placeholder="What shall we call you?">
-						<input type="text" id="userEmail" placeholder="Please enter your e-mail address" />
-						<input type="password" id="userPass" placeholder="Please enter your desired password" />
-						<button>Create User</button>
+						<input type="text" id="userEmail" placeholder="E-mail address" />
+						<input type="password" id="userPass" placeholder="Enter your password" />
+						<input type="password" id="userPassConfirm" placeholder="Confirm your password" />
+						<div class="submit-row">
+							<a class="google-signin">Log in with Google</a>
+							<input type="submit" id="signup-submit" value="Sign Up!">
+						</div>
 					</form>
 
-					<button class="googleForm">Sign in with Google</button>
 				</div>
 			</div>
 		</div>
@@ -74,7 +78,7 @@
 				
 				<li class="signin-btn login-btn "><a href="" class="user-btn">Sign In</a></li>
 				<li class="signup-btn register login-btn "><a href="" class="user-btn"><i class="fa fa-plus" aria-hidden="true"></i>Register</a></li>
-				<li><a id="userSignOut"><i class="fa fa-user-circle-o" aria-hidden="true"></i></li>
+				<li><a id="userSignOut"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a></li>
 				<li><a href="" class="signout-btn user-btn" id="userSignOut">Sign Out</a></li>
 			</ul>
 
@@ -294,7 +298,17 @@
 		</div>
 
 		<div class="dropdown-userFavs">
-
+			<div class="results-top-bar">
+				<a class="favs-toggle-slide"><img src="assets/icons/left-arrow.png" alt=""></a>
+				<a class="goToMapFavs">Map Favourties</a>
+			</div>
+			<hr>
+			<div class="title">
+				<h2>Favourites</h2>
+			</div>
+			<div class="userFavs-area">
+				
+			</div>
 		</div>
  		
 	</section>

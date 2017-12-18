@@ -451,7 +451,6 @@ $(function()  {
 			})
 		}
 		
-		// console.log('asd', n)
 	})
 
 
@@ -863,7 +862,7 @@ $(function()  {
 			userFavsIdss.push(theobjected)
 		}
 
-		$('.dropdown-userFavs').empty()
+		$('.dropdown-userFavs .userFavs-area').empty()
 
 		convertEachFavIDToAList(userFavsIdss)
 
@@ -910,17 +909,22 @@ $(function()  {
 
 		var userEmail = $('#userEmail').val();
 		var userPass = $('#userPass').val();
-		var userUserName = $('#userUserName').val();
-		
-		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
-		.then(function(userData) {
-			$('body').removeClass('loginModalShowing')
+		var userPassConfirm = $('#userPassConfirm').val();
 
-		})
-		.catch(function(error) {
-			console.log('type of error', typeof error)
-			alert(error)
-		})
+		if (userPass === userPassConfirm) {
+			firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
+			.then(function(userData) {
+				$('body').removeClass('loginModalShowing')
+
+			})
+			.catch(function(error) {
+				console.log('type of error', typeof error)
+				alert(error)
+			})
+		} else {
+			alert('Passwords do not match')
+		}
+		
 
 	})
 
@@ -928,7 +932,7 @@ $(function()  {
 
 	var provider = new firebase.auth.GoogleAuthProvider();
 
-	$('.googleForm').on('click', function(e) {
+	$('.google-signin').on('click', function(e) {
 		e.preventDefault();
 
 		firebase.auth().signInWithPopup(provider).catch(function(error) {
@@ -1015,7 +1019,8 @@ $(function()  {
 						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
 					}
 
-					$('.dropdown-userFavs').append(`
+					$('.dropdown-userFavs .userFavs-area').append(`
+
 						<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
 							<a>
 								<h3>${results.name}</h3>
@@ -1028,11 +1033,16 @@ $(function()  {
 										<div class="rating-div">
 											${starRatings(results.rating)}
 										</div>
-										<button class="removeFav">Remove</button>
+										<div class="types">
+											<p>${results.types[0].replace(/_/g, " ")}</p>
+											<p>${results.types[1].replace(/_/g, " ")}</p>
+										</div>
+										<a class="removeFromFavs">Remove</a>
 									</div>
 								</div>
 							</a>
 						</li>
+						
 						`)
 				}
 			})
@@ -1061,6 +1071,9 @@ $(function()  {
 		$('body').addClass('userFavsActive');
 	})
 
+	$('.favs-toggle-slide').on('click', function() {
+		$('body').removeClass('userFavsActive')
+	})
 
 
 
@@ -1072,6 +1085,14 @@ $(function()  {
 		$(this).parent().find('ul.place-open-list').slideToggle()
 	})
 
+
+	$('.authModal button.activate-signup').on('click', function() {
+		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
+	})
+
+	$('.authModal button.activate-login').on('click', function() {
+		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
+	})
 
 
 

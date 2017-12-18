@@ -388,7 +388,8 @@ form.home-search {
       padding-left: 55px; }
 
 #gotime,
-#login-submit {
+#login-submit,
+#signup-submit {
   width: 90px;
   height: 50px;
   background-color: #4611a7;
@@ -759,7 +760,8 @@ body.place-details-active .place {
   width: 100%; }
 
 .place-toggle-slide,
-.place-add-to-favs {
+.place-add-to-favs,
+.favs-toggle-slide {
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -942,14 +944,9 @@ body.place-details-active .place {
       -ms-flex-direction: column;
           flex-direction: column;
   top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
   height: 100%;
-  width: 100%;
-  color: white; }
-  .authModal form {
-    margin-bottom: 30px; }
+  width: 100%; }
 
 .forms {
   width: 60%;
@@ -958,6 +955,15 @@ body.place-details-active .place {
 
 .logging-in .signup-form {
   display: none; }
+
+.signing-in .login-form {
+  display: none; }
+
+.forms.logging-in .auth-slider {
+  right: 25px; }
+
+.forms.signing-up .auth-slider {
+  left: 25px; }
 
 .authModal-copy {
   background-color: rgba(31, 31, 31, 0.98);
@@ -1017,13 +1023,13 @@ body.place-details-active .place {
   background: #fafafa;
   width: calc(50% + 25px);
   box-shadow: 0px -1px 3px white;
-  transition: all 0.2s ease-out;
+  transition: left 4.4s ease-out;
   color: #4611a7; }
   .auth-slider > div {
-    padding: 30px;
-    height: 60%; }
+    padding: 30px; }
 
-body .login-form {
+body .login-form,
+body .signup-form {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -1036,29 +1042,47 @@ body .login-form {
   -webkit-justify-content: space-between;
       -ms-flex-pack: justify;
           justify-content: space-between; }
-  body .login-form h2 {
+  body .login-form h2,
+  body .signup-form h2 {
     color: #4611a7;
     font-weight: 300;
     text-transform: uppercase;
     margin-bottom: 15px; }
-  body .login-form form {
+  body .login-form form,
+  body .signup-form form {
     position: relative;
     margin-bottom: 0; }
-    body .login-form form input {
+    body .login-form form input,
+    body .signup-form form input {
       margin-bottom: 20px; }
-    body .login-form form input[type="text"] {
+    body .login-form form input[type="text"], body .login-form form input[type="password"],
+    body .signup-form form input[type="text"],
+    body .signup-form form input[type="password"] {
       background-color: transparent;
       border: none;
       border-bottom: 2px solid #4611a7;
       width: 100%;
       height: 50px;
       line-height: 50px; }
-    body .login-form form input[type="submit"]#login-submit {
+    body .login-form form input[type="submit"],
+    body .signup-form form input[type="submit"] {
       margin-left: 0 !important;
       border: none;
-      position: absolute;
-      right: 0;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      text-transform: uppercase;
+      font-weight: 300;
+      font-size: 14px; }
+    body .login-form form .submit-row,
+    body .signup-form form .submit-row {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      -webkit-align-items: baseline;
+          -ms-flex-align: baseline;
+              align-items: baseline; }
 
 .forms.logging-in .auth-slider {
   right: 25px;
@@ -1091,14 +1115,17 @@ body.loggedIn .logged-in-status {
 body.loggedIn .login-btn {
   display: none; }
 
-.dropdown-userFavs {
-  background: red; }
-
 body.userFavsActive .dropdown-userFavs {
   right: 0; }
 
 header nav .fa-bars {
   display: none; }
+
+.goToFavs {
+  display: none; }
+
+.loggedIn .goToFavs {
+  display: block; }
 
 @media screen and (max-width: 800px) {
   .hero-copy h1 {

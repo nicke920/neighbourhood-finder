@@ -353,8 +353,6 @@ $(function () {
 				});
 			});
 		}
-
-		// console.log('asd', n)
 	});
 
 	//EVENT LISTENERS
@@ -708,7 +706,7 @@ $(function () {
 			userFavsIdss.push(theobjected);
 		}
 
-		$('.dropdown-userFavs').empty();
+		$('.dropdown-userFavs .userFavs-area').empty();
 
 		convertEachFavIDToAList(userFavsIdss);
 	}
@@ -743,21 +741,25 @@ $(function () {
 
 		var userEmail = $('#userEmail').val();
 		var userPass = $('#userPass').val();
-		var userUserName = $('#userUserName').val();
+		var userPassConfirm = $('#userPassConfirm').val();
 
-		firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (userData) {
-			$('body').removeClass('loginModalShowing');
-		}).catch(function (error) {
-			console.log('type of error', typeof error === "undefined" ? "undefined" : _typeof(error));
-			alert(error);
-		});
+		if (userPass === userPassConfirm) {
+			firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (userData) {
+				$('body').removeClass('loginModalShowing');
+			}).catch(function (error) {
+				console.log('type of error', typeof error === "undefined" ? "undefined" : _typeof(error));
+				alert(error);
+			});
+		} else {
+			alert('Passwords do not match');
+		}
 	});
 
 	//GOOGLE AUTHORIZATION FROM FIREBASE
 
 	var provider = new firebase.auth.GoogleAuthProvider();
 
-	$('.googleForm').on('click', function (e) {
+	$('.google-signin').on('click', function (e) {
 		e.preventDefault();
 
 		firebase.auth().signInWithPopup(provider).catch(function (error) {
@@ -836,7 +838,7 @@ $(function () {
 						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 					}
 
-					$('.dropdown-userFavs').append("\n\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<button class=\"removeFav\">Remove</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t");
+					$('.dropdown-userFavs .userFavs-area').append("\n\n\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"types\">\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[0].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[1].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<a class=\"removeFromFavs\">Remove</a>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\n\t\t\t\t\t\t");
 				}
 			});
 		});
@@ -859,12 +861,24 @@ $(function () {
 		$('body').addClass('userFavsActive');
 	});
 
+	$('.favs-toggle-slide').on('click', function () {
+		$('body').removeClass('userFavsActive');
+	});
+
 	$('nav .fa-bars').on('click', function () {
 		$('ul.navbar').slideToggle();
 	});
 
 	$('.place-hours > p').on('click', function () {
 		$(this).parent().find('ul.place-open-list').slideToggle();
+	});
+
+	$('.authModal button.activate-signup').on('click', function () {
+		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
+	});
+
+	$('.authModal button.activate-login').on('click', function () {
+		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
 	});
 });
 
