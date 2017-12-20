@@ -202,7 +202,7 @@ $(function () {
 							$.each(theMarkersArray, function (index, place) {
 								var isOpenText;
 								var photoURL;
-								console.log('placeee', place);
+								// console.log('placeee', place)
 
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
@@ -267,20 +267,31 @@ $(function () {
 
 			var typeOfIcon;
 			if (icon === 'cafe') {
-				typeOfIcon = '../../assets/icons/location.png';
+				typeOfIcon = '../../assets/icons/map-marker.png';
 			} else if (icon === 'doctor') {
-				typeOfIcon = '../../assets/icons/location2.png';
+				typeOfIcon = '../../assets/icons/map-marker1.png';
 			} else if (icon === 'school') {
-				typeOfIcon = '../../assets/icons/location3.png';
+				typeOfIcon = '../../assets/icons/map-marker2.png';
 			} else if (icon === 'bank') {
-				typeOfIcon = '../../assets/icons/location4.png';
+				typeOfIcon = '../../assets/icons/map-marker3.png';
 			} else if (icon === 'restaurant') {
-				typeOfIcon = '../../assets/icons/location5.png';
+				typeOfIcon = '../../assets/icons/map-marker4.png';
 			} else if (icon === 'bar,night_club') {
-				typeOfIcon = '../../assets/icons/location6.png';
+				typeOfIcon = '../../assets/icons/map-marker5.png';
 			} else if (icon === 'gym') {
-				typeOfIcon = '../../assets/icons/location7.png';
+				typeOfIcon = '../../assets/icons/map-marker6.png';
 			}
+			var iconObject = {
+				url: typeOfIcon,
+				origin: new google.maps.Point(0, 0),
+				labelOrigin: new google.maps.Point(16, 10)
+			};
+
+			var markerLabel = {
+				text: (index + 1).toString(),
+				color: 'black',
+				fontSize: '14px'
+			};
 
 			var marker = new google.maps.Marker({
 				position: placeCoords,
@@ -289,8 +300,10 @@ $(function () {
 				map: map,
 				id: placeid,
 				animation: google.maps.Animation.DROP,
-				icon: typeOfIcon,
-				allDeets: place
+				icon: iconObject,
+				allDeets: place,
+				label: markerLabel
+
 			});
 
 			markers.push(marker);
@@ -366,6 +379,7 @@ $(function () {
 	});
 
 	$('form.home-search').on('submit', function (e) {
+		$('#mapSection').addClass('openn');
 		e.preventDefault();
 		$('.hero').hide();
 		$('.about-us').hide();
@@ -690,27 +704,6 @@ $(function () {
 		whichMap.setZoom(zoomin);
 	}
 
-	function getIDsFromFirebase(itemsData, userFavsIdss) {
-		userFavsIdss.splice(0, userFavsIdss.length);
-
-		userFavsIdss = [];
-
-		userFavsIdss = new Array();
-
-		for (var itemKey in itemsData) {
-
-			var theobjected = {
-				key: itemKey,
-				id: itemsData[itemKey]
-			};
-			userFavsIdss.push(theobjected);
-		}
-
-		$('.dropdown-userFavs .userFavs-area').empty();
-
-		convertEachFavIDToAList(userFavsIdss);
-	}
-
 	firebase.auth().onAuthStateChanged(function (user) {
 		if (user) {
 			currentUserId = user.uid;
@@ -733,6 +726,56 @@ $(function () {
 			$('body').removeClass('loggedIn').addClass('notLoggedIn');
 		}
 	});
+
+	function getIDsFromFirebase(itemsData, userFavsIdss) {
+		userFavsIdss.splice(0, userFavsIdss.length);
+
+		userFavsIdss = [];
+
+		userFavsIdss = new Array();
+
+		for (var itemKey in itemsData) {
+			var theobjected = {
+				key: itemKey,
+				id: itemsData[itemKey]
+			};
+			userFavsIdss.push(theobjected);
+		}
+
+		$('.dropdown-userFavs .userFavs-area').empty();
+
+		convertEachFavIDToAList(userFavsIdss);
+	}
+
+	function convertEachFavIDToAList(pushed) {
+
+		$.each(pushed, function (ind, val) {
+			var request = {
+				placeId: val.id,
+				dbRef: val.key
+			};
+
+			var service;
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function (results, status) {
+
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					var photoURL;
+
+					if ($(results.photos).length > 0) {
+						photoURL = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
+					} else {
+						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+					}
+
+					$('.dropdown-userFavs .userFavs-area').append("\n\n\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"types\">\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[0].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[1].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<a class=\"removeFromFavs\">Remove</a>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\n\t\t\t\t\t\t");
+				}
+			});
+		});
+
+		// console.log('resssUlts -- OUTSIDE', results)
+	}
 
 	//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
 
@@ -803,7 +846,7 @@ $(function () {
 		}
 	});
 
-	$(document).on('click', '.removeFav', function () {
+	$(document).on('click', '.removeFromFavs', function () {
 
 		var user = firebase.auth().currentUser.uid;
 
@@ -815,36 +858,6 @@ $(function () {
 
 		console.log('lci');
 	});
-
-	function convertEachFavIDToAList(pushed) {
-
-		$.each(pushed, function (ind, val) {
-			var request = {
-				placeId: val.id,
-				dbRef: val.key
-			};
-
-			var service;
-			service = new google.maps.places.PlacesService(map);
-
-			service.getDetails(request, function (results, status) {
-
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					var photoURL;
-
-					if ($(results.photos).length > 0) {
-						photoURL = results.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
-					} else {
-						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
-					}
-
-					$('.dropdown-userFavs .userFavs-area').append("\n\n\t\t\t\t\t\t<li id='" + results.place_id + "' data-db-ref='" + request.dbRef + "' class='result-tile'>\n\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t<h3>" + results.name + "</h3>\n\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + results.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t" + starRatings(results.rating) + "\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"types\">\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[0].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t<p>" + results.types[1].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<a class=\"removeFromFavs\">Remove</a>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\n\t\t\t\t\t\t");
-				}
-			});
-		});
-
-		// console.log('resssUlts -- OUTSIDE', results)
-	}
 
 	//FAVOURITES EVENT LISTENERS
 	$('.login-btn').on('click', function (e) {

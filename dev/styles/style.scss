@@ -237,18 +237,11 @@ form.home-search {
 		margin-left: 35px;
 		display: flex;
 		min-width: 280px;
-		// padding-left: 55px;
-		.dropdown-toggle {
-			padding-left: 55px;
-			width: 100%;
-			span {
-				opacity: 0.7;
-			}
-			.fa {
-				opacity: 0.7;
-				font-size: 10px;
-				color: $primary-black-text;
-				margin: 0 10px;
+		background: white;
+		select {
+			border: none;
+			option {
+				padding: 8px 10px;
 			}
 		}
 	}
@@ -327,6 +320,9 @@ body.searched {
 			}
 		}
 	}
+	.results, .place, .dropdown-userFavs {
+		display: block;
+	}
 
 }
 
@@ -336,7 +332,19 @@ body.searched {
 	margin-top: 50px;
 	display: flex;
 	height: calc(100vh - 50px);
+	position: absolute;
+	top: 0;
+	opacity: 0;
+	width: 100%;
+	z-index: -1;
 }
+
+#mapSection.openn {
+	position: relative;
+	opacity: 1;
+	z-index: 1;
+}
+
 
 body.searched #mapSection {
 	overflow: hidden;
@@ -426,6 +434,7 @@ body.searched .secondary-navbar {
 .dropdown-userFavs {
 	width: 30%;
 	min-width: 430px;
+	display: none;
 	padding: 20px; 
 	position: relative;
 	height: 100%;
@@ -521,6 +530,10 @@ body.place-details-active .place {
 		width: 20px;
 		height: 20px;
 	}
+}
+
+.result-tile.favourited .addToFavs {
+	display: none;
 }
 
 .result-tile {
@@ -622,8 +635,8 @@ body.place-details-active .place {
 .dropdown-userFavs {
 	padding: 0;
 	background: white;
-	right: -30%;
-	height: calc(100% - 50px);
+	right: -999px;
+	// height: calc(100% - 50px);
 	position: absolute;
 	transition: all 0.4s ease-out;
 	overflow-y: scroll;
@@ -1071,3 +1084,11 @@ header nav .fa-bars {
 	    }
 	}
 }
+
+.infowindowtext {
+	background: transparent; 
+	font-size: 16px;
+	color: red;
+	border: 0;
+}
+

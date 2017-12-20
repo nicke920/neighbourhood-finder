@@ -274,7 +274,7 @@ $(function()  {
 							$.each(theMarkersArray, function(index, place) {
 								var isOpenText;
 								var photoURL;
-								console.log('placeee', place)
+								// console.log('placeee', place)
 
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
@@ -322,12 +322,7 @@ $(function()  {
 		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
 		top5Search(toMarkersGym, 'gym', location, radius)
 
-
-
 	}
-
-
-
 
 
 
@@ -356,19 +351,30 @@ $(function()  {
 
 			var typeOfIcon;
 			if (icon === 'cafe') {
-				typeOfIcon = '../../assets/icons/location.png'
+				typeOfIcon = '../../assets/icons/map-marker.png'
 			} else if (icon === 'doctor') {
-				typeOfIcon = '../../assets/icons/location2.png'
+				typeOfIcon = '../../assets/icons/map-marker1.png'
 			} else if (icon === 'school') {
-				typeOfIcon = '../../assets/icons/location3.png'
+				typeOfIcon = '../../assets/icons/map-marker2.png'
 			} else if (icon === 'bank') {
-				typeOfIcon = '../../assets/icons/location4.png'
+				typeOfIcon = '../../assets/icons/map-marker3.png'
 			} else if (icon === 'restaurant') {
-				typeOfIcon = '../../assets/icons/location5.png'
+				typeOfIcon = '../../assets/icons/map-marker4.png'
 			} else if (icon === 'bar,night_club') {
-				typeOfIcon = '../../assets/icons/location6.png'
+				typeOfIcon = '../../assets/icons/map-marker5.png'
 			} else if (icon === 'gym') {
-				typeOfIcon = '../../assets/icons/location7.png'
+				typeOfIcon = '../../assets/icons/map-marker6.png'
+			}
+			var iconObject = {
+				url: typeOfIcon, 
+				origin: new google.maps.Point(0,0),
+				labelOrigin: new google.maps.Point(16,10)
+			}
+
+			var markerLabel = {
+				text: (index + 1).toString(),
+				color: 'black', 
+				fontSize: '14px',
 			}
 
 			var marker = new google.maps.Marker({
@@ -378,8 +384,10 @@ $(function()  {
 				map: map, 
 				id: placeid,
 				animation: google.maps.Animation.DROP,
-				icon: typeOfIcon,
-				allDeets: place
+				icon: iconObject,
+				allDeets: place,
+				label: markerLabel
+
 			})
 
 			markers.push(marker)
@@ -406,10 +414,14 @@ $(function()  {
 
 					}
 				})
+
+
+
 			})
 		})
 
 	}
+
 
 
 
@@ -467,6 +479,7 @@ $(function()  {
 
 
 	$('form.home-search').on('submit', function(e) {
+		$('#mapSection').addClass('openn')
 		e.preventDefault();
 		$('.hero').hide();
 		$('.about-us').hide();
@@ -840,11 +853,32 @@ $(function()  {
 
 	}
 
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			currentUserId = user.uid;
+
+			$('body').removeClass('loginModalShowing')
+
+			var userFavsIdss = [];
+
+			var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
 
 
+				var itemsData = firebaseData.val();
 
+				getIDsFromFirebase(itemsData, userFavsIdss);
 
+			})
 
+			$('body').addClass('loggedIn').removeClass('notLoggedIn')
+			$('#usersUserName').text(firebase.auth().currentUser.displayName)
+		} 
+		else {
+			console.log('user NOT logged in')
+			$('body').removeClass('loggedIn').addClass('notLoggedIn')
+		}
+
+	})
 
 	function getIDsFromFirebase(itemsData, userFavsIdss) {
 		userFavsIdss.splice(0,userFavsIdss.length);
@@ -854,7 +888,6 @@ $(function()  {
 		userFavsIdss = new Array;
 
 		for (var itemKey in itemsData) {
-
 			var theobjected = {
 				key: itemKey,
 				id: itemsData[itemKey]
@@ -868,38 +901,61 @@ $(function()  {
 
 	}
 
-	
+	function convertEachFavIDToAList(pushed) {
 
-
-
-
-
-	firebase.auth().onAuthStateChanged(function(user) {
-			if (user) {
-				currentUserId = user.uid;
-
-				$('body').removeClass('loginModalShowing')
-
-				var userFavsIdss = [];
-
-				var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
-
-
-					var itemsData = firebaseData.val();
-
-					getIDsFromFirebase(itemsData, userFavsIdss);
-
-				})
-
-				$('body').addClass('loggedIn').removeClass('notLoggedIn')
-				$('#usersUserName').text(firebase.auth().currentUser.displayName)
-			} 
-			else {
-				console.log('user NOT logged in')
-				$('body').removeClass('loggedIn').addClass('notLoggedIn')
+		$.each(pushed, function(ind, val) {
+			var request = {
+				placeId: val.id,
+				dbRef: val.key
 			}
 
-	})
+			var service;
+			service = new google.maps.places.PlacesService(map);
+
+			service.getDetails(request, function(results, status) {
+
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					var photoURL;
+
+					if ($(results.photos).length > 0) {
+						photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
+					} else {
+						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
+					}
+
+					$('.dropdown-userFavs .userFavs-area').append(`
+
+						<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
+							<a>
+								<h3>${results.name}</h3>
+								<div class="result-detail">
+									<div class="result-image">
+										<img src="${photoURL}" alt="" />
+									</div>
+									<div class="result-description">
+										<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
+										<div class="rating-div">
+											${starRatings(results.rating)}
+										</div>
+										<div class="types">
+											<p>${results.types[0].replace(/_/g, " ")}</p>
+											<p>${results.types[1].replace(/_/g, " ")}</p>
+										</div>
+										<a class="removeFromFavs">Remove</a>
+									</div>
+								</div>
+							</a>
+						</li>
+						
+						`)
+				}
+			})
+			
+		})
+
+		// console.log('resssUlts -- OUTSIDE', results)
+	}
+
 
 
 	//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
@@ -974,6 +1030,7 @@ $(function()  {
 			console.log('yes', dbRef)
 
 			dbRef.push(placeId)
+
 		} else {
 			alert('Please sign in to add to favs')
 		}
@@ -982,7 +1039,7 @@ $(function()  {
 	})
 
 
-	$(document).on('click', '.removeFav', function() {
+	$(document).on('click', '.removeFromFavs', function() {
 
 		var user = firebase.auth().currentUser.uid;
 		
@@ -994,65 +1051,6 @@ $(function()  {
 
 		console.log('lci')
 	})
-
-
-
-	function convertEachFavIDToAList(pushed) {
-
-		$.each(pushed, function(ind, val) {
-			var request = {
-				placeId: val.id,
-				dbRef: val.key
-			}
-
-			var service;
-			service = new google.maps.places.PlacesService(map);
-
-			service.getDetails(request, function(results, status) {
-
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					var photoURL;
-
-					if ($(results.photos).length > 0) {
-						photoURL = results.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
-					} else {
-						photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716"
-					}
-
-					$('.dropdown-userFavs .userFavs-area').append(`
-
-						<li id='${results.place_id}' data-db-ref='${request.dbRef}' class='result-tile'>
-							<a>
-								<h3>${results.name}</h3>
-								<div class="result-detail">
-									<div class="result-image">
-										<img src="${photoURL}" alt="" />
-									</div>
-									<div class="result-description">
-										<h5><i class="fa fa-map-marker" aria-hidden="true"></i>${results.vicinity}</h5>
-										<div class="rating-div">
-											${starRatings(results.rating)}
-										</div>
-										<div class="types">
-											<p>${results.types[0].replace(/_/g, " ")}</p>
-											<p>${results.types[1].replace(/_/g, " ")}</p>
-										</div>
-										<a class="removeFromFavs">Remove</a>
-									</div>
-								</div>
-							</a>
-						</li>
-						
-						`)
-				}
-			})
-			
-		})
-
-		// console.log('resssUlts -- OUTSIDE', results)
-	}
-
-
 
 
 
