@@ -136,29 +136,56 @@ $(function () {
 	//gets the lat lng function of the postal code entered
 	var locationObject;
 
-	function codeAddress() {
-		var address = $('#address').val();
-		var rad = $('#radius').val();
-		//convert radius into number, since it defaults to a string
-		rad = parseInt(rad);
+	function codeAddress(whichForm) {
+		if (whichForm === 'homepage') {
+			var address = $('#address1').val();
+			var rad = $('#radius1').val();
+			//convert radius into number, since it defaults to a string
+			rad = parseInt(rad);
 
-		geocoder.geocode({
-			address: address
-		}, function (results, status) {
-			if (status == 'OK') {
-				map.setCenter(results[0].geometry.location);
+			geocoder.geocode({
+				address: address
+			}, function (results, status) {
+				if (status == 'OK') {
+					map.setCenter(results[0].geometry.location);
 
-				locationObject = results[0].geometry.location;
+					locationObject = results[0].geometry.location;
 
-				//populate city details in top bar
-				$('.city-name').text(results[0].formatted_address);
-				$('.results-radius').text(rad);
+					//populate city details in top bar
+					$('.city-name').text(results[0].formatted_address);
+					$('.results-radius').text(rad);
 
-				listPlaces(locationObject, rad);
+					listPlaces(locationObject, rad);
 
-				centerMarker(locationObject, rad);
-			}
-		});
+					centerMarker(locationObject, rad);
+				}
+			});
+		}
+
+		if (whichForm === 'secondaryForm') {
+			var address = $('#address2').val();
+			var rad = $('#radius2').val();
+			//convert radius into number, since it defaults to a string
+			rad = parseInt(rad);
+
+			geocoder.geocode({
+				address: address
+			}, function (results, status) {
+				if (status == 'OK') {
+					map.setCenter(results[0].geometry.location);
+
+					locationObject = results[0].geometry.location;
+
+					//populate city details in top bar
+					$('.city-name').text(results[0].formatted_address);
+					$('.results-radius').text(rad);
+
+					listPlaces(locationObject, rad);
+
+					centerMarker(locationObject, rad);
+				}
+			});
+		}
 	}
 
 	function listPlaces(location, radius) {
@@ -287,11 +314,11 @@ $(function () {
 				labelOrigin: new google.maps.Point(16, 10)
 			};
 
-			var markerLabel = {
-				text: (index + 1).toString(),
-				color: 'black',
-				fontSize: '14px'
-			};
+			// var markerLabel = {
+			// 	text: (index + 1).toString(),
+			// 	color: 'black', 
+			// 	fontSize: '14px',
+			// }
 
 			var marker = new google.maps.Marker({
 				position: placeCoords,
@@ -301,8 +328,8 @@ $(function () {
 				id: placeid,
 				animation: google.maps.Animation.DROP,
 				icon: iconObject,
-				allDeets: place,
-				label: markerLabel
+				allDeets: place
+				// label: markerLabel
 
 			});
 
@@ -385,14 +412,16 @@ $(function () {
 		$('.about-us').hide();
 
 		$('body').addClass('searched');
-		codeAddress();
+		codeAddress('homepage');
 		$('#about').hide();
 		$('.hero').addClass('searched');
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
+	});
 
-		$('#address').text('');
-		$('#radius').text('');
+	$('.secondary-search').on('submit', function (e) {
+		e.preventDefault();
+		codeAddress('secondaryForm');
 	});
 
 	//open and close dropdown menu in results
@@ -442,7 +471,7 @@ $(function () {
 		}
 	});
 
-	$(document).on('click', '#list > li', function (e) {
+	$(document).on('click', '#list > li, .userFavs-area > li', function (e) {
 		console.log('eee', e);
 		if (e.target.className !== 'addToFavs') {
 			console.log('RANNNNNNN');
@@ -555,7 +584,7 @@ $(function () {
 		$('.place-stars-rating').empty().append(starRatings(results.rating));
 		$('.place-category').text(results.types[0]);
 		$('.place-address').text(results.formatted_address);
-		$('.place-website').text(results.website).attr('href', results.website);
+		$('.place-website').text(results.website).attr('href', results.website).attr('target', '_blank');
 		$('.place-number').text(results.formatted_phone_number);
 		$('.place-open').text(isOpenText);
 
@@ -570,7 +599,7 @@ $(function () {
 
 	function radiusToZoom(r) {
 		var w = $('#map').width();
-		var d = r * 2;
+		var d = r * 1.2;
 		var zooms = [, 21282, 16355, 10064, 5540, 2909, 1485, 752, 378, 190, 95, 48, 24, 12, 6, 3, 1.48, 0.74, 0.37, 0.19];
 		var z = 20,
 		    m;
@@ -872,6 +901,7 @@ $(function () {
 
 	$('.goToFavs').on('click', function () {
 		$('body').addClass('userFavsActive');
+		$('body').removeClass('place-details-active');
 	});
 
 	$('.favs-toggle-slide').on('click', function () {
@@ -892,6 +922,28 @@ $(function () {
 
 	$('.authModal button.activate-login').on('click', function () {
 		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
+	});
+
+	//secondary search slide out event function
+
+	$('.searchFilter').on('click', function () {
+		if ($(this).parent().hasClass('secondary-search-open')) {
+
+			$(this).parent().removeClass('secondary-search-open');
+			$(this).addClass('fa-search');
+			$(this).removeClass('fa-times');
+		} else {
+
+			$(this).parent().addClass('secondary-search-open');
+			$(this).removeClass('fa-search');
+			$(this).addClass('fa-times');
+		}
+	});
+
+	//mobile main slidetoggle 
+
+	$('.sidebar-mob-toggle').on('click', function () {
+		$('body').toggleClass('mobileSlide');
 	});
 });
 
