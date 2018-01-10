@@ -354,6 +354,10 @@ $(function () {
 						var markerLocation = results.geometry.location;
 
 						settingTheCenter(map, 5, markerLocation);
+
+						if ($(window).width() < 900) {
+							$('body').addClass('mobileSlide');
+						}
 					}
 				});
 			});
@@ -909,7 +913,11 @@ $(function () {
 	});
 
 	$('nav .fa-bars').on('click', function () {
-		$('ul.navbar').slideToggle();
+		$('ul.navbar').slideToggle().toggleClass('mobNavOpen');
+	});
+	$('.navbar li').on('click', function () {
+		$('body').removeClass('mobNavOpen');
+		$('ul.navbar').slideUp();
 	});
 
 	$('.place-hours > p').on('click', function () {
@@ -944,6 +952,13 @@ $(function () {
 
 	$('.sidebar-mob-toggle').on('click', function () {
 		$('body').toggleClass('mobileSlide');
+		codeAddress('secondaryForm');
+	});
+
+	$(window).on('resize', function () {
+		if ($(window).width() > 900) {
+			$('body').removeClass('mobileSlide');
+		}
 	});
 });
 
