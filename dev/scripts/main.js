@@ -837,16 +837,18 @@ $(function()  {
 		//center map on center marker
 
 		var centerControlDiv = document.createElement('div');
-	    var centerControl = new CenterControl(centerControlDiv, map);
+	    var centerControl = CenterControl(centerControlDiv, map);
 	    centerControlDiv.index = 0;
-	    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+	    map.addListener('dragstart', function() {
+		    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+	    })
 
 		function CenterControl(controlDiv, map) {
 
 		        // Set CSS for the control border.
 		        var controlUI = document.createElement('div');
-		        controlUI.style.backgroundColor = '#fff';
-		        controlUI.style.border = '2px solid #fff';
+		        controlUI.style.backgroundColor = 'rgb(70,17,167)';
+		        // controlUI.style.border = '2px solid #fff';
 		        controlUI.style.borderRadius = '3px';
 		        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
 		        controlUI.style.cursor = 'pointer';
@@ -857,7 +859,7 @@ $(function()  {
 
 		        // Set CSS for the control interior.
 		        var controlText = document.createElement('div');
-		        controlText.style.color = 'rgb(25,25,25)';
+		        controlText.style.color = 'rgb(255,255,255)';
 		        controlText.style.fontFamily = 'Lato';
 		        controlText.style.fontSize = '16px';
 		        controlText.style.lineHeight = '38px';
@@ -1115,13 +1117,6 @@ $(function()  {
 
 
 
-	$('nav .fa-bars').on('click', function() {
-		$('ul.navbar').slideToggle().toggleClass('mobNavOpen');
-	})
-	$('.navbar li').on('click', function() {
-		$('body').removeClass('mobNavOpen');
-		$('ul.navbar').slideUp();
-	})
 
 	$('.place-hours > p').on('click', function() {
 		$(this).parent().find('ul.place-open-list').slideToggle()
@@ -1168,7 +1163,28 @@ $(function()  {
 			if ($(window).width() > 900) {
 				$('body').removeClass('mobileSlide')
 			}
+
+			if ($(window).width() > 670) {
+				$('ul.navbar').removeClass('mobNavOpen').css('display', 'flex');
+			} else {
+				$('ul.navbar').css('display', 'none')
+			}
+			
+
 		})
+
+		// if ($(window).width() < 670) {
+			$('nav .fa-bars').on('click', function() {
+				$('ul.navbar').slideToggle().toggleClass('mobNavOpen');
+			})
+			$('.navbar.mobNavOpen li').on('click', function() {
+				$('ul.navbar').removeClass('mobNavOpen');
+				$('ul.navbar').slideUp();
+			})
+		// }
+
+
+
 
 })
 

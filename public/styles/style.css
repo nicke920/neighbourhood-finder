@@ -290,6 +290,8 @@ body.notLoggedIn #userSignOut {
 
 body.loggedIn #userSignOut {
   display: block; }
+  body.loggedIn #userSignOut .fa {
+    margin-right: 20px; }
 
 .hero {
   height: 70vh;
@@ -1140,7 +1142,7 @@ header nav .fa-bars {
 .goToFavs {
   display: none; }
 
-.loggedIn .goToFavs {
+.loggedIn.searched .goToFavs {
   display: block; }
 
 @media screen and (max-width: 800px) {
@@ -1167,7 +1169,11 @@ header nav .fa-bars {
       margin-left: 0; }
     form.home-search #gotime1 {
       margin-left: 0;
-      width: 150px; } }
+      width: 150px; }
+  body .about-tile {
+    -webkit-flex: auto;
+        -ms-flex: auto;
+            flex: auto; } }
 
 @media screen and (max-width: 670px) {
   header {
@@ -1189,7 +1195,8 @@ header nav .fa-bars {
     top: 50px;
     right: 0;
     background-color: #fafafa;
-    width: 130px; }
+    width: 130px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8); }
     ul.navbar a {
       line-height: 40px;
       text-align: right;
@@ -1357,3 +1364,160 @@ header nav .fa-bars {
   body.searched.mobileSlide .results, body.searched.mobileSlide .place, body.searched.mobileSlide .dropdown-userFavs {
     bottom: 0;
     height: calc(100% - 50px); } }
+
+.about-us h2 {
+  color: #4611a7;
+  font-weight: 300;
+  font-size: 34px; }
+
+.about-title, .about-popular {
+  background-color: #f0f2f2; }
+  .about-title .wrapper, .about-popular .wrapper {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    padding: 35px 0;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center; }
+
+.about-content {
+  padding: 35px 0; }
+
+.about-tiles {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%; }
+
+.about-tile {
+  background-color: white;
+  padding: 10px 20px;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  box-shadow: 0 0 10px 0 rgba(83, 82, 82, 0.1);
+  margin: 0 3px; }
+  .about-tile p {
+    margin: 5px 0; }
+
+.about-popular {
+  background-color: transparent; }
+
+.popular-cities {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap; }
+
+.city {
+  height: 260px;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-flex-basis: 250px;
+      -ms-flex-preferred-size: 250px;
+          flex-basis: 250px;
+  box-shadow: 0 0 10px 0 rgba(83, 82, 82, 0.5);
+  margin: 0 6px;
+  background-size: cover;
+  background-position: center;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: hidden;
+  margin-bottom: 20px; }
+
+.city:hover .listing-info a {
+  bottom: 50px; }
+
+.city:hover .listing-info h4 {
+  top: -10px; }
+
+.ny {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/ny.jpg); }
+
+.tr {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/toronto.jpg); }
+
+.sf {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/sf.jpg); }
+
+.la {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/la.jpg); }
+
+.van {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/van.jpg); }
+
+.dt {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/detroit.jpg); }
+
+.mia {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/mia.jpg); }
+
+.phi {
+  background-image: linear-gradient(rgba(22, 22, 22, 0.5), rgba(70, 17, 167, 0.5)), url(../../assets/phil.jpg); }
+
+.listing-info {
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+  width: 100%; }
+  .listing-info h4 {
+    color: white;
+    font-size: 24px;
+    font-weight: 500;
+    top: 0;
+    position: relative;
+    transition: top 0.15s ease-out; }
+  .listing-info a {
+    color: white;
+    position: absolute;
+    bottom: -100px;
+    transition: bottom 0.15s ease-out;
+    border: 2px solid rgba(70, 17, 167, 0.8);
+    padding: 10px; }
+    .listing-info a:hover {
+      background-color: white;
+      color: #4611a7; }
