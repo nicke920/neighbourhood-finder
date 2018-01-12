@@ -136,12 +136,17 @@ $(function () {
 	//gets the lat lng function of the postal code entered
 	var locationObject;
 
-	function codeAddress(whichForm) {
+	function codeAddress(whichForm, areacode, arearadius) {
 		if (whichForm === 'homepage') {
-			var address = $('#address1').val();
-			var rad = $('#radius1').val();
-			//convert radius into number, since it defaults to a string
-			rad = parseInt(rad);
+			if (!areacode) {
+				var address = $('#address1').val();
+				var rad = $('#radius1').val();
+				//convert radius into number, since it defaults to a string
+				rad = parseInt(rad);
+			} else {
+				var address = areacode;
+				var rad = arearadius;
+			}
 
 			geocoder.geocode({
 				address: address
@@ -410,11 +415,10 @@ $(function () {
 	});
 
 	$('form.home-search').on('submit', function (e) {
-		$('#mapSection').addClass('openn');
 		e.preventDefault();
+		$('#mapSection').addClass('openn');
 		$('.hero').hide();
 		$('.about-us').hide();
-
 		$('body').addClass('searched');
 		codeAddress('homepage');
 		$('#about').hide();
@@ -422,9 +426,53 @@ $(function () {
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	});
+	function afterSearchStuff(areacode, arearadius) {
+		$('#mapSection').addClass('openn');
+		$('.hero').hide();
+		$('.about-us').hide();
+		$('body').addClass('searched');
+		$('#about').hide();
+		$('.hero').addClass('searched');
+		$('.main-copy-searched').show();
+		$('.main-copy').hide();
+		codeAddress('homepage', areacode, arearadius);
+	}
+
+	$('.city').on('click', function () {
+		var areacode;
+		if ($(this).hasClass('ny')) {
+			areacode = '10001';
+		}
+		if ($(this).hasClass('sf')) {
+			areacode = '94114';
+		}
+		if ($(this).hasClass('tr')) {
+			areacode = 'm5h2g4';
+		}
+		if ($(this).hasClass('la')) {
+			areacode = '90232';
+		}
+		if ($(this).hasClass('dt')) {
+			areacode = '48226';
+		}
+		if ($(this).hasClass('mia')) {
+			areacode = '33135';
+		}
+		if ($(this).hasClass('van')) {
+			areacode = 'v6b3l4';
+		}
+		if ($(this).hasClass('phi')) {
+			areacode = '19106';
+		}
+		var arearadius = 2000;
+		afterSearchStuff(areacode, arearadius);
+	});
 
 	$('.secondary-search').on('submit', function (e) {
 		e.preventDefault();
+		$('.secondary-search-tab').removeClass('secondary-search-open');
+		$('.secondary-search-tab .fa').removeClass('fa-times');
+		$('.secondary-search-tab .fa').addClass('fa-search');
 		codeAddress('secondaryForm');
 	});
 
@@ -660,6 +708,7 @@ $(function () {
 	}
 
 	function settingCenterMarker(whichMap, location, radius) {
+		console.log('getting called???');
 		if (centerPoint || centerCircle) {
 			centerPoint.setMap(null);
 			centerCircle.setMap(null);
@@ -685,11 +734,12 @@ $(function () {
 		//center map on center marker
 
 		var centerControlDiv = document.createElement('div');
+
 		var centerControl = CenterControl(centerControlDiv, map);
 		centerControlDiv.index = 0;
-		map.addListener('dragstart', function () {
-			map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-		});
+		// map.addListener('dragstart', function() {
+		map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+		// })
 
 		function CenterControl(controlDiv, map) {
 
@@ -703,7 +753,11 @@ $(function () {
 			controlUI.style.marginBottom = '22px';
 			controlUI.style.textAlign = 'center';
 			controlUI.title = 'Click to recenter the map';
+			$(controlUI).addClass('uiControl');
+			$(controlDiv).addClass('thebigdiv');
+			$('.thebigdiv').empty();
 			controlDiv.appendChild(controlUI);
+			console.log('con', controlUI);
 
 			// Set CSS for the control interior.
 			var controlText = document.createElement('div');
@@ -721,9 +775,9 @@ $(function () {
 				settingTheCenter(whichMap, radius, centerPoint.position);
 			});
 
-			$('.place-toggle-slide').on('click', function () {
-				settingTheCenter(whichMap, radius, centerPoint.position);
-			});
+			// $('.place-toggle-slide').on('click', function() {
+			// 	settingTheCenter(whichMap, radius, centerPoint.position)
+			// })
 		}
 
 		settingTheCenter(whichMap, radius, centerPoint.position);
@@ -946,7 +1000,7 @@ $(function () {
 
 	$('.sidebar-mob-toggle').on('click', function () {
 		$('body').toggleClass('mobileSlide');
-		codeAddress('secondaryForm');
+		// codeAddress('secondaryForm')
 	});
 
 	$(window).on('resize', function () {
@@ -971,6 +1025,10 @@ $(function () {
 	});
 	// }
 
+	if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
+		$('body').addClass('mobile-device');
+		console.log('mobile');
+	}
 });
 
 },{}]},{},[1]);
