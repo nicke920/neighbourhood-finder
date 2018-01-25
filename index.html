@@ -31,6 +31,11 @@
 				</button>
 			</div>
 			<div class="auth-slider">
+				<i class="fa fa-times-circle exit-auth" aria-hidden="true"></i>
+				<div class="mobile-auth-toggle">
+					<button id="mob-login" class="mob-tog-selected">Log In</button>
+					<button id="mob-signup">Sign Up</button>
+				</div>
 				<div class="login-form">
 					<h2>Log In</h2>
 					<form>
@@ -64,13 +69,14 @@
 	<div class="wrapper header-wrapper">
 
 		<div class="logo-section">
-			<div class="logo-image">
+			<a class="logo-image" href="/">
 				<svg class="thelogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 5 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><path d="M94.5,47.5l4.1-6.2L49.4,8.8L0.9,41.3l4.1,6.2l9.7-6.5v51.1H85l0-50.8L94.5,47.5z M37.5,48.5  c0,0,7.1-6,12.4,2.2c5.3-8.2,12.4-2.2,12.4-2.2c4.9,4.5,0,10.5,0,10.5c-1.9,3.4-11.6,12.6-12.4,13.4l-0.1-0.1  c-1.2-1.1-10.5-10-12.4-13.3C37.5,59,32.5,53,37.5,48.5z"/></svg>
-			</div>
+			</a>
 			<h1 class="logo-name">HoodFinder</h1>
 		</div>
 		<nav class="nav">
 			<i class="fa fa-bars" aria-hidden="true"></i>
+			<i class="fa fa-times" aria-hidden="true"></i>
 			<ul class="navbar">
 				<li><a href="#" class="goToFavs">My Favourites</a></li>
 				<li class="signin-btn login-btn "><a href="" class="user-btn">Sign In</a></li>
@@ -365,7 +371,7 @@
 					<ul class="listings-dropdown" id="list"></ul>
 				</div>
 
-				<div class="result-card dropdown dropdown-bar">
+				<div class="result-card dropdown dropdown-night_club">
 					<div class="result-card-description">
 						<h5>Bars</h5>
 						<img src="assets/icons/map-marker5.png" alt="">

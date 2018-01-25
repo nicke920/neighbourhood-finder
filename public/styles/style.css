@@ -212,7 +212,7 @@ header {
 .logo-image {
   background: #4611a7;
   width: 60px;
-  height: 100%;
+  height: 50px;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -241,6 +241,22 @@ nav.nav {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex; }
+  nav.nav .fa-bars {
+    display: block;
+    font-size: 30px;
+    color: #4611a7; }
+  nav.nav .fa-times {
+    display: none; }
+
+@media screen and (min-width: 685px) {
+  nav.nav .fa.fa-bars {
+    display: none; } }
+
+nav.nav.mobNavOpen .fa-bars {
+  display: none; }
+
+nav.nav.mobNavOpen .fa-times {
+  display: block; }
 
 ul.navbar {
   display: -webkit-flex;
@@ -263,8 +279,6 @@ ul.navbar {
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 600; }
-  ul.navbar li:nth-of-type(2) a {
-    border-right: 1px solid rgba(31, 31, 31, 0.2); }
 
 li.signup-btn.register:hover {
   background: none; }
@@ -384,6 +398,7 @@ form.home-search {
     padding-left: 55px;
     background: white; }
     form.home-search .radius-container select {
+      -webkit-appearance: none;
       border: none;
       font-weight: 100;
       color: grey;
@@ -486,6 +501,7 @@ body.searched #mapSection {
   display: flex; }
   .secondary-search-form form input, .secondary-search-form form select {
     background-color: #4611a7;
+    -webkit-appearance: none;
     color: white;
     border: none;
     border-radius: 0 !important;
@@ -990,12 +1006,6 @@ body.place-details-active .place {
 .signing-in .login-form {
   display: none; }
 
-.forms.logging-in .auth-slider {
-  right: 25px; }
-
-.forms.signing-up .auth-slider {
-  left: 25px; }
-
 .authModal-copy {
   background-color: rgba(31, 31, 31, 0.98);
   padding: 25px;
@@ -1054,10 +1064,42 @@ body.place-details-active .place {
   background: #fafafa;
   width: calc(50% + 25px);
   box-shadow: 0px -1px 3px white;
-  transition: left 4.4s ease-out;
+  transition: left 0.4s ease-out;
   color: #4611a7; }
-  .auth-slider > div {
+  .auth-slider .login-form,
+  .auth-slider .signup-form {
     padding: 30px; }
+  .auth-slider .fa {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 40px;
+    transition: all 0.2s ease-out; }
+    .auth-slider .fa:hover {
+      -webkit-transform: scale(1.1);
+          -ms-transform: scale(1.1);
+              transform: scale(1.1);
+      cursor: pointer; }
+
+.mobile-auth-toggle button {
+  background-color: transparent;
+  border: 2px solid #4611a7;
+  color: #4611a7; }
+  .mobile-auth-toggle button:hover {
+    background-color: #4611a7;
+    color: white; }
+  .mobile-auth-toggle button.mob-tog-selected {
+    background-color: #4611a7;
+    color: white; }
+
+.forms.signing-in .auth-slider {
+  left: -20px; }
+
+.forms.logging-in .auth-slider {
+  left: calc(100% - 365px); }
+
+.mobile-auth-toggle {
+  display: none; }
 
 body .login-form,
 body .signup-form {
@@ -1114,14 +1156,9 @@ body .signup-form {
       -webkit-align-items: baseline;
           -ms-flex-align: baseline;
               align-items: baseline; }
-
-.forms.logging-in .auth-slider {
-  right: 25px;
-  left: unset; }
-
-.forms.signing-up .auth-slider {
-  right: unset;
-  left: 25px; }
+      body .login-form form .submit-row .google-signin,
+      body .signup-form form .submit-row .google-signin {
+        cursor: pointer; }
 
 .loginModalShowing .authModal {
   display: -webkit-flex;
@@ -1184,7 +1221,7 @@ header nav .fa-bars {
       margin-left: 0;
       width: 150px; } }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 685px) {
   header {
     z-index: 999; }
   header nav {
@@ -1192,9 +1229,10 @@ header nav .fa-bars {
         -ms-flex-align: center;
             align-items: center;
     padding-right: 20px; }
-    header nav .fa-bars {
+    header nav .fa-times {
       display: block;
-      font-size: 30px; }
+      font-size: 30px;
+      color: #4611a7; }
   ul.navbar {
     display: none;
     position: absolute;
@@ -1319,7 +1357,11 @@ header nav .fa-bars {
   margin-bottom: 20px; }
 
 .city:hover .listing-info a {
-  bottom: 50px; }
+  bottom: 50px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%); }
 
 .city:hover .listing-info h4 {
   top: -10px; }
@@ -1364,6 +1406,8 @@ header nav .fa-bars {
           justify-content: center;
   position: relative;
   width: 100%; }
+  .listing-info:hover {
+    cursor: pointer; }
   .listing-info h4 {
     color: white;
     font-size: 24px;
@@ -1376,11 +1420,9 @@ header nav .fa-bars {
     position: absolute;
     bottom: -100px;
     transition: bottom 0.15s ease-out;
-    border: 2px solid rgba(70, 17, 167, 0.8);
-    padding: 10px; }
-    .listing-info a:hover {
-      background-color: white;
-      color: #4611a7; }
+    padding: 10px;
+    opacity: 0.6;
+    font-weight: 100; }
 
 @media screen and (max-width: 900px) {
   #map {
@@ -1565,3 +1607,44 @@ header nav .fa-bars {
     margin-bottom: 6px; }
   form.home-search .search-container img {
     width: 20px; } }
+
+@media screen and (max-width: 820px) {
+  .mobile-auth-toggle {
+    display: block; }
+  .auth-slider {
+    top: -10px;
+    bottom: -10px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+            transform: translateX(-50%); }
+  .authModal-copy .thecopy {
+    visibility: hidden; }
+  body .login-form form input[type="text"], body .login-form form input[type="password"], body .signup-form form input[type="text"], body .signup-form form input[type="password"] {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 8px; }
+  body .login-form h2, body .signup-form h2 {
+    font-size: 20px; }
+  .mobile-auth-toggle button {
+    padding: 6px 12px; }
+  #login-submit, #signup-submit {
+    width: 80px;
+    height: 40px; }
+  .forms.signing-in .auth-slider,
+  .forms.logging-in .auth-slider {
+    left: 50%; } }
+
+footer {
+  padding: 5px 20px;
+  background-color: #4611a7; }
+  footer a {
+    color: white;
+    margin: 0;
+    font-weight: 100;
+    font-size: 12px;
+    letter-spacing: .75px; }
+    footer a:hover {
+      text-decoration: none; }
+    footer a:visited {
+      color: white; }

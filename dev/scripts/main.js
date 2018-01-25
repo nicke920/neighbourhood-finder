@@ -276,6 +276,7 @@ $(function()  {
 			service = new google.maps.places.PlacesService(map);
 			service.nearbySearch(request, function(results, status) {
 				if (status == 'OK') {
+					// console.log('REZZZY', results)
 					results.map(function(place, index) {
 						if (place.rating !== undefined) {
 							avg += place.rating
@@ -285,14 +286,26 @@ $(function()  {
 					})
 					$('.avg-area-rating').text((avg / totalPlaces).toFixed(2))
 
-
+					var count = 0;
 					results.filter(function(el) {
 						return el.rating !== undefined
 					}).sort(function(a,b) {
 						return (b.rating - a.rating)
-					}).map(function(place, index) {
-						if (index < 5) {
+					})
+					.map(function(place, index) {
+						var isOK = true;
+						place.types.map(function(place, index) {
+							if (place === 'lodging' || place === 'shopping_mall') {
+								isOK = false;
+								// console.log('falseeyyyy')
+							}
+						})
+						// console.log('placee', place.types)
+						
+						if (isOK === true && count < 5) {
 							theMarkersArray.push(place)
+							count += 1;
+							console.log('counttt', count)
 						}
 					})
 
@@ -303,6 +316,7 @@ $(function()  {
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0]
+								console.log('reaaa', requestType)
 							}
 
 							$(`.dropdown-${requestType} #list`).empty();
@@ -355,7 +369,7 @@ $(function()  {
 		top5Search(toMarkersDoctors, 'doctor', location, radius)
 		top5Search(toMarkersSchool, 'school', location, radius)
 		top5Search(toMarkersBank, 'bank', location, radius)
-		top5Search(toMarkersBar, ['bar', 'night_club'] , location, radius)
+		top5Search(toMarkersBar, 'night_club' , location, radius)
 		top5Search(toMarkersGym, 'gym', location, radius)
 
 	}
@@ -1153,6 +1167,8 @@ $(function()  {
 		e.preventDefault();
 		$('body').addClass('loginModalShowing')
 	})
+
+
 	
 	$('#userSignOut').on('click', function() {
 		firebase.auth().signOut();
@@ -1182,6 +1198,23 @@ $(function()  {
 
 	$('.authModal button.activate-login').on('click', function() {
 		$('.forms').toggleClass('logging-in').toggleClass('signing-in');
+	})
+
+	$('.mobile-auth-toggle button').on('click', function() {
+		$('.mobile-auth-toggle button').removeClass('mob-tog-selected')
+		$(this).addClass('mob-tog-selected');
+		$('.forms').removeClass('logging-in').removeClass('signing-in')
+		if ($(this).is('#mob-signup')) {
+			$('.forms').addClass('signing-in')
+		}
+		if ($(this).is('#mob-login')) {
+			$('.forms').addClass('logging-in')
+		}
+	})
+
+	$('.exit-auth').on('click', function() {
+		$('body').removeClass('loginModalShowing');
+		console.log('click?')
 	})
 
 
@@ -1227,11 +1260,13 @@ $(function()  {
 		})
 
 		// if ($(window).width() < 670) {
-			$('nav .fa-bars').on('click', function() {
+			$('nav .fa').on('click', function() {
 				$('ul.navbar').slideToggle().toggleClass('mobNavOpen');
+				$('nav.nav').toggleClass('mobNavOpen')
 			})
 			$('.navbar.mobNavOpen li').on('click', function() {
 				$('ul.navbar').removeClass('mobNavOpen');
+				$('nav.nav').removeClass('mobNavOpen')
 				$('ul.navbar').slideUp();
 			})
 		// }
@@ -1240,6 +1275,14 @@ $(function()  {
 			$('body').addClass('mobile-device')
 			console.log('mobile')
 		}
+
+		$('nav.nav ul.navbar li a').on('click', function() {
+			if ($(window).width() < 685) {
+				$('nav.nav').removeClass('mobNavOpen')
+				$('nav.nav ul.navbar').removeClass('mobNavOpen').slideUp();
+				console.log('mob')
+			}
+		})
 
 
 })
