@@ -12,6 +12,9 @@
 
 </head>
 <body>
+<div class="favs-alert">
+	<p>You have <span class="fav-action"></span> <span class="fav-name"></span> from your favourites!</p>
+</div>
 
 <div class="authModal">
 	<div class="forms logging-in">
@@ -38,9 +41,9 @@
 				</div>
 				<div class="login-form">
 					<h2>Log In</h2>
-					<form>
+					<form class="loginform">
 						<input type="text" id="userLoginEmail" placeholder="Email">
-						<input type="text" id="userLoginPass" placeholder="Password">
+						<input type="password" id="userLoginPass" placeholder="Password">
 						<div class="submit-row">
 							<a class="google-signin">Log in with Google</a>
 							<input type="submit" id="login-submit" value="log in">
@@ -262,7 +265,7 @@
 			<div class="place-image">
 				<div class="place-top-bar place-wrapper">
 					<a class="place-toggle-slide"><img src="assets/icons/left-arrow.png" alt=""></a>
-					<a class="place-add-to-favs"><img src="assets/icons/add-favorite.png" alt=""></a>
+					<a class="place-add-to-favs addToFavs"><img src="assets/icons/add-favorite.png" alt=""></a>
 				</div>
 				<img src="" alt="">
 			</div>

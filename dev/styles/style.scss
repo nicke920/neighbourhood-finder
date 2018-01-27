@@ -672,7 +672,8 @@ body.place-details-active .place {
 	}
 }
 
-.addToFavs {
+.addToFavs,
+.removeFromFavs {
 	font-size: 12px;
 	color: $accent-color;
 	cursor: pointer;
@@ -703,6 +704,17 @@ body.place-details-active .place {
 	overflow-y: scroll;
 	p {
 		margin: 0;
+	}
+
+	.types p {
+		margin-right: 10px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		border: 1px solid grey;
+		padding: 0px 3px;
+		font-size: 10px;
+		opacity: 0.6;
+		text-transform: capitalize;
 	}
 }
 
@@ -1624,4 +1636,22 @@ footer {
 			color: white;
 		}
 	}
+}
+
+.favs-alert {
+	background-color: $accent-color;
+	padding: 10px;
+	position: fixed;
+	top: -42px;
+	z-index: 999999999999;
+	width: 100%;
+	transition: top 0.1s ease-out; 
+	p, span {
+		margin: 0;
+		color: white;
+	}
+}
+
+.favs-alert.actioned {
+	top: 0;
 }
