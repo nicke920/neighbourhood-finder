@@ -297,15 +297,14 @@ $(function()  {
 						place.types.map(function(place, index) {
 							if (place === 'lodging' || place === 'shopping_mall') {
 								isOK = false;
-								// console.log('falseeyyyy')
 							}
 						})
-						// console.log('placee', place.types)
+
 						
 						if (isOK === true && count < 5) {
 							theMarkersArray.push(place)
 							count += 1;
-							// console.log('counttt', count)
+
 						}
 					})
 
@@ -316,7 +315,7 @@ $(function()  {
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0]
-								// console.log('reaaa', requestType)
+
 							}
 
 							$(`.dropdown-${requestType} #list`).empty();
@@ -324,7 +323,7 @@ $(function()  {
 							$.each(theMarkersArray, function(index, place) {
 								var isOpenText;
 								var photoURL;
-								// console.log('placeee', place)
+
 
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({'maxWidth': 1000, 'maxHeight': 1000})
@@ -349,7 +348,7 @@ $(function()  {
 														<p>${place.types[0].replace(/_/g, " ")}</p>
 														<p>${place.types[1].replace(/_/g, " ")}</p>
 													</div>
-													<a class="addToFavs">Add to favourites</a>
+													<a class="addToFavs"></a>
 												</div>
 											</div>
 										</a>
@@ -390,7 +389,7 @@ $(function()  {
 
 
 	function getMarkers(arrayOfPlaces, icon) {
-		console.log('AOP', arrayOfPlaces)
+
 
 		$.each(arrayOfPlaces, function(index, place) {
 			var placeName = place.name;
@@ -482,7 +481,6 @@ $(function()  {
 
 
 	$('.mapCheck').on('change', function() {
-		// console.log(this)
 		if ($(this).attr('checked')) {
 			$(this).removeAttr('checked')
 
@@ -505,7 +503,6 @@ $(function()  {
 			var n = $(this).parent().parent().find('#list').children();
 
 			$.each(n, function(ind, val) {
-				// console.log('s', $(val).find('li').attr('id'))
 				var ids = $(val).find('li').attr('id')
 
 				$.each(markers, function(ind, val) {
@@ -544,6 +541,7 @@ $(function()  {
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	})
+
 	function afterSearchStuff(areacode, arearadius) {
 		$('#mapSection').addClass('openn')
 		$('.hero').hide();
@@ -556,7 +554,8 @@ $(function()  {
 		codeAddress('homepage', areacode, arearadius);
 	}
 	
-	$('.city').on('click', function() {
+	$('.city').on('click', function(e) {
+		e.preventDefault();
 		var areacode;
 		if ($(this).hasClass('ny')) {
 			areacode = '10001';
@@ -650,9 +649,9 @@ $(function()  {
 
 
 	$(document).on('click', '#list > li, .userFavs-area > li', function(e) {
-		console.log('eee', e)
+
 		if (e.target.className !== 'addToFavs') {
-			console.log('RANNNNNNN')
+
 			var details = this
 
 			var request = {
@@ -680,7 +679,7 @@ $(function()  {
 		var that = this
 		$.each(markers, function(ind, val) {
 			if ($(that).attr('id') === val.id) {
-				// console.log('va', val.id)
+
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE)
 			}
 		})
@@ -689,7 +688,7 @@ $(function()  {
 	$(document).on('mouseout', '#list > li', function() {
 		var that = this
 		$.each(markers, function(ind, val) {
-			// console.log('88')
+
 			if ($(that).attr('id') === val.id) {
 				markers[ind].setAnimation(null)
 			}
@@ -845,7 +844,7 @@ $(function()  {
 
 
 	function starRatings(rating) {
-		// console.log('working', rating)
+
 		var ratingOutput;
 		if (rating > 4.7) {
 			ratingOutput = `<span>(${rating})</span><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>`
@@ -874,7 +873,7 @@ $(function()  {
 
 
 	function settingCenterMarker(whichMap, location, radius) {
-		console.log('getting called???')
+
 		if (centerPoint || centerCircle) {
 			centerPoint.setMap(null)
 			centerCircle.setMap(null)
@@ -923,7 +922,7 @@ $(function()  {
 		        $(controlDiv).addClass('thebigdiv')
 		        $('.thebigdiv').empty();
 		        controlDiv.appendChild(controlUI);
-		        console.log('con', controlUI)
+
 
 		        // Set CSS for the control interior.
 		        var controlText = document.createElement('div');
@@ -952,7 +951,7 @@ $(function()  {
 	}
 
 	function settingTheCenter(whichMap, radius, whereToCenter) {
-		// console.log('center set')
+
 		whichMap.setCenter(whereToCenter)
 
 		var zoomin = radiusToZoom(radius) 
@@ -972,17 +971,17 @@ $(function()  {
 
 
 			currentUserId = user.uid;
-			console.log('cureen', currentUserId)
+
 
 			var dbRef = firebase.database().ref(`users/${currentUserId}/favourites`).on('value', function(firebaseData) {
-				console.log('THIS FUNCTION FIRING')
+
 				var itemsData = firebaseData.val();
-				console.log('valueitems', itemsData)
+
 				var userFavsIdss = [];
 
 				// getIDsFromFirebase(itemsData, userFavsIdss);
 				for (var itemKey in itemsData) {
-					console.log('itemKEY', itemKey)
+
 					var theobjected = {
 						key: itemKey,
 						id: itemsData[itemKey]
@@ -992,7 +991,7 @@ $(function()  {
 
 				$('.dropdown-userFavs .userFavs-area').empty()
 
-				console.log('userfacs', userFavsIdss)
+
 				convertEachFavIDToAList(userFavsIdss)
 
 			})
@@ -1001,7 +1000,7 @@ $(function()  {
 			$('#usersUserName').text(firebase.auth().currentUser.displayName)
 		} 
 		else {
-			console.log('user NOT logged in')
+
 			$('body').removeClass('loggedIn').addClass('notLoggedIn')
 		}
 
@@ -1071,7 +1070,7 @@ $(function()  {
 			
 		})
 
-		// console.log('resssUlts -- OUTSIDE', results)
+
 	}
 
 
@@ -1092,7 +1091,7 @@ $(function()  {
 
 			})
 			.catch(function(error) {
-				console.log('type of error', typeof error)
+
 				alert(error)
 			})
 		} else {
@@ -1114,7 +1113,7 @@ $(function()  {
 		e.preventDefault();
 
 		firebase.auth().signInWithPopup(provider).catch(function(error) {
-			console.log('error message', error)
+
 			// The email of the user's account used.
 			  var email = error.email;
 			  // The firebase.auth.AuthCredential type that was used.
@@ -1133,7 +1132,7 @@ $(function()  {
 
 			$('body').removeClass('loginModalShowing')
 			
-			// console.log('ressss', result)
+
 
 		})
 	})
@@ -1142,8 +1141,9 @@ $(function()  {
 
 	//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
 	$(document).on('click', '.addToFavs', function() {
+		console.log('clicks???')
 		var user = firebase.auth().currentUser.uid;
-		console.log('userr', user)
+
 
 		if (user) {
 			var dbRef = firebase.database().ref(`users/${user}/favourites`);
@@ -1251,7 +1251,7 @@ $(function()  {
 
 	$('.exit-auth').on('click', function() {
 		$('body').removeClass('loginModalShowing');
-		console.log('click?')
+
 	})
 
 
@@ -1310,15 +1310,22 @@ $(function()  {
 
 		if( navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i) ){
 			$('body').addClass('mobile-device')
-			console.log('mobile')
+
 		}
 
 		$('nav.nav ul.navbar li a').on('click', function() {
 			if ($(window).width() < 685) {
 				$('nav.nav').removeClass('mobNavOpen')
 				$('nav.nav ul.navbar').removeClass('mobNavOpen').slideUp();
-				console.log('mob')
+
 			}
+		})
+
+		$('.place-directions').on('click', function() {
+			alert('Feature coming soon! :)')
+		})
+		$('.headerFavs').on('click', function() {
+			alert('Feature coming soon! :)')
 		})
 
 

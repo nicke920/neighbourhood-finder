@@ -1674,3 +1674,8 @@ footer {
 
 .favs-alert.actioned {
   top: 0; }
+
+label {
+  position: absolute;
+  left: -9999999px;
+  color: red; }

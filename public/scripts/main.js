@@ -1,8 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // require('./_firebase.js')
 
 $(function () {
@@ -227,7 +225,6 @@ $(function () {
 
 							if (typeof requestType !== "string") {
 								requestType = requestType[0];
-								// console.log('reaaa', requestType)
 							}
 
 							$(".dropdown-" + requestType + " #list").empty();
@@ -235,7 +232,6 @@ $(function () {
 							$.each(theMarkersArray, function (index, place) {
 								var isOpenText;
 								var photoURL;
-								// console.log('placeee', place)
 
 								if ($(place.photos).length > 0) {
 									photoURL = place.photos[0].getUrl({ 'maxWidth': 1000, 'maxHeight': 1000 });
@@ -243,7 +239,7 @@ $(function () {
 									photoURL = "https://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 								}
 
-								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' place-name='" + place.name + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"types\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<p>" + place.types[0].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<p>" + place.types[1].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"addToFavs\">Add to favourites</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
+								$(".dropdown-" + requestType + " #list").append("<li id='" + place.place_id + "' place-name='" + place.name + "' class='result-tile'>\n\t\t\t\t\t\t\t\t\t\t<a>\n\t\t\t\t\t\t\t\t\t\t\t<h3>" + place.name + "</h3>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-detail\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-image\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"" + photoURL + "\" alt=\"\" />\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"result-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<h5><i class=\"fa fa-map-marker\" aria-hidden=\"true\"></i>" + place.vicinity + "</h5>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"rating-div\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + starRatings(place.rating) + "\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"types\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<p>" + place.types[0].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<p>" + place.types[1].replace(/_/g, " ") + "</p>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"addToFavs\"></a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t</li>");
 							});
 						}
 					};
@@ -268,15 +264,12 @@ $(function () {
 						place.types.map(function (place, index) {
 							if (place === 'lodging' || place === 'shopping_mall') {
 								isOK = false;
-								// console.log('falseeyyyy')
 							}
 						});
-						// console.log('placee', place.types)
 
 						if (isOK === true && count < 5) {
 							theMarkersArray.push(place);
 							count += 1;
-							// console.log('counttt', count)
 						}
 					});
 
@@ -303,7 +296,6 @@ $(function () {
 	}
 
 	function getMarkers(arrayOfPlaces, icon) {
-		console.log('AOP', arrayOfPlaces);
 
 		$.each(arrayOfPlaces, function (index, place) {
 			var placeName = place.name;
@@ -384,7 +376,6 @@ $(function () {
 	}
 
 	$('.mapCheck').on('change', function () {
-		// console.log(this)
 		if ($(this).attr('checked')) {
 			$(this).removeAttr('checked');
 
@@ -406,7 +397,6 @@ $(function () {
 			var n = $(this).parent().parent().find('#list').children();
 
 			$.each(n, function (ind, val) {
-				// console.log('s', $(val).find('li').attr('id'))
 				var ids = $(val).find('li').attr('id');
 
 				$.each(markers, function (ind, val) {
@@ -440,6 +430,7 @@ $(function () {
 		$('.main-copy-searched').show();
 		$('.main-copy').hide();
 	});
+
 	function afterSearchStuff(areacode, arearadius) {
 		$('#mapSection').addClass('openn');
 		$('.hero').hide();
@@ -452,7 +443,8 @@ $(function () {
 		codeAddress('homepage', areacode, arearadius);
 	}
 
-	$('.city').on('click', function () {
+	$('.city').on('click', function (e) {
+		e.preventDefault();
 		var areacode;
 		if ($(this).hasClass('ny')) {
 			areacode = '10001';
@@ -538,9 +530,9 @@ $(function () {
 	});
 
 	$(document).on('click', '#list > li, .userFavs-area > li', function (e) {
-		console.log('eee', e);
+
 		if (e.target.className !== 'addToFavs') {
-			console.log('RANNNNNNN');
+
 			var details = this;
 
 			var request = {
@@ -567,7 +559,7 @@ $(function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
 			if ($(that).attr('id') === val.id) {
-				// console.log('va', val.id)
+
 				markers[ind].setAnimation(google.maps.Animation.BOUNCE);
 			}
 		});
@@ -576,7 +568,7 @@ $(function () {
 	$(document).on('mouseout', '#list > li', function () {
 		var that = this;
 		$.each(markers, function (ind, val) {
-			// console.log('88')
+
 			if ($(that).attr('id') === val.id) {
 				markers[ind].setAnimation(null);
 			}
@@ -698,7 +690,7 @@ $(function () {
 	});
 
 	function starRatings(rating) {
-		// console.log('working', rating)
+
 		var ratingOutput;
 		if (rating > 4.7) {
 			ratingOutput = "<span>(" + rating + ")</span><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i><i class=\"fa fa-star\" aria-hidden=\"true\"></i>";
@@ -723,7 +715,7 @@ $(function () {
 	}
 
 	function settingCenterMarker(whichMap, location, radius) {
-		console.log('getting called???');
+
 		if (centerPoint || centerCircle) {
 			centerPoint.setMap(null);
 			centerCircle.setMap(null);
@@ -772,7 +764,6 @@ $(function () {
 			$(controlDiv).addClass('thebigdiv');
 			$('.thebigdiv').empty();
 			controlDiv.appendChild(controlUI);
-			console.log('con', controlUI);
 
 			// Set CSS for the control interior.
 			var controlText = document.createElement('div');
@@ -799,7 +790,7 @@ $(function () {
 	}
 
 	function settingTheCenter(whichMap, radius, whereToCenter) {
-		// console.log('center set')
+
 		whichMap.setCenter(whereToCenter);
 
 		var zoomin = radiusToZoom(radius);
@@ -814,17 +805,16 @@ $(function () {
 			$('body').removeClass('loginModalShowing');
 
 			currentUserId = user.uid;
-			console.log('cureen', currentUserId);
 
 			var dbRef = firebase.database().ref("users/" + currentUserId + "/favourites").on('value', function (firebaseData) {
-				console.log('THIS FUNCTION FIRING');
+
 				var itemsData = firebaseData.val();
-				console.log('valueitems', itemsData);
+
 				var userFavsIdss = [];
 
 				// getIDsFromFirebase(itemsData, userFavsIdss);
 				for (var itemKey in itemsData) {
-					console.log('itemKEY', itemKey);
+
 					var theobjected = {
 						key: itemKey,
 						id: itemsData[itemKey]
@@ -834,14 +824,13 @@ $(function () {
 
 				$('.dropdown-userFavs .userFavs-area').empty();
 
-				console.log('userfacs', userFavsIdss);
 				convertEachFavIDToAList(userFavsIdss);
 			});
 
 			$('body').addClass('loggedIn').removeClass('notLoggedIn');
 			$('#usersUserName').text(firebase.auth().currentUser.displayName);
 		} else {
-			console.log('user NOT logged in');
+
 			$('body').removeClass('loggedIn').addClass('notLoggedIn');
 		}
 	});
@@ -883,8 +872,6 @@ $(function () {
 				}
 			});
 		});
-
-		// console.log('resssUlts -- OUTSIDE', results)
 	}
 
 	//REGULAR SIGNUP THROUGH EMAIL/PASSWORD
@@ -900,7 +887,7 @@ $(function () {
 			firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function (userData) {
 				$('body').removeClass('loginModalShowing');
 			}).catch(function (error) {
-				console.log('type of error', typeof error === "undefined" ? "undefined" : _typeof(error));
+
 				alert(error);
 			});
 		} else {
@@ -921,7 +908,7 @@ $(function () {
 		e.preventDefault();
 
 		firebase.auth().signInWithPopup(provider).catch(function (error) {
-			console.log('error message', error);
+
 			// The email of the user's account used.
 			var email = error.email;
 			// The firebase.auth.AuthCredential type that was used.
@@ -939,15 +926,13 @@ $(function () {
 			// firebase.database().ref(`users/${user.uid}`).set(newUser)
 
 			$('body').removeClass('loginModalShowing');
-
-			// console.log('ressss', result)
 		});
 	});
 
 	//EVENT FOR WHEN USER CLICKS TILE TO ADD TO FAVS
 	$(document).on('click', '.addToFavs', function () {
+		console.log('clicks???');
 		var user = firebase.auth().currentUser.uid;
-		console.log('userr', user);
 
 		if (user) {
 			var dbRef = firebase.database().ref("users/" + user + "/favourites");
@@ -1043,7 +1028,6 @@ $(function () {
 
 	$('.exit-auth').on('click', function () {
 		$('body').removeClass('loginModalShowing');
-		console.log('click?');
 	});
 
 	//secondary search slide out event function
@@ -1095,15 +1079,20 @@ $(function () {
 
 	if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
 		$('body').addClass('mobile-device');
-		console.log('mobile');
 	}
 
 	$('nav.nav ul.navbar li a').on('click', function () {
 		if ($(window).width() < 685) {
 			$('nav.nav').removeClass('mobNavOpen');
 			$('nav.nav ul.navbar').removeClass('mobNavOpen').slideUp();
-			console.log('mob');
 		}
+	});
+
+	$('.place-directions').on('click', function () {
+		alert('Feature coming soon! :)');
+	});
+	$('.headerFavs').on('click', function () {
+		alert('Feature coming soon! :)');
 	});
 });
 
